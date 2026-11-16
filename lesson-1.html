@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>שיעור 1 · מבוא לבינה מלאכותית</title>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#0181C9;--deep:#0B4F7C;--yellow:#E5E633;--teal:#6BE3D1;--soft:#EEF8F6;--line:#E3ECEF;--orange:#FA7548;--ink:#2F3437;--body:#4A4A4A;--muted:#7A8489}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'Assistant','Heebo',sans-serif;direction:rtl;color:var(--body)}
+#vp{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#design{width:1600px;height:900px;flex:0 0 auto;position:relative;background:#F7FAFB;transform-origin:center;overflow:hidden}
+#design::before{content:'';position:absolute;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle,rgba(107,227,209,.28),rgba(107,227,209,0) 70%);top:-260px;right:-180px}
+#design::after{content:'';position:absolute;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(1,129,201,.12),rgba(1,129,201,0) 70%);bottom:-260px;left:-160px}
+
+/* פס עליון קבוע */
+.top{position:absolute;top:0;right:0;left:0;height:104px;display:flex;align-items:center;gap:22px;padding:0 64px;z-index:3;background:rgba(255,255,255,.85);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.top img{height:54px}
+.num{font-size:17px;font-weight:700;color:var(--blue);letter-spacing:.5px}
+.top h1{margin:0;font-size:38px;font-weight:700;color:var(--ink);line-height:1.1}
+.date{font-size:18px;color:var(--muted);font-weight:600;margin-top:2px}
+.actions{margin-right:auto;display:flex;gap:12px;align-items:center}
+.home{display:flex;align-items:center;gap:8px;color:var(--deep);text-decoration:none;font-weight:700;font-size:19px;padding:10px 18px;border-radius:999px;border:1px solid var(--line);background:#fff;transition:.2s}
+.home:hover{border-color:var(--teal)}
+.home svg,.fb svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.fb{display:flex;align-items:center;gap:8px;background:var(--orange);color:var(--ink);border:0;font:700 19px 'Assistant',sans-serif;padding:11px 22px;border-radius:999px;cursor:pointer;transition:.2s}
+.fb:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(250,117,72,.3)}
+
+/* רובריקות */
+.grid{position:absolute;top:150px;bottom:74px;right:64px;left:64px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr 1fr;gap:26px;z-index:2}
+.card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:34px 34px 30px;display:flex;flex-direction:column;align-items:flex-start;gap:14px;cursor:pointer;text-align:right;font-family:inherit;transition:.25s;position:relative;overflow:hidden}
+.card::after{content:'';position:absolute;bottom:0;right:0;left:0;height:4px;background:var(--teal);transform:scaleX(0);transform-origin:right;transition:.3s}
+.card:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(11,79,124,.10);border-color:#D2E6EA}
+.card:hover::after{transform:scaleX(1)}
+.ic{width:72px;height:72px;border-radius:20px;background:var(--soft);display:flex;align-items:center;justify-content:center}
+.ic svg{width:36px;height:36px;fill:none;stroke:var(--deep);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.card h2{margin:6px 0 0;font-size:32px;font-weight:700;color:var(--ink)}
+.card p{margin:0;font-size:21px;color:var(--muted);line-height:1.45}
+.card .go{margin-top:auto;font-size:18px;font-weight:700;color:var(--blue)}
+
+.sig{position:absolute;bottom:24px;left:0;right:0;text-align:center;font-size:14px;color:var(--muted);z-index:2}
+.sig a{color:inherit}
+
+/* חלון נפתח */
+#modal{position:absolute;inset:0;background:rgba(47,52,55,.35);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:20}
+#modal.on{display:flex;animation:fade .25s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.box{width:1280px;height:800px;background:#fff;border-radius:26px;box-shadow:0 30px 70px rgba(0,0,0,.18);display:flex;flex-direction:column;overflow:hidden;animation:up .3s ease}
+@keyframes up{from{transform:translateY(18px)}to{transform:none}}
+.bar{display:flex;align-items:center;gap:16px;padding:22px 36px 16px;border-bottom:1px solid var(--line)}
+.bar .ic{width:56px;height:56px;border-radius:16px}
+.bar .ic svg{width:28px;height:28px}
+.bar h2{margin:0;font-size:36px;color:var(--ink);font-weight:700;flex:1}
+.bar a{font-weight:700;font-size:18px;color:var(--deep)}
+.x{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:#fff;font:400 30px/1 'Assistant';color:var(--deep);cursor:pointer}
+.x:hover{background:var(--soft)}
+.content{flex:1;min-height:0;overflow:auto;padding:26px 44px 30px;font-size:26px;color:var(--ink);line-height:1.5}
+.content.frame{padding:0}
+.content iframe{width:100%;height:100%;border:0;display:block}
+.empty{height:100%;display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:700}
+
+/* תוכן החלונות */
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;counter-reset:s}
+.steps li{display:flex;gap:18px;align-items:flex-start;counter-increment:s}
+.steps li::before{content:counter(s);flex:0 0 44px;height:44px;border-radius:50%;background:var(--soft);color:var(--deep);font-weight:700;font-size:21px;display:flex;align-items:center;justify-content:center}
+.steps b{color:var(--deep)}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start}
+.formula{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 20px}
+.formula span{border:2px solid var(--teal);border-radius:999px;padding:5px 22px;font-weight:700;font-size:24px;background:#fff}
+.formula i{font-style:normal;color:var(--muted);align-self:center}
+.ex{background:var(--soft);border-radius:18px;padding:20px 26px;font-size:25px}
+.ex small{display:block;font-size:18px;font-weight:700;color:var(--blue);margin-bottom:4px}
+.copy{margin-top:12px;background:#fff;border:1px solid var(--line);color:var(--deep);font:700 17px 'Assistant';padding:5px 18px;border-radius:999px;cursor:pointer}
+.copy:hover{border-color:var(--teal)}
+.stores{display:flex;gap:14px;margin-top:18px;flex-wrap:wrap}
+.store{display:inline-block;background:var(--deep);color:#fff;text-decoration:none;font-weight:700;font-size:20px;padding:11px 22px;border-radius:12px}
+.note{margin-top:16px;font-size:21px;color:var(--muted)}
+.tips{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.tip{background:var(--soft);border-radius:18px;padding:18px 22px}
+.tip b{display:block;font-size:25px;color:var(--ink)}
+.tip span{font-size:20px;color:var(--muted)}
+.learned{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.learned li{background:var(--soft);border-radius:16px;padding:18px 24px;font-weight:700;display:flex;gap:14px;align-items:center}
+.learned li::before{content:'';width:12px;height:12px;border-radius:50%;background:var(--teal);flex:0 0 auto}
+/* התנסות */
+.try{margin-top:24px;border:2px solid var(--yellow);border-radius:18px;padding:18px 24px;display:flex;align-items:center;gap:20px;background:#fff}
+.try .lbl{flex:0 0 auto;background:var(--yellow);color:var(--ink);font-weight:700;font-size:20px;padding:6px 16px;border-radius:999px}
+.try .txt{flex:1;font-size:24px;font-weight:600}
+.try a{flex:0 0 auto;font-weight:700;font-size:19px;color:var(--deep);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:8px 18px}
+.try a:hover{border-color:var(--teal)}
+
+/* ===== מבנה הג'ניאלי ===== */
+.grid,.card{display:none}
+.sheet{position:absolute;top:24px;right:36px;left:36px;bottom:40px;background:#fff;border-radius:26px;box-shadow:0 14px 40px rgba(11,79,124,.12);z-index:1}
+.top{top:24px;right:36px;left:36px;width:auto;border-radius:26px 26px 0 0;background:transparent;backdrop-filter:none;padding:0 40px 0 40px}
+.badge{background:#2B78C5;color:#fff;font-weight:700;font-size:28px;border-radius:12px;padding:8px 22px}
+.cols{position:absolute;top:150px;bottom:76px;right:76px;left:76px;display:grid;grid-template-columns:1.1fr 1fr 1.1fr;gap:28px;z-index:2}
+.panel{border-radius:22px;padding:24px;display:flex;flex-direction:column;gap:16px;min-height:0}
+.panel.blue{background:#2B78C5}
+.panel.light{background:#DCEFFB;padding:22px 26px}
+.panel.light h2{margin:0 0 4px;font-size:32px;font-weight:700;color:#1E5D96;text-align:center}
+.learn{background:#fff;border-radius:16px;padding:18px 24px}
+.learn h3{margin:0 0 8px;font-size:26px;color:var(--ink);font-weight:700}
+.learn ol{margin:0;padding-right:26px;font-size:22px;color:var(--ink);line-height:1.6}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:14px;flex:1;min-height:0}
+.tile{background:#fff;border:0;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;font:700 22px 'Assistant',sans-serif;color:var(--ink);text-align:center;transition:.2s;padding:12px}
+.tile.main{flex-direction:row;gap:18px;font-size:28px;padding:22px}
+.tile:hover,.act:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(0,0,0,.15)}
+.cols .ic{width:58px;height:58px;border-radius:50%;background:#E2448F;flex:0 0 auto}
+.cols .ic svg{width:28px;height:28px;stroke:#fff}
+.row{display:flex;align-items:center;gap:16px;background:transparent;border:0;border-radius:14px;padding:10px 8px;cursor:pointer;text-decoration:none;font:700 24px 'Assistant',sans-serif;color:var(--ink);text-align:right;width:100%;transition:.2s}
+.row:hover{background:rgba(255,255,255,.65)}
+.row .ic{width:50px;height:50px}
+.row .ic svg{width:24px;height:24px}
+.sep{font-size:18px;font-weight:700;color:#1E5D96;border-top:1px solid rgba(30,93,150,.2);padding-top:10px;margin-top:4px}
+.list{display:flex;flex-direction:column;gap:2px;overflow:auto;min-height:0}
+.list .row{font-size:22px;padding:6px 8px}
+.list .row .ic{width:42px;height:42px;background:#7A5BD6}
+.list .row .ic svg{width:20px;height:20px}
+.act{flex:1;background:#fff;border:0;border-radius:16px;display:flex;align-items:center;gap:18px;padding:18px 22px;cursor:pointer;text-align:right;font:700 26px 'Assistant',sans-serif;color:var(--ink);transition:.2s}
+.act small{display:block;font-size:19px;font-weight:600;color:var(--muted);margin-top:2px}
+.muted{color:#1E5D96;font-size:19px}
+.sig{bottom:12px}
+.introw{height:100%;display:flex;align-items:center;justify-content:center}.introw ol{font-size:46px;font-weight:700;line-height:2;color:var(--ink)}
+
+/* עדכון 16.11 */
+.panel.blue .act{flex:0 0 auto}
+.panel.blue .learn{flex:1}
+.panel.blue:last-child .act{flex:1}
+.row.white{background:#fff;padding:9px 14px;font-size:22px}
+.row.white:hover{background:#F4FAFE;box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.row.white .ic{width:44px;height:44px}
+.panel.light{gap:10px}
+.list .row{font-size:20px;padding:4px 8px}
+.list .row .ic{width:36px;height:36px}
+.about{display:flex;gap:36px;align-items:center;background:var(--soft);border-radius:20px;padding:24px 30px;margin-bottom:26px}
+.about b{display:block;font-size:40px;color:var(--ink)}
+.about span{font-size:26px;color:var(--deep)}
+.about .av{width:110px;height:110px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.about .av img{height:60px}
+.introw2 h3{margin:0 0 8px;font-size:30px;color:var(--ink)}
+.introw2 ol{margin:0;font-size:36px;line-height:1.8}
+.svtabs{display:flex;gap:10px;margin-bottom:18px}
+.svtabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 22px;font:700 20px 'Assistant';color:var(--deep);cursor:pointer}
+.svtabs button.on{background:var(--deep);color:#fff;border-color:var(--deep)}
+.qrw{display:flex;gap:50px;align-items:center;justify-content:center}
+.qrw .q{padding:14px;border:3px solid var(--teal);border-radius:18px}
+.qrw ol{font-size:30px;line-height:1.9}
+.rhead{font-size:24px;color:var(--deep);margin-bottom:12px}.rhead b{font-size:44px;color:var(--blue)}
+.rgrid{display:grid;gap:18px}
+.rq{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.rq h4{margin:0 0 10px;font-size:21px;color:var(--ink);line-height:1.3}
+.bar2{display:grid;grid-template-columns:130px 1fr 30px;gap:10px;align-items:center;margin-bottom:8px;font-size:18px}
+.bt{background:var(--soft);height:20px;border-radius:10px;overflow:hidden}.bt i{display:block;height:100%;background:var(--blue);border-radius:10px;transition:width .6s}
+.answ{margin-top:16px}.answ h4{margin:0 0 8px;font-size:22px}
+.answ .cards{display:flex;flex-wrap:wrap;gap:10px}
+.answ .cards div{border:2px solid var(--yellow);border-radius:12px;padding:8px 16px;font-size:20px;color:#000;background:#fff}
+</style>
+<style>
+/* editor chrome; the design itself lives in #design */
+html{background:#e9eef2}
+body{margin:0}
+#design{margin:130px auto 40px;box-shadow:0 10px 40px rgba(0,0,0,.2)}
+#design [contenteditable]{outline:2px dashed transparent;outline-offset:4px;cursor:text}
+#design [contenteditable]:hover{outline-color:#0181C9}
+#design [contenteditable]:focus{outline:3px solid #FA7548}
+body.ed-move #design [data-mv]{cursor:move;outline:2px dashed #0181C9;outline-offset:3px}
+body.ed-move #design [data-mv]:hover{outline-color:#FA7548}
+body.ed-export #design,body.ed-export #design *{box-shadow:none!important;outline:none!important}
+.ed-added{position:absolute;top:45%;right:10%;font-size:40px;font-weight:700;color:#303030;z-index:50;white-space:nowrap}
+#ed-bar{position:fixed;top:0;left:0;right:0;min-height:70px;padding:8px 10px;box-sizing:border-box;background:#0B4F7C;color:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font:19px 'Assistant',Arial,sans-serif;z-index:1000;direction:rtl;flex-wrap:wrap}
+#ed-bar button{font:800 18px 'Assistant',Arial,sans-serif;background:#fff;color:#0B4F7C;border:0;border-radius:30px;padding:8px 14px;cursor:pointer}
+#ed-bar .ed-teal{background:#6BE3D1;color:#303030}
+#ed-bar .ed-cta{background:#FA7548;color:#303030;padding:10px 22px}
+#ed-bar #ed-mode.on{background:#E5E633;color:#303030}
+#ed-saved{opacity:.7;min-width:110px}
+#ed-stale{display:none;position:fixed;inset:0;background:rgba(11,79,124,.92);color:#fff;z-index:2000;align-items:center;justify-content:center;text-align:center;font:800 34px/1.5 'Assistant',Arial,sans-serif;direction:rtl}
+
+/* שילוב העורך במסך השיעור */
+#vp #design{margin:0;box-shadow:none}
+body.editing #vp{top:86px}
+#ed-toggle{position:fixed;bottom:12px;right:12px;z-index:1100;background:#0B4F7C;color:#fff;border:0;border-radius:999px;font:700 15px 'Assistant',sans-serif;padding:8px 16px;cursor:pointer;opacity:.35;transition:.2s}
+#ed-toggle:hover,body.editing #ed-toggle{opacity:1}
+body.editing #ed-toggle{background:#FA7548;color:#2F3437}
+body.editing #design [data-open]{cursor:text}
+</style>
+</head>
+<body>
+<div id="vp"><div id="design" data-key="lesson-1-tel-sheva" data-v="1" data-file="שיעור-1.png">
+<!--DESIGN-START-->
+  <div class="sheet"></div>
+
+  <div class="top">
+    <span class="badge">שיעור 1</span><h1>מבוא לבינה מלאכותית</h1>
+    <div class="date">16.11</div>
+    <div class="actions">
+      <a class="home" href="index.html"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>עמוד הבית</a>
+      <button class="fb" data-open="feedback"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg>משוב</button>
+    </div>
+    <img src="assets/lomdot-logo-no-tagline.png" alt="לומדות">
+  </div>
+
+  <div class="cols">
+    <div class="panel blue">
+      <div class="learn" data-move><h3>מה נלמד היום?</h3><ol><li>מה זה בינה מלאכותית</li><li>איך כותבים לבינה</li><li>מדברים עם הבינה בטלפון</li><li>בונים מערך שיעור</li></ol></div>
+      <div role="button" tabindex="0" data-move class="act" data-open="intro"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.5"/><path d="M15.5 14.2c3 .2 5.5 2.7 5.5 5.8"/></svg></span><span data-edit>היכרות<small>נעים להכיר</small></span></div>
+      <div role="button" tabindex="0" data-move class="act" data-open="survey"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><span data-edit>כמה אנחנו משתמשים בבינה מלאכותית?<small>סקר קצר ותוצאות</small></span></div>
+    </div>
+    <div class="panel light">
+      <h2>מתחם צפייה ומשאבים</h2>
+      <div role="button" tabindex="0" data-move class="row white" data-open="deck"><span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M12 16v4M8 20h8"/></svg></span><span data-edit>מצגת השיעור</span></div>
+      <div role="button" tabindex="0" data-move class="row white" data-open="padlet"><span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="5" rx="1"/><rect x="13" y="10" width="8" height="11" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/></svg></span><span data-edit>בואו נכיר קצת יותר בפדלט</span></div>
+      <div role="button" tabindex="0" data-move class="row white" data-open="tips"><span class="ic"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/></svg></span><span data-edit>טיפים לתוצאות טובות</span></div>
+      <div role="button" tabindex="0" data-move class="row white" data-open="learned"><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg></span><span data-edit>מה למדנו</span></div>
+      <div class="list" id="res"><span class="muted">טוען...</span></div>
+    </div>
+    <div class="panel blue">
+      <div role="button" tabindex="0" data-move class="act" data-open="write"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg></span><span data-edit>איך כותבים לבינה?<small>הסבר והתנסות</small></span></div>
+      <div role="button" tabindex="0" data-move class="act" data-open="plan"><span class="ic"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></span><span data-edit>בניית מערך שיעור<small>דגשים והתנסות</small></span></div>
+      <div role="button" tabindex="0" data-move class="act" data-open="phone"><span class="ic"><svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></span><span data-edit>שיחה בטלפון<small>מדברים עם הבינה בקול</small></span></div>
+    </div>
+  </div>
+
+  <div class="sig">© שירה רוט זליקוביץ · הוראה יצירתית עם AI · <a href="https://wa.me/972523930628" target="_blank" rel="noopener">ווטסאפ</a> · <a href="https://www.lomdot.org/" target="_blank" rel="noopener">להזמנת סדנאות בינה מלאכותית</a></div>
+
+  <div id="modal"><div class="box"><div class="bar"><span class="ic" id="mIc"></span><h2 id="mTitle"></h2><a id="mExt" target="_blank" rel="noopener">פתיחה בחלון חדש</a><button class="x" id="mClose" aria-label="סגירה">×</button></div><div class="content" id="mBody"></div></div></div>
+<!--DESIGN-END-->
+</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+/* ===== עריכות שמורות (בדפדפן הזה) ===== */
+const EDKEY='edit-design-lesson-1-tel-sheva-v1';
+try{const sv=localStorage.getItem(EDKEY);if(sv){document.getElementById('design').innerHTML=sv;const m=document.getElementById('modal');if(m){m.classList.remove('on');document.getElementById('mBody').innerHTML='';}}}catch(e){}
+/* ===== הגדרות ===== */
+const SESSION='1';
+const SHEET_ID='1jZSeNE40Kd5q3K09NQ1xOOg1wJtwcPlyOx9acNoUfdg'; // פדלט ומשוב נלקחים מהגיליון
+const LINKS={padlet:'https://padlet.com/shirarothz/padlet-s025i42xat8y8kuwmu2h',feedback:'',deck:''}; // deck = קישור ההטמעה של מצגת הקנבה // אפשר גם לכתוב כאן ישירות
+const SURVEY={form:'https://docs.google.com/forms/d/e/1FAIpQLSfyuwXxfOIwusnJ047nFQBA_ZtWdZFLAB1D22UElTze1RJ3yw/viewform',sheet:'1Apeo3prNfDsFnZorueoCUsNaB055klhZ2mbTycWXKbw',gid:'1758922010',open:'ציפיות'};
+const EXTRA=[{name:'הקמפיין של איילת זורר',url:'https://youtu.be/qGzba7SFM-c'}]; // משאבים נוספים
+const GEMINI='https://gemini.google.com';
+
+/* ===== תוכן החלונות ===== */
+const ex=(label,text)=>`<div class="ex"><small>${label}</small><span>${text}</span><br><button class="copy">העתקה</button></div>`;
+const tryIt=(text,link)=>`<div class="try"><span class="lbl">התנסות</span><span class="txt">${text}</span>${link?`<a href="${link}" target="_blank" rel="noopener">לפתיחת Gemini</a>`:''}</div>`;
+const frame=u=>`<iframe src="${u}" allowfullscreen allow="fullscreen; clipboard-write"></iframe>`;
+const WIN={
+ write:()=>({t:'איך כותבים לבינה?',h:`
+  <div class="formula"><span>מי אני</span><i>+</i><span>מה אני רוצה</span><i>+</i><span>איך</span></div>
+  <div class="cols2">
+   <ol class="steps">
+    <li><div>כותבים כמו שמדברים עם אדם.</div></li>
+    <li><div><b>מי אני:</b> "אני מורה לעברית בכיתה ז׳"</div></li>
+    <li><div><b>מה אני רוצה:</b> "שיחה קצרה בשוק"</div></li>
+    <li><div><b>איך:</b> "בעברית פשוטה, 6 משפטים, עם ניקוד"</div></li>
+    <li><div>לא מתאים? מבקשים לשנות: "קצר יותר", "קל יותר".</div></li>
+   </ol>
+   ${ex('דוגמה','אני מורה לעברית בכיתה ז׳. כתוב שיחה קצרה בין מוכר לקונה בשוק. בעברית פשוטה, 6 משפטים, עם ניקוד.')}
+  </div>
+  ${tryIt('כתבו בקשה על נושא מהכיתה שלכם: מי אני, מה אני רוצה, איך.',GEMINI)}`}),
+ phone:()=>({t:'שיחה בטלפון',h:`
+  <div class="cols2">
+   <ol class="steps">
+    <li><div>מורידים את אפליקציית <b>Gemini</b>.</div></li>
+    <li><div>נכנסים עם חשבון Google.</div></li>
+    <li><div>לוחצים על כפתור <b>Live</b>.</div></li>
+    <li><div>מדברים בעברית, והבינה עונה בקול.</div></li>
+   </ol>
+   <div>${ex('אומרים בהתחלה','דבר איתי בעברית פשוטה ובמשפטים קצרים.')}
+    <div class="stores"><a class="store" href="https://play.google.com/store/apps/details?id=com.google.android.apps.bard" target="_blank" rel="noopener">Google Play</a><a class="store" href="https://apps.apple.com/app/google-gemini/id6477489729" target="_blank" rel="noopener">App Store</a></div>
+    <div class="note">אפשר גם באפליקציית ChatGPT, בכפתור הקול.</div></div>
+  </div>
+  ${tryIt('דברו עם הבינה 2 דקות, כמו תלמידים מתחילים. איך הרגשתם?')}`}),
+ plan:()=>({t:'בניית מערך שיעור',h:`
+  <div class="cols2">
+   <ol class="steps">
+    <li><div><b>מטרה:</b> מה התלמיד יידע לומר בסוף השיעור?</div></li>
+    <li><div><b>הכיתה:</b> גיל, מספר תלמידים, רמת עברית.</div></li>
+    <li><div><b>מבנה:</b> פתיחה, הקניה, תרגול, משימה בזוגות, סיכום.</div></li>
+    <li><div><b>דיבור:</b> התלמידים מדברים רוב הזמן.</div></li>
+    <li><div><b>חומרים:</b> שיחה לדוגמה, צירופים, שאלות.</div></li>
+    <li><div><b>בדיקה:</b> קוראים, מתקנים, והמורה מחליט.</div></li>
+   </ol>
+   ${ex('דוגמה','אני מורה לעברית, כיתה ח׳, 30 תלמידים, רמה בסיסית. בנה מערך שיעור של 45 דקות על הנושא "בקניון". המטרה: התלמידים ישאלו מחיר ויבקשו מידה. התלמידים מדברים רוב השיעור, בזוגות.')}
+  </div>
+  ${tryIt('בנו מערך שיעור לנושא שאתם מלמדים השבוע.',GEMINI)}`}),
+ tips:()=>({t:'טיפים לתוצאות טובות',h:`
+  <div class="tips">
+   <div class="tip"><b>כותבים ברור</b><span>מה, למי, ובאיזה אורך</span></div>
+   <div class="tip"><b>נותנים דוגמה</b><span>"משהו כמו..."</span></div>
+   <div class="tip"><b>מבקשים לשנות</b><span>כמה פעמים שצריך</span></div>
+   <div class="tip"><b>עברית פשוטה</b><span>ואפשר גם עם ניקוד</span></div>
+   <div class="tip"><b>נושא חדש, שיחה חדשה</b><span>פותחים צ׳אט חדש</span></div>
+   <div class="tip"><b>בודקים את התשובה</b><span>הבינה יכולה לטעות</span></div>
+  </div>
+  ${tryIt('קחו תשובה שקיבלתם ובקשו לשנות אותה פעמיים. מה השתפר?',GEMINI)}`}),
+ intro:()=>({t:'נעים להכיר',h:`<div class="about"><div class="av"><img src="assets/lomdot-logo-no-tagline.png" alt=""></div><div><b>שירה רוט זליקוביץ</b><span>הוראה יצירתית עם בינה מלאכותית · לומדות</span></div></div><div class="introw2"><h3>ועכשיו אתם:</h3><ol><li>השם שלי</li><li>בית הספר שלי</li><li>מה אני מלמד, ובאילו כיתות</li></ol></div>`}),
+ survey:()=>({t:'כמה אנחנו משתמשים בבינה מלאכותית?',u:SURVEY.form,h:`<div class="svtabs"><button class="on" data-sv="q">סריקה</button><button data-sv="r">תוצאות</button></div><div id="svBody"></div>`,after:svInit}),
+ deck:()=>({t:'מצגת השיעור',u:LINKS.deck,f:!!LINKS.deck,h:LINKS.deck?frame(LINKS.deck):'<div class="empty">המצגת תופיע כאן</div>'}),
+ padlet:()=>({t:'בואו נכיר קצת יותר',u:LINKS.padlet,f:!!LINKS.padlet,h:LINKS.padlet?frame(LINKS.padlet):'<div class="empty">הפדלט יופיע כאן</div>'}),
+ learned:()=>({t:'מה למדנו',h:`<ul class="learned"><li>מה זה בינה מלאכותית</li><li>הכלים החינמיים</li><li>איך כותבים לבינה</li><li>מדברים עם הבינה בטלפון</li><li>בונים מערך שיעור</li><li>טיפים לתוצאות טובות</li></ul>`}),
+ feedback:()=>{const u=LINKS.feedback?LINKS.feedback.replace('{מפגש}',SESSION):'';const e=u&&u.includes('docs.google.com/forms')?u+(u.includes('?')?'&':'?')+'embedded=true':u;return {t:'משוב על המפגש',u,f:!!u,h:u?frame(e):'<div class="empty">טופס המשוב יופיע כאן</div>'}}
+};
+
+/* ===== מנגנון החלון ===== */
+const $m=()=>document.getElementById('modal'),$b=()=>document.getElementById('mBody'),$e=()=>document.getElementById('mExt');
+function openWin(k,src){const modal=$m(),body=$b(),ext=$e();
+  const w=WIN[k]();document.getElementById('mTitle').textContent=w.t;
+  const ic=src&&src.querySelector('.ic svg');document.getElementById('mIc').innerHTML=ic?ic.outerHTML:'';document.getElementById('mIc').style.display=ic?'':'none';
+  body.className='content'+(w.f?' frame':'');body.innerHTML=w.h;
+  if(w.u){ext.href=w.u;ext.style.display=''}else ext.style.display='none';
+  modal.classList.add('on'); if(w.after) w.after();
+  body.querySelectorAll('.copy').forEach(b=>b.onclick=()=>navigator.clipboard.writeText(b.parentNode.querySelector('span').textContent).then(()=>{b.textContent='הועתק';setTimeout(()=>b.textContent='העתקה',1500)}));
+}
+function closeWin(){clearInterval(window._sv);const modal=$m(),body=$b();modal.classList.remove('on');body.innerHTML=''}
+document.addEventListener('click',e=>{if(document.body.classList.contains('editing'))return;const b=e.target.closest('[data-open]');if(b)openWin(b.dataset.open,b)});
+document.addEventListener('keydown',e=>{if(document.body.classList.contains('editing'))return;const b=e.target.closest&&e.target.closest('[data-open]');if(b&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openWin(b.dataset.open,b)}});
+document.addEventListener('click',e=>{if(e.target.closest('#mClose'))closeWin()});
+document.addEventListener('click',e=>{if(e.target.id==='modal')closeWin()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeWin()});
+
+
+let svMode='q';
+function svInit(){svMode='q';document.querySelectorAll('.svtabs button').forEach(b=>b.onclick=()=>{svMode=b.dataset.sv;document.querySelectorAll('.svtabs button').forEach(x=>x.classList.toggle('on',x===b));svRender()});svRender()}
+function svRender(){
+  const box=document.getElementById('svBody'); if(!box) return; clearInterval(window._sv);
+  if(svMode==='q'){box.innerHTML='<div class="qrw"><div class="q" id="qr"></div><ol><li>סרקו את הקוד בטלפון</li><li>ענו על השאלות</li><li>נראה את התוצאות יחד</li></ol></div>';new QRCode(document.getElementById('qr'),{text:SURVEY.form,width:360,height:360,colorDark:'#0B4F7C'});return}
+  box.innerHTML='<div class="muted">טוען תוצאות...</div>'; svResults(); window._sv=setInterval(svResults,5000);
+}
+function svResults(){
+  loadSheetFrom(SURVEY.sheet,SURVEY.gid).then(rows=>{
+    const box=document.getElementById('svBody'); if(!box||svMode!=='r') return;
+    if(!rows.length){box.innerHTML='<div class="rhead"><b>0</b> ענו</div>';return}
+    const all=Object.keys(rows[0]).filter(k=>k&&!/חותמת|timestamp/i.test(k));
+    const oq=all.find(k=>k.includes(SURVEY.open)), qs=all.filter(k=>k!==oq);
+    const charts=qs.map(q=>{const c={};rows.forEach(r=>String(r[q]||'').split(/,\s*/).filter(Boolean).forEach(a=>c[a]=(c[a]||0)+1));const arr=Object.entries(c).sort((a,b)=>b[1]-a[1]);const mx=Math.max(1,...arr.map(a=>a[1]));
+      return `<div class="rq"><h4>${esc(q)}</h4>${arr.map(([a,n])=>`<div class="bar2"><span>${esc(a)}</span><span class="bt"><i style="width:${n/mx*100}%"></i></span><b>${n}</b></div>`).join('')}</div>`}).join('');
+    const ans=oq?`<div class="answ"><h4>${esc(oq)}</h4><div class="cards">${rows.map(r=>String(r[oq]||'').trim()).filter(Boolean).map(v=>`<div>${esc(v)}</div>`).join('')}</div></div>`:'';
+    box.innerHTML=`<div class="rhead"><b>${rows.length}</b> ענו</div><div class="rgrid" style="grid-template-columns:repeat(${Math.min(qs.length,3)},1fr)">${charts}</div>${ans}`;
+  }).catch(()=>{});
+}
+function loadSheetFrom(id,gid){return new Promise((ok,fail)=>{const cb='cb'+Date.now()+Math.floor(Math.random()*1e4),sc=document.createElement('script');
+  window[cb]=r=>{try{const h=r.table.cols.map(c=>(c.label||'').trim());ok(r.table.rows.map(row=>{const o={};h.forEach((k,i)=>{const c=row.c&&row.c[i];o[k]=c?String(c.f!=null?c.f:(c.v!=null?c.v:'')).trim():''});return o}))}catch(e){fail(e)}sc.remove()};
+  sc.onerror=fail;sc.src=`https://docs.google.com/spreadsheets/d/${id}/gviz/tq?gid=${gid}&headers=1&tqx=out:json;responseHandler:${cb}&t=${Date.now()}`;document.body.appendChild(sc);})}
+
+/* ===== פדלט ומשוב מהגיליון ===== */
+function loadSheet(){return new Promise((ok,fail)=>{const cb='cb'+Date.now(),sc=document.createElement('script');
+  window[cb]=r=>{try{const h=r.table.cols.map(c=>(c.label||'').trim());ok(r.table.rows.map(row=>{const o={};h.forEach((k,i)=>{const c=row.c&&row.c[i];o[k]=c?String(c.f!=null?c.f:(c.v!=null?c.v:'')).trim():''});return o}))}catch(e){fail(e)}};
+  sc.onerror=fail;sc.src=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?gid=0&headers=1&tqx=out:json;responseHandler:${cb}`;document.body.appendChild(sc);})}
+const mine=(rows,kind)=>rows.filter(r=>r['סוג']===kind&&r['קישור']&&(r['מפגש']===SESSION||String(r['מפגש']).indexOf('כל')===0)).sort((a,b)=>(b['מפגש']===SESSION)-(a['מפגש']===SESSION));
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const LINK_IC='<span class="ic"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 6 0l3-3a4 4 0 0 0-6-6l-1 1"/><path d="M14 10a4 4 0 0 0-6 0l-3 3a4 4 0 0 0 6 6l1-1"/></svg></span>';
+loadSheet().then(rows=>{
+  const res=mine(rows,'משאב').concat(EXTRA.filter(x=>x.url).map(x=>({'שם':x.name,'קישור':x.url})));
+  document.getElementById('res').innerHTML=res.length?res.map(r=>`<a class="row" href="${esc(r['קישור'])}" target="_blank" rel="noopener">${LINK_IC}${esc(r['שם']||r['קישור'])}</a>`).join(''):'<span class="muted">יעלו בקרוב</span>';
+  if(!LINKS.padlet&&mine(rows,'פדלט')[0])LINKS.padlet=mine(rows,'פדלט')[0]['קישור'];
+  if(!LINKS.feedback&&mine(rows,'משוב')[0])LINKS.feedback=mine(rows,'משוב')[0]['קישור'];
+}).catch(()=>{});
+
+function fit(){const top=document.body.classList.contains('editing')?86:0;const s=Math.min(innerWidth/1600,(innerHeight-top)/900);document.getElementById('design').style.transform=`scale(${s})`}
+addEventListener('resize',fit);fit();
+</script>
+
+<button id="ed-toggle" type="button">עריכה</button>
+<script type="text/plain" id="ed-src">/* Editable design layer: click to edit text, resize, drag, add/delete, undo, autosave, save, download PNG.
+   Expects one element <div id="design"> (fixed width/height) holding the whole design, and html2canvas loaded before this file.
+   Optional on #design: data-key="unique-name" (storage key), data-file="name.png" (download name), data-v="1" (bump to discard old saved edits). */
+(function(){
+const design=document.getElementById('design');
+if(!design){console.warn('editor: no #design');return;}
+const TEXT='h1,h2,h3,h4,h5,h6,p,li,blockquote,figcaption,[data-edit]';
+const MV='[contenteditable],img,svg,[data-move]';
+const KEY='edit-design-'+(design.dataset.key||location.pathname)+'-v'+(design.dataset.v||'1');
+const FILE=design.dataset.file||'design.png';
+const ORIGINAL=design.innerHTML, TAB=String(Date.now())+Math.random();
+let cur=null, moving=false, stale=false, drag=null, saveT=null;
+const ls=fn=>{try{return fn();}catch(e){return null;}};
+
+// toolbar and stale-tab cover
+const bar=document.createElement('div');bar.id='ed-bar';bar.setAttribute('data-html2canvas-ignore','true');
+bar.innerHTML='<button id="ed-mode">מצב הזזה: כבוי</button><button class="ed-sz" data-d="2">+ הגדלה</button><button class="ed-sz" data-d="-2">- הקטנה</button><button id="ed-wt">עובי הכתב</button>'+
+ '<button id="ed-add">+ טקסט חדש</button><button id="ed-dup">שכפול</button><button id="ed-del">מחיקה</button><button id="ed-undo">ביטול פעולה</button>'+
+ '<button id="ed-save" class="ed-teal">שמירה</button><button id="ed-reset">חזרה למקור</button><button id="ed-exp">שליחה לקלוד</button><button id="ed-dl" class="ed-cta">הורדת תמונה</button><span id="ed-saved">שמירה אוטומטית</span>';
+document.body.appendChild(bar);
+const cover=document.createElement('div');cover.id='ed-stale';cover.innerHTML='העורך נפתח בלשונית אחרת.<br>כדי לא לדרוס שינויים, הלשונית הזו כבר לא שומרת.<br>אפשר לסגור אותה.';
+document.body.appendChild(cover);
+const $=id=>document.getElementById(id);
+
+function prep(){
+  design.querySelectorAll(TEXT).forEach(el=>{if(!el.closest('[data-noedit]')&&!el.parentElement.closest('[contenteditable]'))el.setAttribute('contenteditable','true');});
+  design.querySelectorAll('[contenteditable]').forEach(el=>el.setAttribute('contenteditable',moving?'false':'true'));
+  design.querySelectorAll(MV).forEach(el=>el.setAttribute('data-mv',''));
+}
+const saved=ls(()=>localStorage.getItem(KEY));if(saved)design.innerHTML=saved;
+prep();
+
+// newest tab owns the editor; older tabs stop saving
+ls(()=>localStorage.setItem(KEY+'-owner',TAB));
+window.addEventListener('storage',e=>{if(e.key===KEY+'-owner'&&e.newValue!==TAB){stale=true;cover.style.display='flex';}});
+
+const hist=[design.innerHTML];
+function hhmm(){const d=new Date();return d.getHours()+':'+String(d.getMinutes()).padStart(2,'0');}
+function flash(t){const s=$('ed-saved');s.textContent=t;s.style.opacity=1;clearTimeout(s._t);s._t=setTimeout(()=>s.style.opacity=.7,1500);}
+function writeNow(label,noHist){if(stale)return;
+  if(!noHist&&hist[hist.length-1]!==design.innerHTML){hist.push(design.innerHTML);if(hist.length>40)hist.shift();}
+  const ok=ls(()=>{localStorage.setItem(KEY,design.innerHTML);return true;});flash(ok?label+' '+hhmm():'לא הצלחתי לשמור');}
+function save(){clearTimeout(saveT);saveT=setTimeout(()=>writeNow('נשמר'),400);}
+design.addEventListener('input',save);
+// paste plain text only, so pasted styles cannot nest inside a text box
+design.addEventListener('paste',e=>{e.preventDefault();document.execCommand('insertText',false,(e.clipboardData||window.clipboardData).getData('text/plain'));});
+document.addEventListener('focusin',e=>{if(e.target.isContentEditable&&design.contains(e.target))cur=e.target.closest('.ed-added')||e.target.closest('[contenteditable]');});
+bar.querySelectorAll('button').forEach(b=>b.addEventListener('mousedown',e=>e.preventDefault()));
+
+bar.querySelectorAll('.ed-sz').forEach(b=>b.onclick=()=>{if(!cur){alert('קודם לוחצים על הטקסט שרוצים לשנות');return;}
+  const fs=parseFloat(getComputedStyle(cur).fontSize);cur.style.fontSize=Math.max(8,fs+Number(b.dataset.d))+'px';
+  cur.querySelectorAll('*').forEach(c=>{if(c.style.fontSize)c.style.fontSize='';});save();});
+
+
+const WEIGHTS=[400,600,700,800],WNAMES={400:'רגיל',600:'בינוני',700:'מודגש',800:'מודגש מאוד'};
+$('ed-wt').onclick=()=>{if(!cur){alert('קודם לוחצים על הטקסט שרוצים לשנות');return;}const w=Math.round(parseInt(getComputedStyle(cur).fontWeight)/100)*100;const i=WEIGHTS.findIndex(x=>x>=w);const n=WEIGHTS[(i+1)%WEIGHTS.length];cur.style.fontWeight=n;cur.querySelectorAll('*').forEach(c=>{if(c.style.fontWeight)c.style.fontWeight='';});flash('עובי: '+WNAMES[n]);save();};
+// duplicate: a free-floating copy with the same look, placed just below the original
+$('ed-dup').onclick=()=>{if(!cur||!design.contains(cur)){alert('קודם לוחצים על הטקסט שרוצים לשכפל');return;}
+  const src=cur.closest('.ed-added')||cur,cs=getComputedStyle(src),r=src.getBoundingClientRect(),f=design.getBoundingClientRect();
+  const c=src.cloneNode(true);c.removeAttribute('id');delete c.dataset.tx;delete c.dataset.ty;c.classList.add('ed-added');
+  ['fontSize','fontWeight','fontFamily','color','lineHeight','textAlign','letterSpacing','background','backgroundColor','padding','borderRadius'].forEach(k=>c.style[k]=cs[k]);
+  Object.assign(c.style,{position:'absolute',left:(r.left-f.left)+'px',top:(r.bottom-f.top+10)+'px',right:'auto',width:r.width+'px',margin:'0',transform:'',whiteSpace:'normal',zIndex:50});
+  design.appendChild(c);c.querySelectorAll('[contenteditable]').forEach(x=>x.removeAttribute('contenteditable'));c.setAttribute('contenteditable',moving?'false':'true');c.setAttribute('data-mv','');cur=c;save();flash('שוכפל');};
+// a text box whose text was fully erased is removed (undo brings it back), so no empty frames stay behind
+function dropEmpty(){let n=0;design.querySelectorAll('[contenteditable]').forEach(el=>{if(!el.textContent.trim()&&!el.querySelector('img,svg')){el.remove();n++;}});return n;}
+if(dropEmpty())ls(()=>localStorage.setItem(KEY,design.innerHTML));
+design.addEventListener('focusout',e=>{const el=e.target;if(el.isContentEditable&&!el.textContent.trim()&&!el.querySelector('img,svg')){setTimeout(()=>{if(document.activeElement!==el&&!el.textContent.trim()){if(hist[hist.length-1]!==design.innerHTML)hist.push(design.innerHTML);el.remove();if(cur===el)cur=null;writeNow('תיבה ריקה נמחקה');}},0);}});
+$('ed-mode').onclick=()=>{moving=!moving;document.body.classList.toggle('ed-move',moving);$('ed-mode').classList.toggle('on',moving);
+  $('ed-mode').textContent=moving?'מצב הזזה: פועל, גוררים עם העכבר':'מצב הזזה: כבוי';prep();if(document.activeElement)document.activeElement.blur();};
+design.addEventListener('pointerdown',e=>{if(!moving)return;let el=e.target.closest('[data-mv]');if(!el||!design.contains(el))return;e.preventDefault();
+  el=el.closest('.ed-added')||el;drag={el,x0:e.clientX,y0:e.clientY,tx:+(el.dataset.tx||0),ty:+(el.dataset.ty||0)};design.setPointerCapture(e.pointerId);cur=el;});
+design.addEventListener('pointermove',e=>{if(!drag)return;const el=drag.el,dx=drag.tx+e.clientX-drag.x0,dy=drag.ty+e.clientY-drag.y0;
+  el.dataset.tx=dx;el.dataset.ty=dy;el.style.transform='translate('+dx+'px,'+dy+'px)';if(getComputedStyle(el).display==='inline')el.style.display='inline-block';});
+design.addEventListener('pointerup',()=>{if(drag)save();drag=null;});
+
+$('ed-add').onclick=()=>{const d=document.createElement('div');d.className='ed-added';d.textContent='טקסט חדש';
+  d.setAttribute('contenteditable',moving?'false':'true');d.setAttribute('data-mv','');design.appendChild(d);cur=d;
+  if(!moving){d.focus();document.getSelection().selectAllChildren(d);}save();};
+$('ed-del').onclick=()=>{if(!cur||!design.contains(cur)){alert('קודם לוחצים על מה שרוצים למחוק');return;}
+  const added=cur.closest('.ed-added'),el=added||cur;if(!added&&!confirm('למחוק את החלק הזה? אפשר להחזיר עם ביטול פעולה.'))return;
+  clearTimeout(saveT);if(hist[hist.length-1]!==design.innerHTML)hist.push(design.innerHTML);el.remove();cur=null;writeNow('נמחק');};
+$('ed-undo').onclick=()=>{clearTimeout(saveT);if(hist[hist.length-1]!==design.innerHTML)hist.push(design.innerHTML);
+  if(hist.length<2){flash('אין מה לבטל');return;}hist.pop();design.innerHTML=hist[hist.length-1];prep();cur=null;writeNow('בוטל',true);};
+$('ed-save').onclick=()=>{if(document.activeElement)document.activeElement.blur();clearTimeout(saveT);writeNow('נשמר');ls(()=>localStorage.setItem(KEY+'-backup',design.innerHTML));};
+$('ed-reset').onclick=()=>{if(!confirm('למחוק את כל השינויים ולחזור לעיצוב המקורי?'))return;
+  ls(()=>localStorage.setItem(KEY+'-before-reset',design.innerHTML));ls(()=>localStorage.removeItem(KEY));design.innerHTML=ORIGINAL;hist.length=0;hist.push(ORIGINAL);prep();flash('חזר למקור');};
+// exports the current edit (images stripped) so Claude can read it from the download folder and rebuild the source
+$('ed-exp').onclick=()=>{const t=document.createElement('div');t.innerHTML=design.innerHTML;t.querySelectorAll('img').forEach(i=>i.setAttribute('src',''));const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t.innerHTML],{type:'text/html'}));a.download=(design.dataset.key||'design')+'-edit-for-claude.html';document.body.appendChild(a);a.click();a.remove();flash('הקובץ ירד להורדות');};
+$('ed-dl').onclick=async()=>{if(document.activeElement)document.activeElement.blur();
+  document.body.classList.add('ed-export');window.scrollTo(0,0);
+  try{const c=await html2canvas(design,{scale:Number(design.dataset.scale||1),backgroundColor:null,useCORS:true});
+    const a=document.createElement('a');a.download=FILE;a.href=c.toDataURL('image/png');document.body.appendChild(a);a.click();a.remove();}
+  catch(e){alert('ההורדה לא הצליחה כאן. פתחו את הקובץ בדפדפן כרום ונסו שוב.');}
+  document.body.classList.remove('ed-export');};
+})();
+</script>
+<script>
+document.getElementById('ed-toggle').onclick=function(){
+  if(document.body.classList.contains('editing')){location.reload();return;}
+  closeWin();document.body.classList.add('editing');this.textContent='סיום עריכה';fit();
+  const go=()=>{(new Function(document.getElementById('ed-src').textContent))();fit();};
+  if(window.html2canvas)go();else{const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';sc.onload=go;sc.onerror=go;document.head.appendChild(sc);}
+};
+</script>
+
+<script>
+/* שמירת העיצוב לתוך הקובץ עצמו (כדי להעלות לגיטהב) */
+async function saveToFile(){
+  let src;
+  try{ src = await (await fetch(location.href.split('#')[0].split('?')[0], {cache:'no-store'})).text(); }
+  catch(e){ alert('לא הצלחתי לקרוא את הקובץ המקורי. פתחו את המסך דרך החלונית של קלוד.'); return; }
+  const a = src.indexOf('<!--DESIGN-START-->'), b = src.indexOf('<!--DESIGN-END-->');
+  if(a<0||b<0){ alert('חסר סימון בקובץ'); return; }
+  const t = document.getElementById('design').cloneNode(true);
+  t.querySelectorAll('[contenteditable]').forEach(e=>e.removeAttribute('contenteditable'));
+  t.querySelectorAll('[data-mv]').forEach(e=>e.removeAttribute('data-mv'));
+  const m = t.querySelector('#modal'); if(m){ m.classList.remove('on'); const mb=m.querySelector('#mBody'); if(mb) mb.innerHTML=''; }
+  const r = t.querySelector('#res'); if(r) r.innerHTML='<span class="muted">טוען...</span>';
+  const out = src.slice(0, a + '<!--DESIGN-START-->'.length) + '\n' + t.innerHTML.trim() + '\n' + src.slice(b);
+  const name = (location.pathname.split('/').pop()) || 'lesson-1.html';
+  try{
+    if(window.showSaveFilePicker){
+      const h = await showSaveFilePicker({suggestedName:name, types:[{description:'HTML',accept:{'text/html':['.html']}}]});
+      const w = await h.createWritable(); await w.write(out); await w.close();
+    } else {
+      const l = document.createElement('a'); l.href = URL.createObjectURL(new Blob([out],{type:'text/html'})); l.download = name; document.body.appendChild(l); l.click(); l.remove();
+    }
+  }catch(e){ if(e && e.name==='AbortError') return; alert('השמירה לא הצליחה: '+e); return; }
+  try{ localStorage.removeItem(EDKEY); }catch(e){}
+  alert('נשמר בקובץ. עכשיו אפשר להעלות לגיטהב.');
+}
+/* כפתור בפס העורך */
+const _edObs = new MutationObserver(()=>{ const bar=document.getElementById('ed-bar'); if(bar && !document.getElementById('ed-file')){ const b=document.createElement('button'); b.id='ed-file'; b.className='ed-cta'; b.textContent='שמירה לקובץ'; b.onmousedown=e=>e.preventDefault(); b.onclick=saveToFile; bar.insertBefore(b, bar.firstChild); } });
+_edObs.observe(document.body, {childList:true});
+</script>
+</body>
+</html>
