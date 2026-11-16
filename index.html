@@ -6,60 +6,58 @@
 <title>עברית דבורה עם בינה מלאכותית · תל שבע</title>
 <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--blue:#0181C9;--deep:#0B4F7C;--teal:#6BE3D1;--soft:#EEF8F6;--line:#E3ECEF;--orange:#FA7548;--ink:#2F3437;--muted:#5E686D;--panel:#2B78C5;--pink:#E2448F}
+:root{--blue:#0181C9;--panel:#2B78C5;--deep:#0B4F7C;--teal:#6BE3D1;--soft:#EEF8F6;--line:#E3ECEF;--orange:#FA7548;--pink:#E2448F;--ink:#2F3437;--muted:#5E686D}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'Assistant','Heebo',sans-serif;direction:rtl;color:var(--ink)}
 #vp{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
 #stage{width:1600px;height:900px;flex:0 0 auto;position:relative;background:#F7FAFB;transform-origin:center;overflow:hidden}
-#stage::before{content:'';position:absolute;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle,rgba(107,227,209,.28),rgba(107,227,209,0) 70%);top:-260px;right:-180px}
-#stage::after{content:'';position:absolute;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(1,129,201,.12),rgba(1,129,201,0) 70%);bottom:-260px;left:-160px}
-.sheet{position:absolute;top:24px;right:36px;left:36px;bottom:40px;background:#fff;border-radius:26px;box-shadow:0 14px 40px rgba(11,79,124,.12);z-index:1;display:flex;flex-direction:column}
+#stage::before{content:'';position:absolute;width:680px;height:680px;border-radius:50%;background:radial-gradient(circle,rgba(107,227,209,.30),rgba(107,227,209,0) 70%);top:-280px;right:-200px}
+#stage::after{content:'';position:absolute;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle,rgba(226,68,143,.10),rgba(226,68,143,0) 70%);bottom:-300px;left:-180px}
 
-/* כותרת */
-.top{display:flex;align-items:center;gap:22px;padding:28px 44px 22px;border-bottom:1px solid var(--line)}
-.top img{height:70px}
-.top h1{margin:0;font-size:40px;font-weight:700;line-height:1.15}
-.top p{margin:6px 0 0;font-size:21px;color:var(--muted);font-weight:600}
-.top .chips{margin-right:auto;display:flex;gap:10px}
-.top .chips span{background:#EAF4FB;color:var(--deep);border-radius:999px;padding:8px 18px;font-weight:700;font-size:18px}
+/* דף מרכזי, בפרופורציות של הג'ניאלי */
+.sheet{position:absolute;top:40px;bottom:46px;right:110px;left:110px;background:#fff;border-radius:28px;box-shadow:0 18px 50px rgba(11,79,124,.14);z-index:1;display:flex;flex-direction:column;align-items:center;padding:34px 60px 18px}
+.sheet::before{content:'';position:absolute;top:0;right:60px;left:60px;height:6px;border-radius:0 0 6px 6px;background:linear-gradient(90deg,var(--teal),var(--blue),var(--pink))}
+.logo{position:absolute;top:22px;left:30px;height:66px}
+.eyebrow{display:flex;gap:10px}
+.eyebrow span{background:#EAF4FB;color:var(--deep);border-radius:999px;padding:5px 16px;font-size:17px;font-weight:700}
+h1{margin:12px 0 0;font-size:46px;font-weight:700;color:var(--deep);text-align:center;line-height:1.15}
+.sub{margin:8px 0 0;font-size:23px;color:var(--muted);text-align:center}
 
-/* מפגשים */
-.body{flex:1;min-height:0;padding:26px 44px 30px;display:flex}
-.panel{flex:1;background:var(--panel);border-radius:22px;padding:24px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:1fr 1fr;gap:18px}
-.card{background:#fff;border-radius:18px;padding:22px 22px 18px;display:flex;flex-direction:column;gap:10px;text-decoration:none;color:var(--ink);position:relative;transition:.2s}
-a.card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(0,0,0,.18)}
-.card .n{width:58px;height:58px;border-radius:50%;background:var(--pink);color:#fff;font-size:28px;font-weight:700;display:flex;align-items:center;justify-content:center}
-.card h2{margin:4px 0 0;font-size:27px;font-weight:700;line-height:1.25}
-.card .desc{margin:0;font-size:20px;line-height:1.45;color:var(--muted)}
-.card.soon .desc{color:#5E7385}
-.card .n{width:64px;height:64px;font-size:30px}
-.card h2{font-size:29px}
-.card .meta{margin-top:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.card .date{font-size:20px;font-weight:700;color:var(--deep)}
-.card .type{background:#EAF4FB;color:var(--deep);border-radius:999px;padding:3px 12px;font-size:16px;font-weight:700}
-.card .go{position:absolute;top:24px;left:22px;font-size:17px;font-weight:700;color:#fff;background:var(--orange);border-radius:999px;padding:6px 14px;color:var(--ink)}
-.card.soon{background:#E7F1FA}
-.card.soon .n{background:#9CB8CF}
-.card.soon h2{color:#4C5C68}
-.card.soon .later{position:absolute;top:26px;left:22px;font-size:16px;font-weight:700;color:#5E7385}
-.card.task .type{background:#FFF6D6;color:#6B5A00}
+/* המפגשים: לוח כחול עם כרטיסים לבנים, כמו במסך השיעור */
+.grid{flex:0 0 auto;height:500px;width:92%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:14px;margin:20px 0 12px;background:var(--panel);border-radius:22px;padding:20px}
+.s{background:#fff;border-radius:16px;padding:14px 18px;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--ink);position:relative;transition:.25s}
+.s .top{display:flex;align-items:center;gap:12px}
+.s .n{width:46px;height:46px;border-radius:50%;background:var(--pink);color:#fff;font-size:25px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.s .d{font-size:23px;font-weight:700;color:var(--blue)}
+.s h2{margin:2px 0 0;font-size:25px;font-weight:700;line-height:1.25}
+.s .desc{margin:0;font-size:18px;line-height:1.4;color:var(--muted)}
+.s .t{margin-top:auto;align-self:flex-start;font-size:16px;font-weight:700;color:var(--deep);background:#EAF4FB;border-radius:999px;padding:3px 12px}
+.s .t.task{background:#FFF4CF;color:#6B5A00}
+a.s:hover{transform:translateY(-4px);box-shadow:0 14px 28px rgba(0,0,0,.2)}
+a.s .go{position:absolute;top:22px;left:18px;background:var(--orange);color:var(--ink);font-weight:700;font-size:18px;border-radius:999px;padding:6px 20px}
+.s.soon{background:#E6F0F9}
+.s.soon .n{background:#9DB6CB}
+.s.soon h2{color:#4C5C68}
+.s.soon .d{color:#6F8AA0}
 
-.sig{position:absolute;bottom:14px;left:0;right:0;text-align:center;font-size:14px;color:var(--muted);z-index:2}
+/* בתמיכת */
+.partners{flex:1;display:flex;align-items:center;justify-content:center;gap:50px;border-top:1px solid var(--line);padding-top:8px;width:100%}
+.partners span{font-size:17px;font-weight:700;color:var(--muted)}
+.partners img{height:84px;width:auto}
+
+.sig{position:absolute;bottom:18px;left:0;right:0;text-align:center;font-size:14px;color:var(--muted);z-index:2}
 .sig a{color:inherit}
 </style>
 </head>
 <body>
 <div id="vp"><div id="stage">
   <div class="sheet">
-    <div class="top">
-      <img src="assets/lomdot-logo-no-tagline.png" alt="לומדות">
-      <div>
-        <h1>כלים דיגיטליים וחווייתיים בהוראת עברית דבורה</h1>
-        <p>בינה מלאכותית לעידוד הדיבור בעברית · בהנחיית שירה רוט זליקוביץ</p>
-      </div>
-      <div class="chips"><span>תל שבע</span><span>תשפ"ז</span></div>
-    </div>
-    <div class="body"><div class="panel" id="grid"></div></div>
+    <img class="logo" src="assets/lomdot-logo-no-tagline.png" alt="לומדות">
+    <div class="eyebrow"><span>השתלמות למורים לעברית</span><span>תל שבע</span><span>תשפ"ז</span></div>
+    <h1>כלים דיגיטליים וחווייתיים בהוראת עברית דבורה</h1>
+    <p class="sub">בינה מלאכותית לעידוד הדיבור בעברית · בהנחיית שירה רוט זליקוביץ</p>
+    <div class="grid" id="grid"></div>
+    <div class="partners"><img src="assets/budur.png" alt="בודור"><img src="assets/partner2.png" alt="" onerror="this.remove()"></div>
   </div>
   <div class="sig">© שירה רוט זליקוביץ · הוראה יצירתית עם AI · <a href="https://wa.me/972523930628" target="_blank" rel="noopener">ווטסאפ</a> · <a href="https://www.lomdot.org/" target="_blank" rel="noopener">להזמנת סדנאות בינה מלאכותית</a></div>
 </div></div>
@@ -67,19 +65,18 @@ a.card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(0,0,0,.18)}
 <script>
 /* page = עמוד המפגש. מפגש בלי page מוצג "בקרוב" */
 const SESSIONS=[
- {n:1,date:'16.11',type:'פרונטלי',title:'מבוא לבינה מלאכותית',desc:'מה זה בינה מלאכותית, איך כותבים לבינה ומדברים איתה בטלפון',page:'lesson-1.html'},
- {n:2,date:'23.11',type:'סינכרוני',title:'NotebookLM',desc:'פודקאסט וסרטון בעברית מדוברת מתוך החומרים שלנו'},
- {n:3,date:'30.11',type:'סינכרוני',title:'מטקסט לתמונה',desc:'מדרש תמונה, חידות בתמונה, משחקי מילים וקלפי שיח'},
- {n:4,date:'7.12',type:'סינכרוני',title:'יצירת סרטונים',desc:'סרטון בלי קול, והתלמידים מדבבים אותו'},
- {n:5,date:'14.12',type:'פרונטלי',title:'יצירת אפליקציות',desc:'מקליט קול ומשחקי דיבור בקוד'},
- {n:6,date:'21.12',type:'מטלה',title:'בוט עוזר ללימוד שפה',desc:'בונים בוט שמתרגל עם התלמידים עברית מדוברת'},
- {n:7,date:'11.1',type:'מטלה',title:'מערך שיעור',desc:'מערך על בסיס 3 פרקטיקות, והעברתו בכיתה'},
- {n:8,date:'18.1',type:'פרונטלי',title:'למידת עמיתים וסיכום',desc:'מציגים את השיעורים, רפלקציה וסיכום הקורס'}
+ {date:'16.11',type:'פרונטלי',title:'מבוא לבינה מלאכותית',desc:'מה זה בינה מלאכותית, איך כותבים לבינה ומדברים איתה בטלפון',page:'lesson-1.html'},
+ {date:'23.11',type:'בזום',title:'NotebookLM',desc:'פודקאסט וסרטון בעברית מדוברת מתוך החומרים שלנו'},
+ {date:'30.11',type:'בזום',title:'מטקסט לתמונה',desc:'מדרש תמונה, חידות, משחקי מילים וקלפי שיח'},
+ {date:'7.12',type:'בזום',title:'יצירת סרטונים',desc:'סרטון בלי קול, והתלמידים מדבבים אותו'},
+ {date:'14.12',type:'פרונטלי',title:'יצירת אפליקציות',desc:'מקליט קול ומשחקי דיבור בקוד'},
+ {date:'21.12',type:'מטלה',title:'בוט עוזר ללימוד שפה',desc:'בוט שמתרגל עם התלמידים עברית מדוברת'},
+ {date:'11.1',type:'מטלה',title:'מערך שיעור',desc:'מערך על בסיס 3 פרקטיקות, והעברתו בכיתה'},
+ {date:'18.1',type:'פרונטלי',title:'למידת עמיתים וסיכום',desc:'מציגים את השיעורים, רפלקציה וסיכום'}
 ];
-document.getElementById('grid').innerHTML=SESSIONS.map(s=>{
-  const inner=`<span class="n">${s.n}</span><h2>${s.title}</h2><p class="desc">${s.desc||''}</p><div class="meta"><span class="date">${s.date}</span><span class="type">${s.type}</span></div>`;
-  const task=s.type==='מטלה'?' task':'';
-  return s.page?`<a class="card${task}" href="${s.page}">${inner}<span class="go">כניסה</span></a>`:`<div class="card soon${task}">${inner}<span class="later">בקרוב</span></div>`;
+document.getElementById('grid').innerHTML=SESSIONS.map((s,i)=>{
+  const inner=`<div class="top"><span class="n">${i+1}</span><span class="d">${s.date}</span></div><h2>${s.title}</h2><p class="desc">${s.desc||''}</p><span class="t${s.type==='מטלה'?' task':''}">${s.type}</span>`;
+  return s.page?`<a class="s" href="${s.page}">${inner}<span class="go">כניסה</span></a>`:`<div class="s soon">${inner}</div>`;
 }).join('');
 function fit(){const s=Math.min(innerWidth/1600,innerHeight/900);document.getElementById('stage').style.transform=`scale(${s})`}
 addEventListener('resize',fit);fit();

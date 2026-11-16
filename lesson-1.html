@@ -211,6 +211,31 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'A
 .aboutme .facts span{border:2px solid var(--teal);border-radius:999px;padding:4px 16px;font-size:22px;font-weight:700;color:var(--deep);background:#fff}
 .youwin{height:100%;display:flex;align-items:center;justify-content:center}
 .youwin ol{font-size:46px;font-weight:700;line-height:2;color:var(--ink)}
+
+/* חלון ועכשיו אתם */
+.youwin2{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;height:100%;align-items:stretch}
+.youwin2 .qs{display:flex;flex-direction:column;justify-content:center;gap:18px}
+.youwin2 .lead{margin:0 0 4px;font-size:28px;color:var(--muted);font-weight:600}
+.youwin2 .q{display:flex;align-items:center;gap:20px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px 24px;box-shadow:0 8px 20px rgba(11,79,124,.08)}
+.youwin2 .qi{width:64px;height:64px;border-radius:50%;background:#E2448F;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.youwin2 .qi svg{width:32px;height:32px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.youwin2 b{font-size:34px;color:var(--ink)}
+.youwin2 .yimg{border-radius:24px;background:#EAF4FB;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.youwin2 .yimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.youwin2 .yimg em{font-style:normal;font-size:22px;font-weight:700;color:#7A8489}
+.youwin2 .yimg img+em{display:none}
+.slead{margin:0 0 16px;font-size:26px;color:var(--deep);font-weight:600}
+
+/* ספרונים לדוגמה */
+.books{display:flex;gap:34px;justify-content:center;margin:22px 0 4px}
+.book{display:flex;flex-direction:column;align-items:center;gap:10px;text-decoration:none;width:200px;transition:.25s}
+.book:hover{transform:translateY(-6px) rotate(-2deg)}
+.cover{position:relative;width:118px;height:150px;border-radius:6px 14px 14px 6px;box-shadow:0 12px 22px -8px rgba(11,79,124,.45),inset -6px 0 0 rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center}
+.cover .spine{position:absolute;right:0;top:0;bottom:0;width:14px;border-radius:0 14px 14px 0;background:rgba(0,0,0,.12)}
+.cover svg{width:58px;height:58px;fill:none;stroke:#2F3437;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.book .bt{font-size:20px;font-weight:700;color:var(--deep);text-align:center;line-height:1.3}
+.cols2 .steps{gap:8px}
+.slead{margin:0 0 10px !important}
 </style>
 </head>
 <body>
@@ -243,6 +268,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'A
     </div>
     <div class="panel blue">
       <div role="button" tabindex="0" data-move class="act" data-open="phone"><span class="ic"><svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></span><span data-edit>שיחה בטלפון<small>מדברים עם הבינה בקול</small></span></div>
+      <div role="button" tabindex="0" data-move class="act" data-open="story"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/><path d="M9 8h6M9 12h4"/></svg></span><span data-edit>Storybook<small>ספר סיפור מאויר עם הקראה</small></span></div>
       <div role="button" tabindex="0" data-move class="act" data-open="tips"><span class="ic"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/></svg></span><span data-edit>טיפים לתוצאות טובות<small>איך מקבלים תשובות טובות יותר</small></span></div>
       <div role="button" tabindex="0" data-move class="act" data-open="padlet"><span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="5" rx="1"/><rect x="13" y="10" width="8" height="11" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/></svg></span><span data-edit>בואו נכיר קצת יותר<small>עם בינה מלאכותית בפדלט</small></span></div>
       <div role="button" tabindex="0" data-move class="act" data-open="learned"><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg></span><span data-edit>מה למדנו<small>סיכום המפגש</small></span></div>
@@ -260,9 +286,14 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'A
 /* ===== הגדרות ===== */
 const SESSION='1';
 const SHEET_ID='1jZSeNE40Kd5q3K09NQ1xOOg1wJtwcPlyOx9acNoUfdg'; // פדלט ומשוב נלקחים מהגיליון
-const LINKS={padlet:'https://padlet.com/shirarothz/padlet-s025i42xat8y8kuwmu2h',feedback:'',deck:''}; // deck = קישור ההטמעה של מצגת הקנבה // אפשר גם לכתוב כאן ישירות
+const LINKS={padlet:'https://padlet.com/shirarothz/padlet-s025i42xat8y8kuwmu2h',feedback:'',deck:'https://www.canva.com/design/DAHbCgOCH34/yJA85wKum4jqfBZLP-5gtg/view?embed'}; // deck = קישור ההטמעה של מצגת הקנבה // אפשר גם לכתוב כאן ישירות
 const SURVEY={form:'https://docs.google.com/forms/d/e/1FAIpQLSfyuwXxfOIwusnJ047nFQBA_ZtWdZFLAB1D22UElTze1RJ3yw/viewform',sheet:'1Apeo3prNfDsFnZorueoCUsNaB055klhZ2mbTycWXKbw',gid:'1758922010',open:'ציפיות'};
 const EXTRA=[{name:'הקמפיין של איילת זורר',url:'https://youtu.be/qGzba7SFM-c'}]; // משאבים נוספים
+const STORIES=[ // ספרי Storybook לדוגמה
+ {t:'יובל גיבור השיעורים',u:'https://gemini.google.com/share/ec79a4050854',c:'#FBD38D',i:'<rect x="6" y="7" width="12" height="13" rx="3"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/><path d="M6 12h12"/><path d="M10 15h4"/>'},
+ {t:'המסע הגדול של ניצנה הטיפה',u:'https://gemini.google.com/share/9bf1ab0d73ea',c:'#9FDCF5',i:'<path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z"/><path d="M9.5 14.5a2.5 2.5 0 0 0 2.5 2.5"/>'},
+ {t:'הילה והשעון המקפץ בזמן',u:'https://gemini.google.com/share/e861d28d007f',c:'#F6B8D9',i:'<circle cx="12" cy="13" r="7"/><path d="M12 13V9.5M12 13l2.5 1.5"/><path d="M10 3h4M12 3v3"/>'}
+];
 const GEMINI='https://gemini.google.com';
 
 /* ===== תוכן החלונות ===== */
@@ -320,10 +351,11 @@ const WIN={
   </div>
   ${tryIt('קחו תשובה שקיבלתם ובקשו לשנות אותה פעמיים. מה השתפר?',GEMINI)}`}),
  intro:()=>({t:'נעים להכיר',h:`<div class="aboutme solo"><div class="me"><div class="ph"></div><div><div class="eye">מי מעבירה את ההשתלמות</div><b>שירה רוט זליקוביץ</b><span class="role">מומחית בטכנולוגיות בחינוך ובהוראה יצירתית עם AI</span><div class="facts"><span>גרה בחריש</span><span>אמא ל-6 ילדים</span><span>סבתא ל-9 נכדים</span><span>עובדת במשרד החינוך</span></div><p>אחרי שנים רבות בעולמות התקשורת החזותית, הפרסום והשיווק, עברתי לעולם של טכנולוגיות בלמידה.</p><p>אני אוהבת במיוחד את החיבור בין יצירתיות, עיצוב, טכנולוגיה ולמידה.</p><p>ואני פשוט עפה על AI, ועל הדרך שבה הוא מאפשר לנו ליצור דברים שפעם נראו בלתי אפשריים.</p></div></div></div>`}),
- you:()=>({t:'ועכשיו אתם',h:`<div class="youwin"><ol><li>השם שלי</li><li>בית הספר שלי</li><li>מה אני מלמד, ובאילו כיתות</li></ol></div>`}),
+ you:()=>({t:'ועכשיו אתם',h:`<div class="youwin2"><div class="qs"><p class="lead">ספרו לנו בכמה מילים:</p><div class="q"><span class="qi"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg></span><b>השם שלי</b></div><div class="q"><span class="qi"><svg viewBox="0 0 24 24"><path d="M3 10l9-6 9 6"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/></svg></span><b>בית הספר שלי</b></div><div class="q"><span class="qi"><svg viewBox="0 0 24 24"><path d="M4 5h7a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H4z"/><path d="M20 5h-6"/><path d="M20 5v13h-6"/></svg></span><b>מה אני מלמד, ובאילו כיתות</b></div></div><div class="yimg"><img src="assets/you.jpg" alt="" onerror="this.remove()"><em>מקום לתמונה</em></div></div>`}),
  survey:()=>({t:'כמה אנחנו משתמשים בבינה מלאכותית?',u:SURVEY.form,h:`<div class="svtabs"><button class="on" data-sv="q">סריקה</button><button data-sv="r">תוצאות</button></div><div id="svBody"></div>`,after:svInit}),
  deck:()=>({t:'מצגת השיעור',u:LINKS.deck,f:!!LINKS.deck,h:LINKS.deck?frame(LINKS.deck):'<div class="empty">המצגת תופיע כאן</div>'}),
  video:(el)=>({t:el.dataset.title||'סרטון',u:'https://youtu.be/'+el.dataset.vid,f:true,h:frame('https://www.youtube-nocookie.com/embed/'+el.dataset.vid+'?autoplay=1&rel=0')}),
+ story:()=>({t:'Storybook של Gemini',h:`<div class="cols2"><div><p class="slead">Gemini יוצר ספר סיפור מאויר של 10 עמודים, עם הקראה בקול.</p><ol class="steps"><li><div>נכנסים ל-<b>Gemini</b>.</div></li><li><div>בוחרים <b>Storybook</b> בכלים, או בצד המסך.</div></li><li><div>כותבים על מה הסיפור, למי, ובאיזו עברית.</div></li><li><div>מקבלים ספר עם איורים, ולוחצים על <b>הקראה</b>.</div></li></ol></div><div>${ex('דוגמה','כתוב ספר קצר בעברית פשוטה על ילד שהולך לשוק עם אמא שלו. משפט אחד או שניים בכל עמוד.')}</div></div><div class="books">${STORIES.map(b=>`<a class="book" href="${b.u}" target="_blank" rel="noopener"><span class="cover" style="background:${b.c}"><span class="spine"></span><svg viewBox="0 0 24 24">${b.i}</svg></span><span class="bt">${b.t}</span></a>`).join('')}</div>${tryIt('צרו ספר לנושא מהכיתה שלכם. הקריאו אותו בקול, ובקשו מהתלמידים לספר אותו מחדש.',GEMINI)}`}),
  padlet:()=>({t:'בואו נכיר קצת יותר',u:LINKS.padlet,f:!!LINKS.padlet,h:LINKS.padlet?frame(LINKS.padlet):'<div class="empty">הפדלט יופיע כאן</div>'}),
  learned:()=>({t:'מה למדנו',h:`<ul class="learned"><li>מה זה בינה מלאכותית</li><li>הכלים החינמיים</li><li>איך כותבים לבינה</li><li>מדברים עם הבינה בטלפון</li><li>בונים מערך שיעור</li><li>טיפים לתוצאות טובות</li></ul>`}),
  feedback:()=>{const u=LINKS.feedback?LINKS.feedback.replace('{מפגש}',SESSION):'';const e=u&&u.includes('docs.google.com/forms')?u+(u.includes('?')?'&':'?')+'embedded=true':u;return {t:'משוב על המפגש',u,f:!!u,h:u?frame(e):'<div class="empty">טופס המשוב יופיע כאן</div>'}}
