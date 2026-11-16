@@ -3,349 +3,86 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>עברית דבורה עם AI</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<title>עברית דבורה עם בינה מלאכותית · תל שבע</title>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --lm-blue:#0181C9; --lm-blue-deep:#0B4F7C; --lm-yellow:#E5E633; --lm-teal:#6BE3D1;
-  --lm-teal-soft:#E6FAF6; --lm-orange:#FA7548; --lm-ink:#303030; --lm-body:#4A4A4A;
-  --lm-muted:#6B6B6B; --lm-border:#DDE7E8; --lm-white:#fff;
-  --lm-font:'Assistant','Heebo',sans-serif; --lm-radius:6px; --lm-radius-lg:14px;
-  --lm-shadow:0 2px 10px rgba(48,48,48,.10); --lm-shadow-hover:0 8px 24px rgba(48,48,48,.16);
-}
+:root{--blue:#0181C9;--deep:#0B4F7C;--teal:#6BE3D1;--soft:#EEF8F6;--line:#E3ECEF;--orange:#FA7548;--ink:#2F3437;--muted:#5E686D;--panel:#2B78C5;--pink:#E2448F}
 *{box-sizing:border-box}
-html,body{margin:0;height:100%;background:#eef3f4;font-family:var(--lm-font);color:var(--lm-body);direction:rtl;overflow:hidden}
-#viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
-#stage{width:1600px;height:900px;flex:0 0 auto;position:relative;background:#fff;transform-origin:center center;box-shadow:0 10px 40px rgba(0,0,0,.12);overflow:hidden}
-.slide{position:absolute;inset:0;padding:72px 96px 96px;display:none;flex-direction:column;animation:fade .35s ease}
-.slide.on{display:flex}
-@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-h1,h2,h3{color:var(--lm-ink);font-weight:800;margin:0;line-height:1.2}
-h2.title{font-size:64px;margin-bottom:44px}
-.mark{background:linear-gradient(transparent 58%,var(--lm-yellow) 58%);padding:0 6px}
-.stripe{height:8px;display:flex;width:240px;margin:22px 0 0}
-.stripe i{flex:1}.stripe i:nth-child(1){background:var(--lm-teal)}.stripe i:nth-child(2){background:var(--lm-yellow)}.stripe i:nth-child(3){background:var(--lm-blue)}
-a{color:var(--lm-blue-deep)}
-/* home */
-.home{padding:56px 80px 70px}
-.home-head{display:flex;align-items:center;gap:40px;margin-bottom:34px}
-.home-head img{height:120px}
-.home-head h1{font-size:54px}
-.home-head p{font-size:26px;color:var(--lm-blue-deep);margin:8px 0 0;font-weight:700}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;background:var(--lm-teal);padding:28px;border-radius:var(--lm-radius-lg)}
-.card{background:#fff;border-radius:var(--lm-radius);box-shadow:var(--lm-shadow);padding:20px 22px;min-height:190px;display:flex;flex-direction:column;gap:8px;border:0;text-align:right;font-family:inherit;transition:.2s}
-button.card{cursor:pointer}
-button.card:hover{box-shadow:var(--lm-shadow-hover);transform:translateY(-3px)}
-.card .num{font-size:20px;font-weight:800;color:var(--lm-blue)}
-.card .date{font-size:18px;color:var(--lm-muted)}
-.card .type{display:inline-block;align-self:flex-start;background:var(--lm-teal-soft);color:var(--lm-blue-deep);font-weight:700;font-size:15px;padding:3px 12px;border-radius:999px}
-.card h3{font-size:25px;line-height:1.25}
-.card.soon{opacity:.6}
-.card .soon-t{margin-top:auto;font-size:15px;color:var(--lm-muted)}
-/* section */
-.section{background:var(--lm-teal);justify-content:center}
-.section .big{font-size:180px;font-weight:800;color:var(--lm-blue-deep);line-height:1}
-.section h2{font-size:96px;margin-top:10px}
-.section p{font-size:34px;color:var(--lm-ink);margin:24px 0 0;font-weight:600}
-/* list */
-.list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:26px}
-.list li{font-size:38px;color:var(--lm-ink);display:flex;gap:24px;align-items:center}
-.list li b{flex:0 0 64px;height:64px;border-radius:50%;background:var(--lm-blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:32px}
-.list.q li b{background:var(--lm-yellow);color:var(--lm-ink)}
-/* cards row */
-.cards{display:grid;gap:26px;flex:1;align-content:center;padding-bottom:40px}
-.cards .c{background:#fff;border-radius:var(--lm-radius);box-shadow:var(--lm-shadow);padding:36px 30px;min-height:260px;border-top:8px solid var(--lm-blue);display:flex;flex-direction:column;gap:6px}
-.cards .c a{margin-top:auto}
-.cards .c h3{font-size:38px;margin-bottom:10px}
-.cards .c p{font-size:28px;margin:0;line-height:1.5}
-.cards .c a{font-size:24px;font-weight:700}
-.on-soft{background:var(--lm-teal-soft)}
-/* flow */
-.flow{display:flex;align-items:center;gap:26px;flex:1}
-.flow .st{flex:1;background:var(--lm-teal-soft);border-radius:var(--lm-radius-lg);padding:44px 30px;text-align:center}
-.flow .st .n{font-size:90px;font-weight:800;color:var(--lm-blue);line-height:1}
-.flow .st p{font-size:36px;color:var(--lm-ink);font-weight:700;margin:16px 0 0}
-.flow .ar{font-size:60px;color:var(--lm-blue-deep);font-weight:800}
-/* prompt */
-.prompt{background:var(--lm-blue-deep);color:#fff;border-radius:var(--lm-radius-lg);padding:40px 48px 84px;font-size:42px;line-height:1.5;font-weight:600;position:relative}
-.copy{position:absolute;left:24px;bottom:20px;background:transparent;color:var(--lm-teal);border:2px solid var(--lm-teal);font:700 20px var(--lm-font);padding:6px 18px;border-radius:var(--lm-radius);cursor:pointer}
-.after{margin-top:34px;font-size:34px;color:var(--lm-ink)}
-.chips{display:flex;gap:16px;flex-wrap:wrap;margin-top:18px}
-.chips span{background:var(--lm-yellow);color:var(--lm-ink);font-size:30px;font-weight:700;padding:8px 22px;border-radius:999px}
-/* statement */
-.statement{background:var(--lm-blue-deep);justify-content:center}
-.statement h2{color:#fff;font-size:84px}
-.statement p{color:var(--lm-teal);font-size:40px;margin:26px 0 0;font-weight:700}
-/* table */
-table.t{width:100%;border-collapse:collapse;font-size:32px}
-table.t th{background:var(--lm-blue-deep);color:#fff;padding:18px 24px;text-align:right}
-table.t td{padding:18px 24px;border-bottom:2px solid var(--lm-border);color:var(--lm-ink)}
-table.t td:first-child{font-weight:800;color:var(--lm-blue-deep);white-space:nowrap}
-/* closing */
-.closing{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;flex:1}
-.closing .box{border-radius:var(--lm-radius-lg);padding:34px 38px}
-.closing .learned{background:var(--lm-teal-soft);border-right:8px solid var(--lm-blue)}
-.closing .learned h3,.closing .res h3{font-size:36px;margin-bottom:18px}
-.closing .learned li{font-size:30px;color:var(--lm-ink);margin-bottom:12px}
-.closing .res{background:#fff;box-shadow:var(--lm-shadow);display:flex;flex-direction:column}
-.res-list{list-style:none;padding:0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
-.res-list a{font-size:28px;font-weight:700;text-decoration:none;border-bottom:2px solid var(--lm-teal)}
-.res-list .muted{font-size:24px;color:var(--lm-muted)}
-.btns{margin-top:auto;display:flex;gap:18px;flex-wrap:wrap}
-.btn{display:inline-block;background:var(--lm-orange);color:var(--lm-ink);font:800 26px/1 var(--lm-font);padding:20px 36px;border-radius:var(--lm-radius);text-decoration:none}
-.btn.ghost{background:transparent;color:var(--lm-blue-deep);border:3px solid var(--lm-blue-deep)}
-.btn.off{opacity:.45;pointer-events:none}
-/* split: טקסט מימין, תמונה משמאל */
-.slide.content::before{content:'';position:absolute;width:420px;height:420px;border-radius:50%;background:var(--lm-teal-soft);top:-180px;right:-160px;z-index:0}
-.slide>*{position:relative;z-index:1}
-.split{display:grid;grid-template-columns:1fr 620px;gap:56px;flex:1;min-height:0}
-.split .txt{display:flex;flex-direction:column;justify-content:center;min-width:0}
-.split .txt h2.title{margin-bottom:36px}
-.pic{border-radius:28px;overflow:hidden;background:var(--lm-teal-soft);height:100%;max-height:700px;align-self:center;width:100%;display:flex;align-items:center;justify-content:center;box-shadow:var(--lm-shadow)}
-.pic img{width:100%;height:100%;object-fit:cover;display:block}
-.pic .ph{text-align:center;color:var(--lm-blue-deep);font-size:24px;font-weight:700;opacity:.55}
-.pic .ph svg{width:120px;height:120px;display:block;margin:0 auto 12px}
-.section.withpic{display:grid;grid-template-columns:1fr 680px;gap:60px;align-items:center}
-.section.withpic .pic{height:720px}
-.split .prompt{font-size:36px}
-.split .list li{font-size:36px}
-.qrbox{background:#fff;border:3px solid var(--lm-teal);max-height:600px;max-width:600px;justify-self:center}
-.qr-in{background:#fff;padding:20px;border-radius:12px}
-.res-head{display:flex;align-items:baseline;justify-content:space-between}
-.res-count{font-size:32px;color:var(--lm-blue-deep);font-weight:700}
-.res-count b{font-size:72px;color:var(--lm-blue);margin-left:10px}
-.res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;align-content:start}
-.open-ans{margin-top:26px;flex:1;min-height:0;overflow:hidden}
-.open-ans h3{font-size:30px;margin-bottom:14px}
-.ans-cards{display:flex;flex-wrap:wrap;gap:14px;align-content:flex-start}
-.ans{background:#fff;border:3px solid var(--lm-yellow);color:#000;font-size:24px;font-weight:600;padding:14px 22px;border-radius:14px;box-shadow:var(--lm-shadow);max-width:460px;line-height:1.35;animation:fade .4s ease}
-.rq{background:#fff;border-radius:var(--lm-radius-lg);box-shadow:var(--lm-shadow);padding:28px;border-top:8px solid var(--lm-teal)}
-.rq h3{font-size:28px;margin-bottom:20px;line-height:1.3}
-.bar{display:grid;grid-template-columns:150px 1fr 40px;gap:12px;align-items:center;margin-bottom:14px;font-size:22px;color:var(--lm-ink)}
-.bt{background:var(--lm-teal-soft);height:26px;border-radius:13px;overflow:hidden}
-.bt i{display:block;height:100%;background:var(--lm-blue);border-radius:13px;transition:width .6s}
-.bar b{color:var(--lm-blue-deep);font-size:24px}
-.quotes{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px}
-.quotes li{background:var(--lm-teal-soft);border-radius:10px;padding:10px 14px;font-size:22px;color:var(--lm-ink);line-height:1.4}
-.muted-big{grid-column:1/-1;text-align:center;font-size:32px;color:var(--lm-muted);padding-top:120px}
-/* chrome */
-.logo-c{position:absolute;right:40px;bottom:22px;height:56px;z-index:5}
-.sig{position:absolute;left:0;right:0;bottom:24px;text-align:center;font-size:15px;color:var(--lm-muted);opacity:.85}
+html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'Assistant','Heebo',sans-serif;direction:rtl;color:var(--ink)}
+#vp{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#stage{width:1600px;height:900px;flex:0 0 auto;position:relative;background:#F7FAFB;transform-origin:center;overflow:hidden}
+#stage::before{content:'';position:absolute;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle,rgba(107,227,209,.28),rgba(107,227,209,0) 70%);top:-260px;right:-180px}
+#stage::after{content:'';position:absolute;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(1,129,201,.12),rgba(1,129,201,0) 70%);bottom:-260px;left:-160px}
+.sheet{position:absolute;top:24px;right:36px;left:36px;bottom:40px;background:#fff;border-radius:26px;box-shadow:0 14px 40px rgba(11,79,124,.12);z-index:1;display:flex;flex-direction:column}
+
+/* כותרת */
+.top{display:flex;align-items:center;gap:22px;padding:28px 44px 22px;border-bottom:1px solid var(--line)}
+.top img{height:70px}
+.top h1{margin:0;font-size:40px;font-weight:700;line-height:1.15}
+.top p{margin:6px 0 0;font-size:21px;color:var(--muted);font-weight:600}
+.top .chips{margin-right:auto;display:flex;gap:10px}
+.top .chips span{background:#EAF4FB;color:var(--deep);border-radius:999px;padding:8px 18px;font-weight:700;font-size:18px}
+
+/* מפגשים */
+.body{flex:1;min-height:0;padding:26px 44px 30px;display:flex}
+.panel{flex:1;background:var(--panel);border-radius:22px;padding:24px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:1fr 1fr;gap:18px}
+.card{background:#fff;border-radius:18px;padding:22px 22px 18px;display:flex;flex-direction:column;gap:10px;text-decoration:none;color:var(--ink);position:relative;transition:.2s}
+a.card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(0,0,0,.18)}
+.card .n{width:58px;height:58px;border-radius:50%;background:var(--pink);color:#fff;font-size:28px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.card h2{margin:4px 0 0;font-size:27px;font-weight:700;line-height:1.25}
+.card .desc{margin:0;font-size:20px;line-height:1.45;color:var(--muted)}
+.card.soon .desc{color:#5E7385}
+.card .n{width:64px;height:64px;font-size:30px}
+.card h2{font-size:29px}
+.card .meta{margin-top:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.card .date{font-size:20px;font-weight:700;color:var(--deep)}
+.card .type{background:#EAF4FB;color:var(--deep);border-radius:999px;padding:3px 12px;font-size:16px;font-weight:700}
+.card .go{position:absolute;top:24px;left:22px;font-size:17px;font-weight:700;color:#fff;background:var(--orange);border-radius:999px;padding:6px 14px;color:var(--ink)}
+.card.soon{background:#E7F1FA}
+.card.soon .n{background:#9CB8CF}
+.card.soon h2{color:#4C5C68}
+.card.soon .later{position:absolute;top:26px;left:22px;font-size:16px;font-weight:700;color:#5E7385}
+.card.task .type{background:#FFF6D6;color:#6B5A00}
+
+.sig{position:absolute;bottom:14px;left:0;right:0;text-align:center;font-size:14px;color:var(--muted);z-index:2}
 .sig a{color:inherit}
-#nav{position:fixed;bottom:10px;left:10px;display:flex;gap:6px;z-index:10;opacity:.45;transition:opacity .2s}
-#nav:hover{opacity:1}
-#nav button{background:var(--lm-blue-deep);color:#fff;border:0;border-radius:var(--lm-radius);font:700 14px var(--lm-font);padding:7px 12px;cursor:pointer}
-#nav button:disabled{opacity:.35;cursor:default}
-#counter{position:absolute;left:40px;bottom:30px;font-size:18px;color:var(--lm-muted);z-index:5}
-#progress{position:absolute;top:0;right:0;height:6px;background:var(--lm-teal);transition:width .3s;z-index:5}
 </style>
 </head>
 <body>
-<div id="viewport"><div id="stage"><div id="progress"></div><div id="slides"></div><img class="logo-c" id="logoC" src="assets/lomdot-logo-no-tagline.png" alt="לומדות"><div id="counter"></div></div></div>
-<div id="nav"><button id="homeBtn">בית</button><button id="prevBtn">הקודם</button><button id="nextBtn">הבא</button></div>
+<div id="vp"><div id="stage">
+  <div class="sheet">
+    <div class="top">
+      <img src="assets/lomdot-logo-no-tagline.png" alt="לומדות">
+      <div>
+        <h1>כלים דיגיטליים וחווייתיים בהוראת עברית דבורה</h1>
+        <p>בינה מלאכותית לעידוד הדיבור בעברית · בהנחיית שירה רוט זליקוביץ</p>
+      </div>
+      <div class="chips"><span>תל שבע</span><span>תשפ"ז</span></div>
+    </div>
+    <div class="body"><div class="panel" id="grid"></div></div>
+  </div>
+  <div class="sig">© שירה רוט זליקוביץ · הוראה יצירתית עם AI · <a href="https://wa.me/972523930628" target="_blank" rel="noopener">ווטסאפ</a> · <a href="https://www.lomdot.org/" target="_blank" rel="noopener">להזמנת סדנאות בינה מלאכותית</a></div>
+</div></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-/* ===== הגדרות ===== */
-const SHEET_ID = '1jZSeNE40Kd5q3K09NQ1xOOg1wJtwcPlyOx9acNoUfdg'; // גיליון המשאבים
-const SHEET_GID = '0';
-
-const COURSE = {
-  title: 'כלים דיגיטליים וחווייתיים בהוראת עברית דבורה',
-  sub: 'בינה מלאכותית לעידוד הדיבור בעברית · תל שבע · תשפ"ז'
-};
-
-/* ===== המפגשים =====
-   מפגש בלי slides מוצג בבית כ"בקרוב" */
-const SESSIONS = [
- { n:1, date:'16.11', type:'פרונטלי', title:'מבוא לבינה מלאכותית',
-   learned:['מה זה בינה מלאכותית','הכלים החינמיים','כותבים שאלה ומקבלים תשובה','מדברים עם הבינה בקול','מבקשים תשובה קצרה ופשוטה'],
-   slides:[
-    {k:'section', big:'1', h:'מבוא לבינה מלאכותית', p:'16.11 · מפגש פרונטלי'},
-    {k:'list', q:true, h:'נעים להכיר', items:['השם שלי','בית הספר שלי','מה אני מלמד, ובאילו כיתות']},
-    {k:'qr', h:'סקר קצר', kind:'סקר', url:'https://docs.google.com/forms/d/e/1FAIpQLSfyuwXxfOIwusnJ047nFQBA_ZtWdZFLAB1D22UElTze1RJ3yw/viewform', items:['סרקו את הקוד בטלפון','ענו על 3 שאלות','נראה את התוצאות יחד']},
-    {k:'results', h:'מה ענינו?', sheet:'1Apeo3prNfDsFnZorueoCUsNaB055klhZ2mbTycWXKbw', gid:'1758922010', open:'ציפיות'},
-    {k:'list', h:'מה נלמד היום', items:['מה זה בינה מלאכותית','הכלים החינמיים','כותבים לבינה ומקבלים תשובה','מדברים עם הבינה בקול']},
-    {k:'list', q:true, h:'מה קורה בכיתה?', items:['כמה תלמידים יש בכיתה?','התלמידים מדברים עברית בשיעור?','מה קשה להם?']},
-    {k:'cards', h:'מה הבינה <span class="mark">יודעת</span> לעשות?', cols:5, items:[
-      {t:'כותבת',p:'טקסטים ותשובות'},{t:'מציירת',p:'תמונות'},{t:'מדברת',p:'ומקשיבה'},{t:'יוצרת',p:'סרטונים'},{t:'בונה',p:'משחקים'}]},
-    {k:'cards', h:'הכלים החינמיים', cols:4, items:[
-      {t:'Gemini',p:'של Google',a:'https://gemini.google.com'},{t:'ChatGPT',p:'של OpenAI',a:'https://chatgpt.com'},
-      {t:'Claude',p:'של Anthropic',a:'https://claude.ai'},{t:'Copilot',p:'של Microsoft',a:'https://copilot.microsoft.com'}]},
-    {k:'flow', h:'איך זה עובד?', steps:['כותבים שאלה','הבינה עונה','מבקשים לשנות']},
-    {k:'prompt', h:'בואו ננסה', text:'כתוב שיחה קצרה בעברית פשוטה בין מוכר לקונה בשוק.', after:'עכשיו בקשו:', chips:['קצר יותר','עם ניקוד','קל יותר']},
-    {k:'cards', h:'מדברים עם הבינה', cols:3, soft:true, items:[
-      {t:'שיחה בקול',p:'מדברים ושומעים'},
-      {t:'מיקרופון',p:'מדברים, והבינה כותבת'},
-      {t:'רמקול',p:'הבינה מקריאה את התשובה'}]},
-    {k:'prompt', h:'בואו ננסה: אתם התלמידים', text:'פתחו שיחה בקול. דברו כמו תלמידים מתחילים.', after:'איך הרגשתם?'},
-    {k:'statement', h:'התשובות ארוכות מדי', p:'מה עושים?'},
-    {k:'prompt', h:'מבקשים תשובה קצרה', text:'דבר איתי בעברית פשוטה. ענה במשפט אחד או שניים. בסוף שאל אותי שאלה אחת.'},
-    {k:'list', h:'עוד טיפים', items:['לבקש ניקוד','ללחוץ על הרמקול ולשמוע','לשמור את הבקשה בהגדרות, ואז לא צריך לכתוב אותה כל פעם']},
-    {k:'closing'}
-   ]},
- { n:2, date:'23.11', type:'סינכרוני', title:'NotebookLM' },
- { n:3, date:'30.11', type:'סינכרוני', title:'מטקסט לתמונה' },
- { n:4, date:'7.12',  type:'סינכרוני', title:'יצירת סרטונים' },
- { n:5, date:'14.12', type:'פרונטלי', title:'יצירת אפליקציות' },
- { n:6, date:'21.12', type:'א-סינכרוני', title:'בוט עוזר ללימוד שפה' },
- { n:7, date:'11.1',  type:'א-סינכרוני', title:'מערך שיעור' },
- { n:8, date:'18.1',  type:'פרונטלי', title:'למידת עמיתים וסיכום' }
+/* page = עמוד המפגש. מפגש בלי page מוצג "בקרוב" */
+const SESSIONS=[
+ {n:1,date:'16.11',type:'פרונטלי',title:'מבוא לבינה מלאכותית',desc:'מה זה בינה מלאכותית, איך כותבים לבינה ומדברים איתה בטלפון',page:'lesson-1.html'},
+ {n:2,date:'23.11',type:'סינכרוני',title:'NotebookLM',desc:'פודקאסט וסרטון בעברית מדוברת מתוך החומרים שלנו'},
+ {n:3,date:'30.11',type:'סינכרוני',title:'מטקסט לתמונה',desc:'מדרש תמונה, חידות בתמונה, משחקי מילים וקלפי שיח'},
+ {n:4,date:'7.12',type:'סינכרוני',title:'יצירת סרטונים',desc:'סרטון בלי קול, והתלמידים מדבבים אותו'},
+ {n:5,date:'14.12',type:'פרונטלי',title:'יצירת אפליקציות',desc:'מקליט קול ומשחקי דיבור בקוד'},
+ {n:6,date:'21.12',type:'מטלה',title:'בוט עוזר ללימוד שפה',desc:'בונים בוט שמתרגל עם התלמידים עברית מדוברת'},
+ {n:7,date:'11.1',type:'מטלה',title:'מערך שיעור',desc:'מערך על בסיס 3 פרקטיקות, והעברתו בכיתה'},
+ {n:8,date:'18.1',type:'פרונטלי',title:'למידת עמיתים וסיכום',desc:'מציגים את השיעורים, רפלקציה וסיכום הקורס'}
 ];
-
-/* ===== מנוע ===== */
-const SIG = '© שירה רוט זליקוביץ · הוראה יצירתית עם AI · <a href="https://wa.me/972523930628" target="_blank" rel="noopener">ווטסאפ</a> · <a href="https://www.lomdot.org/" target="_blank" rel="noopener">להזמנת סדנאות בינה מלאכותית</a>';
-const stripe = '<div class="stripe"><i></i><i></i><i></i></div>';
-let RES = null; // [{מפגש,סוג,שם,קישור}]
-let cur = {s:0, i:0}; // s=0 בית
-
-function esc(t){return String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
-
-function homeHTML(){
-  const cards = SESSIONS.map(s=>{
-    const has = s.slides && s.slides.length;
-    const inner = `<span class="num">מפגש ${s.n}</span><span class="date">${s.date}</span><h3>${s.title}</h3><span class="type">${s.type}</span>${has?'':'<span class="soon-t">בקרוב</span>'}`;
-    return has ? `<button class="card" onclick="go(${s.n},0)">${inner}</button>` : `<div class="card soon">${inner}</div>`;
-  }).join('');
-  return `<div class="slide home on"><div class="home-head"><img src="assets/lomdot-logo.png" alt="לומדות"><div><h1>${COURSE.title}</h1><p>${COURSE.sub}</p></div></div><div class="grid">${cards}</div><div class="sig">${SIG}</div></div>`;
-}
-
-/* תמונות: שמים קובץ בתיקיית assets בשם s<מפגש>-<שקופית>.jpg (למשל s1-2.jpg)
-   או כותבים img:'כתובת' בשקופית. בלי תמונה מוצג מקום ריק עדין. */
-const PH = '<div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="M21 17l-5-5-9 8"/></svg>מקום לתמונה</div>';
-function pic(s,i,d){
-  const src = d.img || `assets/s${s.n}-${i+1}.jpg`;
-  return `<div class="pic"><img src="${src}" alt="" onerror="this.parentNode.innerHTML=PH"></div>`;
-}
-function slideHTML(s, d, i){
-  switch(d.k){
-    case 'section': return `<div class="slide section withpic"><div><div class="big">${d.big}</div><h2>${d.h}</h2>${stripe}<p>${d.p||''}</p></div>${pic(s,i,d)}</div>`;
-    case 'list': return `<div class="slide content"><div class="split"><div class="txt"><h2 class="title">${d.h}</h2><ul class="list ${d.q?'q':''}">${d.items.map((t,j)=>`<li><b>${d.q?'?':j+1}</b>${t}</li>`).join('')}</ul></div>${pic(s,i,d)}</div></div>`;
-    case 'cards': return `<div class="slide content ${d.soft?'on-soft':''}"><h2 class="title">${d.h}</h2><div class="cards" style="grid-template-columns:repeat(${d.cols||3},1fr)">${d.items.map(c=>`<div class="c"><h3>${c.t}</h3><p>${c.p||''}</p>${c.a?`<a href="${c.a}" target="_blank" rel="noopener">לפתיחה</a>`:''}</div>`).join('')}</div></div>`;
-    case 'flow': return `<div class="slide"><h2 class="title">${d.h}</h2><div class="flow">${d.steps.map((t,i)=>`${i?'<span class="ar">&#8592;</span>':''}<div class="st"><div class="n">${i+1}</div><p>${t}</p></div>`).join('')}</div></div>`;
-    case 'prompt': return `<div class="slide content"><div class="split"><div class="txt"><h2 class="title">${d.h}</h2><div class="prompt"><span>${d.text}</span><button class="copy" onclick="copyP(this)">העתקה</button></div>${d.after?`<div class="after">${d.after}</div>`:''}${d.chips?`<div class="chips">${d.chips.map(c=>`<span>${c}</span>`).join('')}</div>`:''}</div>${pic(s,i,d)}</div></div>`;
-    case 'statement': return `<div class="slide statement"><h2>${d.h}</h2><p>${d.p||''}</p></div>`;
-    case 'table': return `<div class="slide"><h2 class="title">${d.h}</h2><table class="t"><tr><th>כיתה</th><th>מה מותר</th></tr>${d.rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</table></div>`;
-    case 'qr': return `<div class="slide content"><div class="split"><div class="txt"><h2 class="title">${d.h}</h2><ul class="list">${d.items.map((t,j)=>`<li><b>${j+1}</b>${t}</li>`).join('')}</ul></div><div class="pic qrbox" data-kind="${d.kind}" data-session="${s.n}" data-url="${d.url||''}"><div class="ph">הקוד יופיע כאן</div></div></div></div>`;
-    case 'results': return `<div class="slide content"><div class="res-head"><h2 class="title">${d.h}</h2><div class="res-count"><b id="rCount">0</b> ענו</div></div><div class="res-grid" id="rGrid" data-sheet="${d.sheet||''}" data-gid="${d.gid||'0'}" data-open="${d.open||''}"><div class="muted-big">התוצאות יופיעו כאן</div></div><div class="open-ans" id="rOpen"></div></div>`;
-    case 'closing': return `<div class="slide"><h2 class="title">סיכום מפגש ${s.n}</h2><div class="closing"><div class="box learned"><h3>מה למדנו</h3><ul>${(s.learned||[]).map(t=>`<li>${t}</li>`).join('')}</ul></div><div class="box res"><h3>משאבים</h3><ul class="res-list" data-session="${s.n}"><li class="muted">טוען...</li></ul><div class="btns"><a class="btn off" data-kind="משוב" data-session="${s.n}" target="_blank" rel="noopener">למשוב על המפגש</a><a class="btn ghost off" data-kind="פדלט" data-session="${s.n}" target="_blank" rel="noopener">לפדלט התוצרים</a></div></div></div><div class="sig">${SIG}</div></div>`;
-  }
-  return '';
-}
-
-function render(){
-  const box = document.getElementById('slides');
-  const logo = document.getElementById('logoC');
-  if(cur.s===0){ box.innerHTML = homeHTML(); logo.style.display='none'; document.getElementById('counter').textContent=''; document.getElementById('progress').style.width='0'; }
-  else{
-    const s = SESSIONS.find(x=>x.n===cur.s), d = s.slides[cur.i];
-    box.innerHTML = slideHTML(s,d,cur.i).replace('class="slide','class="slide on');
-    logo.style.display = (d.k==='section'||d.k==='statement')?'none':'block';
-    document.getElementById('counter').textContent = `מפגש ${s.n} · ${cur.i+1}/${s.slides.length}`;
-    document.getElementById('progress').style.width = ((cur.i+1)/s.slides.length*100)+'%';
-    if(d.k==='closing') fillClosing();
-    if(d.k==='qr') fillQR();
-    clearInterval(window._rTimer);
-    if(d.k==='results'){ fillResults(); window._rTimer=setInterval(fillResults,5000); }
-  }
-  document.getElementById('homeBtn').disabled = cur.s===0;
-  document.getElementById('prevBtn').disabled = cur.s===0;
-  document.getElementById('nextBtn').disabled = cur.s===0 || cur.i===SESSIONS.find(x=>x.n===cur.s).slides.length-1;
-  history.replaceState(null,'', cur.s? `#${cur.s}-${cur.i+1}` : '#');
-}
-function go(s,i){cur={s,i};render()}
-function step(dir){
-  if(!cur.s) return;
-  const n = SESSIONS.find(x=>x.n===cur.s).slides.length;
-  const i = cur.i+dir; if(i<0||i>=n) return; go(cur.s,i);
-}
-function copyP(b){navigator.clipboard.writeText(b.previousElementSibling.textContent).then(()=>{b.textContent='הועתק';setTimeout(()=>b.textContent='העתקה',1500)})}
-
-/* ===== משאבים מהגיליון ===== */
-function loadSheet(id,gid){
-  return new Promise((ok,fail)=>{
-    const cb='cb'+Date.now()+Math.floor(Math.random()*1e4); const sc=document.createElement('script');
-    window[cb]=r=>{ try{
-        const h=r.table.cols.map(c=>(c.label||'').trim());
-        ok(r.table.rows.map(row=>{const o={};h.forEach((k,i)=>{const c=row.c&&row.c[i];o[k]=c?String(c.f!=null?c.f:(c.v!=null?c.v:'')).trim():''});return o}));
-      }catch(e){fail(e)} delete window[cb]; sc.remove(); };
-    sc.onerror=fail;
-    sc.src=`https://docs.google.com/spreadsheets/d/${id||SHEET_ID}/gviz/tq?gid=${gid||SHEET_GID}&headers=1&tqx=out:json;responseHandler:${cb}&t=${Date.now()}`;
-    document.body.appendChild(sc);
-  });
-}
-function matchSession(row,n){const m=row['מפגש']||'';return m===String(n)||m.indexOf('כל')===0}
-function fillClosing(){
-  const ul=document.querySelector('.res-list'); if(!ul) return;
-  const n=ul.dataset.session;
-  if(!RES){ loadSheet().then(r=>{RES=r;fillClosing()}).catch(()=>{ul.innerHTML='<li class="muted">לא ניתן לטעון את המשאבים כרגע</li>'}); return; }
-  const items=RES.filter(r=>r['סוג']==='משאב'&&matchSession(r,n)&&r['קישור']);
-  ul.innerHTML = items.length? items.map(r=>`<li><a href="${esc(r['קישור'])}" target="_blank" rel="noopener">${esc(r['שם']||r['קישור'])}</a></li>`).join('') : '<li class="muted">המשאבים יעלו בקרוב</li>';
-  document.querySelectorAll('.btns .btn').forEach(b=>{
-    const rows=RES.filter(r=>r['סוג']===b.dataset.kind&&r['קישור']);
-    const row=rows.find(r=>r['מפגש']===b.dataset.session)||rows.find(r=>matchSession(r,b.dataset.session));
-    if(row){ let url=row['קישור']; if(b.dataset.kind==='משוב') url=url.replace('{מפגש}',b.dataset.session); b.href=url; b.classList.remove('off'); } else b.classList.add('off');
-  });
-}
-
-/* תוצאות סקר: גיליון התשובות של הטופס (פתוח לצפייה). כל עמודה חוץ מחותמת הזמן היא שאלה */
-function fillResults(){
-  const grid=document.getElementById('rGrid'); if(!grid||!grid.dataset.sheet) return;
-  loadSheet(grid.dataset.sheet,grid.dataset.gid).then(rows=>{
-    if(!document.getElementById('rGrid')) return;
-    document.getElementById('rCount').textContent=rows.length;
-    if(!rows.length) return;
-    const all=Object.keys(rows[0]).filter(k=>k&&!/חותמת|timestamp/i.test(k));
-    const openKey=grid.dataset.open, openQ=openKey?all.find(k=>k.includes(openKey)):null;
-    const qs=all.filter(k=>k!==openQ);
-    const op=document.getElementById('rOpen');
-    if(openQ&&op){
-      const vals=rows.map(r=>String(r[openQ]||'').trim()).filter(Boolean);
-      op.innerHTML=`<h3>${esc(openQ)}</h3><div class="ans-cards">${vals.map(v=>`<div class="ans">${esc(v)}</div>`).join('')}</div>`;
-    }
-    grid.style.gridTemplateColumns=`repeat(${Math.min(qs.length,4)},1fr)`;
-    grid.innerHTML=qs.map(q=>{
-      const vals=rows.map(r=>String(r[q]||'').trim()).filter(Boolean);
-      const uniq=[...new Set(vals)];
-      const avg=vals.reduce((a,v)=>a+v.length,0)/Math.max(1,vals.length);
-      if(avg>28 || (uniq.length>6 && uniq.length>vals.length*0.6)){ // שאלה פתוחה: מציגים ציטוטים
-        return `<div class="rq"><h3>${esc(q)}</h3><ul class="quotes">${vals.slice(-6).reverse().map(v=>`<li>${esc(v)}</li>`).join('')}</ul></div>`;
-      }
-      const c={}; rows.forEach(r=>String(r[q]||'').split(/,\s*/).filter(Boolean).forEach(a=>c[a]=(c[a]||0)+1));
-      const arr=Object.entries(c).sort((a,b)=>b[1]-a[1]); const max=Math.max(1,...arr.map(a=>a[1]));
-      return `<div class="rq"><h3>${esc(q)}</h3>${arr.map(([a,n])=>`<div class="bar"><span class="bl">${esc(a)}</span><span class="bt"><i style="width:${n/max*100}%"></i></span><b>${n}</b></div>`).join('')}</div>`;
-    }).join('');
-  }).catch(()=>{});
-}
-
-function fillQR(){
-  const box=document.querySelector('.qrbox'); if(!box) return;
-  let url=box.dataset.url;
-  if(!url){
-    if(!RES){ loadSheet().then(r=>{RES=r;fillQR()}).catch(()=>{}); return; }
-    const rows=RES.filter(r=>r['סוג']===box.dataset.kind&&r['קישור']);
-    const row=rows.find(r=>r['מפגש']===box.dataset.session)||rows.find(r=>matchSession(r,box.dataset.session));
-    url=row&&row['קישור'];
-  }
-  if(!url||!window.QRCode) return;
-  box.innerHTML='<div class="qr-in"></div>';
-  new QRCode(box.firstChild,{text:url,width:440,height:440,colorDark:'#0B4F7C',colorLight:'#ffffff'});
-}
-
-/* ===== שליטה ===== */
-document.getElementById('homeBtn').onclick=()=>go(0,0);
-document.getElementById('prevBtn').onclick=()=>step(-1);
-document.getElementById('nextBtn').onclick=()=>step(1);
-document.addEventListener('keydown',e=>{
-  if(e.key==='ArrowLeft'||e.key==='PageDown'||e.key===' ') {e.preventDefault();step(1)}
-  if(e.key==='ArrowRight'||e.key==='PageUp') {e.preventDefault();step(-1)}
-  if(e.key==='Escape'||e.key==='Home') go(0,0);
-});
+document.getElementById('grid').innerHTML=SESSIONS.map(s=>{
+  const inner=`<span class="n">${s.n}</span><h2>${s.title}</h2><p class="desc">${s.desc||''}</p><div class="meta"><span class="date">${s.date}</span><span class="type">${s.type}</span></div>`;
+  const task=s.type==='מטלה'?' task':'';
+  return s.page?`<a class="card${task}" href="${s.page}">${inner}<span class="go">כניסה</span></a>`:`<div class="card soon${task}">${inner}<span class="later">בקרוב</span></div>`;
+}).join('');
 function fit(){const s=Math.min(innerWidth/1600,innerHeight/900);document.getElementById('stage').style.transform=`scale(${s})`}
-addEventListener('resize',fit); fit();
-function fromHash(){const m=location.hash.match(/^#(\d+)-(\d+)$/);const s=m&&SESSIONS.find(x=>x.n==m[1]&&x.slides);cur=s?{s:+m[1],i:Math.min(+m[2]-1,s.slides.length-1)}:{s:0,i:0};render()}
-addEventListener('hashchange',fromHash); fromHash();
+addEventListener('resize',fit);fit();
 </script>
 </body>
 </html>
