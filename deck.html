@@ -342,10 +342,12 @@ document.addEventListener('keydown',e=>{
   if(e.key==='ArrowRight'||e.key==='PageUp') {e.preventDefault();step(-1)}
   if(e.key==='Escape'||e.key==='Home') go(0,0);
 });
-function fit(){const s=Math.min(innerWidth/1600,innerHeight/900);document.getElementById('stage').style.transform=`scale(${s})`}
+function fit(){const s=Math.min(innerWidth/1600,innerHeight/900);document.getElementById('stage').style.zoom=s}
 addEventListener('resize',fit); fit();
 function fromHash(){const m=location.hash.match(/^#(\d+)-(\d+)$/);const s=m&&SESSIONS.find(x=>x.n==m[1]&&x.slides);cur=s?{s:+m[1],i:Math.min(+m[2]-1,s.slides.length-1)}:{s:0,i:0};render()}
 addEventListener('hashchange',fromHash); fromHash();
 </script>
+<script>/* העמוד לא זז: מחזיר כל גלילה למקום */
+(function(){const vp=document.getElementById('vp');const r=()=>{if(vp&&(vp.scrollTop||vp.scrollLeft)){vp.scrollTop=0;vp.scrollLeft=0}if(scrollX||scrollY)scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0};addEventListener('scroll',e=>{if(e.target===document||e.target===vp||e.target===document.body||e.target===document.documentElement)r()},true);addEventListener('resize',r);r()})();</script>
 </body>
 </html>

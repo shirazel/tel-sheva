@@ -9,7 +9,7 @@
 :root{--blue:#0181C9;--panel:#2B78C5;--deep:#0B4F7C;--teal:#6BE3D1;--soft:#EEF8F6;--line:#E3ECEF;--orange:#FA7548;--pink:#E2448F;--ink:#2F3437;--muted:#5E686D}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'Assistant','Heebo',sans-serif;direction:rtl;color:var(--ink)}
-#vp{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#vp{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
 #stage{width:1600px;height:900px;flex:0 0 auto;position:relative;background:#F7FAFB;transform-origin:center;overflow:hidden}
 #stage::before{content:'';position:absolute;width:680px;height:680px;border-radius:50%;background:radial-gradient(circle,rgba(107,227,209,.30),rgba(107,227,209,0) 70%);top:-280px;right:-200px}
 #stage::after{content:'';position:absolute;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle,rgba(226,68,143,.10),rgba(226,68,143,0) 70%);bottom:-300px;left:-180px}
@@ -78,8 +78,10 @@ document.getElementById('grid').innerHTML=SESSIONS.map((s,i)=>{
   const inner=`<div class="top"><span class="n">${i+1}</span><span class="d">${s.date}</span></div><h2>${s.title}</h2><p class="desc">${s.desc||''}</p><span class="t${s.type==='מטלה'?' task':''}">${s.type}</span>`;
   return s.page?`<a class="s" href="${s.page}">${inner}<span class="go">כניסה</span></a>`:`<div class="s soon">${inner}</div>`;
 }).join('');
-function fit(){const s=Math.min(innerWidth/1600,innerHeight/900);document.getElementById('stage').style.transform=`scale(${s})`}
+function fit(){const s=Math.min(innerWidth/1600,innerHeight/900);document.getElementById('stage').style.zoom=s}
 addEventListener('resize',fit);fit();
 </script>
+<script>/* העמוד לא זז: מחזיר כל גלילה למקום */
+(function(){const vp=document.getElementById('vp');const r=()=>{if(vp&&(vp.scrollTop||vp.scrollLeft)){vp.scrollTop=0;vp.scrollLeft=0}if(scrollX||scrollY)scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0};addEventListener('scroll',e=>{if(e.target===document||e.target===vp||e.target===document.body||e.target===document.documentElement)r()},true);addEventListener('resize',r);r()})();</script>
 </body>
 </html>

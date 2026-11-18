@@ -9,7 +9,7 @@
 :root{--blue:#0181C9;--deep:#0B4F7C;--yellow:#E5E633;--teal:#6BE3D1;--soft:#EEF8F6;--line:#E3ECEF;--orange:#FA7548;--ink:#2F3437;--body:#4A4A4A;--muted:#7A8489}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'Assistant','Heebo',sans-serif;direction:rtl;color:var(--body)}
-#vp{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#vp{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
 #design{width:1600px;height:900px;flex:0 0 auto;position:relative;background:#F7FAFB;transform-origin:center;overflow:hidden}
 #design::before{content:'';position:absolute;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle,rgba(107,227,209,.28),rgba(107,227,209,0) 70%);top:-260px;right:-180px}
 #design::after{content:'';position:absolute;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(1,129,201,.12),rgba(1,129,201,0) 70%);bottom:-260px;left:-160px}
@@ -418,12 +418,14 @@ loadSheet().then(rows=>{
   if(!LINKS.feedback&&mine(rows,'משוב')[0])LINKS.feedback=mine(rows,'משוב')[0]['קישור'];
 }).catch(()=>{});
 
-function fit(){const top=0;const s=Math.min(innerWidth/1600,(innerHeight-top)/900);document.getElementById('design').style.transform=`scale(${s})`}
+function fit(){const top=0;const s=Math.min(innerWidth/1600,(innerHeight-top)/900);document.getElementById('design').style.zoom=s}
 addEventListener('resize',fit);fit();
 </script>
 
 
 
 
+<script>/* העמוד לא זז: מחזיר כל גלילה למקום */
+(function(){const vp=document.getElementById('vp');const r=()=>{if(vp&&(vp.scrollTop||vp.scrollLeft)){vp.scrollTop=0;vp.scrollLeft=0}if(scrollX||scrollY)scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0};addEventListener('scroll',e=>{if(e.target===document||e.target===vp||e.target===document.body||e.target===document.documentElement)r()},true);addEventListener('resize',r);r()})();</script>
 </body>
 </html>
