@@ -283,6 +283,19 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'A
 .upload .art{width:84px;height:84px}
 .upload:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(0,0,0,.15)}
 .list{gap:4px}
+/* חלונות עם תמונות */
+.gal{display:grid;grid-template-columns:repeat(var(--n),1fr);gap:34px;margin:6px 0 4px}
+.fig{margin:0;display:flex;flex-direction:column;gap:10px;position:relative}
+.fig .cap{font-size:22px;font-weight:700;color:var(--deep);line-height:1.3;min-height:2.6em;display:flex;align-items:flex-end}
+.fig .ph{position:relative;height:360px;border:2px dashed #B8CFDA;border-radius:18px;background:#F4FAFD;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+.fig .ph em{font-style:normal;font-size:22px;font-weight:700;color:var(--muted);line-height:1.4}
+.fig .ph em small{font-size:16px;font-weight:600;direction:ltr;display:inline-block}
+.fig .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#fff}
+.fig .arr{position:absolute;right:-30px;top:58%;font-size:30px;font-weight:800;color:var(--blue)}
+.gal[style*="--n:4"] .ph{height:300px}
+.gal[style*="--n:1"] .ph{height:420px}
+.formula{align-items:center}
+.wheel.sm{margin:0 auto 0 0;font-size:18px;padding:8px 18px}
 </style>
 </head>
 <body>
@@ -350,124 +363,40 @@ const ex=(label,text)=>`<div class="ex"><small>${label}</small><span>${text}</sp
 const tryIt=(text,link,lt)=>`<div class="try"><span class="lbl">התנסות</span><span class="txt">${text}</span>${link?`<a href="${link}" target="_blank" rel="noopener">${lt||'לפתיחת Gemini'}</a>`:''}</div>`;
 const talk=text=>`<div class="talk"><span class="lbl">בכיתה</span><span class="txt">${text}</span></div>`;
 const frame=u=>`<iframe src="${u}" allowfullscreen allow="fullscreen; clipboard-write"></iframe>`;
+/* תמונות לדוגמה: שמים קובץ בתיקייה assets/lesson2 בשם שמופיע כאן, והוא מופיע בחלון */
+const IMG='assets/lesson2/';
+const gal=items=>`<div class="gal" style="--n:${items.length}">${items.map(([f,c],i)=>`<figure class="fig">${i?'<span class="arr">&larr;</span>':''}<figcaption class="cap">${c}</figcaption><div class="ph"><img src="${IMG+f}.jpg" alt="" onerror="this.remove()"><em>מקום לתמונה<br><small>${f}.jpg</small></em></div></figure>`).join('')}</div>`;
 const WIN={
  prompt:()=>({t:'פרומפט טוב לתמונה',h:`
-  <div class="formula"><span>מה רואים</span><i>+</i><span>איפה</span><i>+</i><span>מתי</span><i>+</i><span>אווירה</span><i>+</i><span>סגנון</span></div>
-  <div class="cols2">
-   <ol class="steps">
-    <li><div><b>מה רואים:</b> "ילדה קוראת ספר"</div></li>
-    <li><div><b>איפה:</b> "בספרייה של בית הספר"</div></li>
-    <li><div><b>מתי:</b> "בבוקר", "בשקיעה", "בחורף"</div></li>
-    <li><div><b>אווירה:</b> "שמח", "שקט", "מצחיק"</div></li>
-    <li><div><b>סגנון:</b> צילום, ציור בצבעי מים, קומיקס, תלת-ממד</div></li>
-   </ol>
-   <div>${ex('דוגמה','ילדה קוראת ספר בספרייה של בית הספר, בבוקר. אווירה שקטה. ציור בצבעי מים.')}
-    <a class="wheel" href="${STYLES}" target="_blank" rel="noopener">למעבדת הסגנונות</a></div>
-  </div>
-  ${talk('התלמידים אומרים את הפרומפט בקול, חלק אחרי חלק.')}
-  ${tryIt('צרו תמונה לנושא מהכיתה שלכם. נסו 2 סגנונות שונים.',GEMINI)}`}),
+  <div class="formula"><span>מה רואים</span><i>+</i><span>איפה</span><i>+</i><span>מתי</span><i>+</i><span>אווירה</span><i>+</i><span>סגנון</span><a class="wheel sm" href="${STYLES}" target="_blank" rel="noopener">למעבדת הסגנונות</a></div>
+  ${gal([['prompt-1','ילדה קוראת ספר בספרייה. צילום'],['prompt-2','אותו דבר, ציור בצבעי מים'],['prompt-3','אותו דבר, קומיקס']])}
+  ${talk('התלמידים אומרים את הפרומפט בקול, חלק אחרי חלק.')}`}),
  edit:()=>({t:'עריכת תמונה',h:`
-  <div class="cols2">
-   <ol class="steps">
-    <li><div>יוצרים תמונה, או מעלים תמונה.</div></li>
-    <li><div>כותבים מה לשנות, דבר אחד בכל פעם.</div></li>
-    <li><div><b>משנים:</b> "תחליף את החולצה לאדומה"</div></li>
-    <li><div><b>מוסיפים:</b> "תוסיף חתול ליד הדלת"</div></li>
-    <li><div><b>מוחקים:</b> "תמחק את הכיסא"</div></li>
-   </ol>
-   ${ex('דוגמה','תשאיר את התמונה כמו שהיא. רק תוסיף עץ ליד הבית, ותחליף את השמיים לשמיים של ערב.')}
-  </div>
-  ${talk('"מה השתנה?" מראים שתי תמונות. התלמידים אומרים: "פה יש..., ופה אין...".')}
-  ${tryIt('שנו בתמונה שלכם 2 דברים. בקשו מחברה למצוא מה השתנה.',GEMINI)}`}),
+  ${gal([['edit-1','צור תמונה של ילד בחצר'],['edit-2','שנה את צבע החולצה'],['edit-3','תוסיף חתול']])}
+  ${talk('"מה השתנה?" התלמידים אומרים: "פה יש..., ופה אין...".')}`}),
  color:()=>({t:'צביעת תמונה ישנה',h:`
-  <div class="cols2">
-   <ol class="steps">
-    <li><div>מצלמים בטלפון תמונה ישנה בשחור-לבן.</div></li>
-    <li><div>מעלים אותה ל-<b>Gemini</b>.</div></li>
-    <li><div>כותבים: "תצבע את התמונה".</div></li>
-    <li><div>מבקשים: "אל תשנה את הפנים ואת האנשים".</div></li>
-   </ol>
-   <div>${ex('דוגמה','תצבע את התמונה בצבעים טבעיים. אל תשנה את האנשים, את הפנים ואת הבגדים.')}
-    <div class="warn">לפני שמעלים תמונה עם אנשים, שואלים את המשפחה. אפשר להתחיל בתמונה של מקום או חפץ.</div></div>
-  </div>
-  ${talk('התלמיד שואל את סבא או סבתא על התמונה. בכיתה הוא מספר: מי בתמונה? איפה? מה עשו פעם? מה השתנה היום?')}
-  ${tryIt('צבעו תמונה ישנה: מקום, חפץ או אירוע מהעבר.',GEMINI)}`}),
+  ${gal([['color-1','תמונה ישנה'],['color-2','תצבע את התמונה. אל תשנה אותה']])}
+  ${talk('התלמיד שואל את סבא או סבתא, ומספר: מי? איפה? מה עשו פעם?')}`}),
  char:()=>({t:'דמות עקבית',h:`
-  <div class="cols2">
-   <ol class="steps">
-    <li><div>מתארים דמות אחת. מה רואים? גיל, שיער, בגדים.</div></li>
-    <li><div>נשארים <b>באותה שיחה</b>.</div></li>
-    <li><div>כותבים: "עכשיו אותו ילד ב..."</div></li>
-    <li><div>הדמות נשארת אותה דמות, והמקום משתנה.</div></li>
-   </ol>
-   <div>${ex('דוגמה','ילד בן 10, שיער שחור מתולתל, חולצה כחולה. ציור צבעוני. הילד בבית.')}
-    ${ex('ממשיכים','עכשיו אותו ילד בבית הספר.')}</div>
-  </div>
-  ${talk('כל תלמיד מספר תמונה אחת. יחד יוצא סיפור. מה יקרה בתמונה הבאה?')}
-  ${tryIt('צרו דמות ו-3 תמונות שלה במקומות שונים.',GEMINI)}`}),
+  ${gal([['char-1','ילד בן 10, חולצה כחולה'],['char-2','עכשיו אותו ילד בבית הספר'],['char-3','עכשיו אותו ילד בשוק']])}
+  ${talk('כל תלמיד מספר תמונה אחת. יחד יוצא סיפור.')}`}),
  combine:()=>({t:'שילוב תמונות',h:`
-  <div class="cols2">
-   <ol class="steps">
-    <li><div>מעלים כמה תמונות ביחד.</div></li>
-    <li><div>למשל: שני אנשים, וספל.</div></li>
-    <li><div>כותבים מה לעשות איתן.</div></li>
-    <li><div>הבינה יוצרת תמונה אחת חדשה.</div></li>
-   </ol>
-   <div>${ex('דוגמה','תושיב את שני האנשים בבית קפה. הם שותים מהספל הזה ומדברים.')}
-    <div class="warn">בהדגמה: משתמשים באנשים שהבינה יצרה.</div></div>
-  </div>
-  ${talk('התלמיד מסביר: מה חיברתי? איפה הם? מה הם עושים?')}
-  ${tryIt('חברו 2 או 3 תמונות לתמונה אחת.',GEMINI)}`}),
+  ${gal([['combine-1','תמונה 1'],['combine-2','תמונה 2'],['combine-3','תמונה 3'],['combine-4','תושיב אותם בבית קפה, עם הספל הזה']])}
+  ${talk('התלמיד מסביר: מה חיברתי? איפה הם? מה הם עושים?')}`}),
  comic:()=>({t:'קומיקס',h:`
-  <div class="cols2">
-   <ol class="steps">
-    <li><div>מבקשים קומיקס של 4 ריבועים.</div></li>
-    <li><div>אותן דמויות בכל הריבועים.</div></li>
-    <li><div>מבקשים: <b>בלי טקסט ובלי בועות</b>.</div></li>
-    <li><div>את הבועות מוסיפים אחר כך, בקנבה או במצגת.</div></li>
-   </ol>
-   <div>${ex('דוגמה','קומיקס של 4 ריבועים: שני חברים קונים פירות בשוק. ציור צבעוני. בלי טקסט ובלי בועות.')}
-    <div class="warn">הבינה טועה בכתב עברי בתוך תמונה. לכן מוסיפים את הטקסט לבד.</div></div>
-  </div>
-  ${talk('בזוגות: ממציאים מה כל דמות אומרת, ומשחקים את השיחה בקול.')}
-  ${tryIt('צרו קומיקס של 4 ריבועים בלי טקסט.',GEMINI)}`}),
+  ${gal([['comic-1','קומיקס של 4 ריבועים: שני חברים בשוק. בלי טקסט ובלי בועות']])}
+  ${talk('בזוגות: ממציאים מה כל דמות אומרת, ומשחקים בקול.')}`}),
  pause:()=>({t:'הפסקה',h:`<div class="timer"><div class="t" id="tm">15:00</div><div class="tb"><button id="tmGo">התחלה</button><button class="sec" id="tmReset">מההתחלה</button></div><p>בהפסקה: הכינו 2 תמונות למדרש תמונה.<br>סצנה אחת, וסצנת המשך.</p></div>`,after:timerInit}),
  midrash:()=>({t:'מדרש תמונה',h:`
-  <div class="cols2">
-   <ol class="steps">
-    <li><div>כל אחת מכינה <b>2 תמונות</b>: סצנה, וסצנת המשך.</div></li>
-    <li><div>מורה מציגה את הסצנה הראשונה.</div></li>
-    <li><div>הגלגל בוחר מורה. היא מספרת את הסיפור שהתמונה מספרת.</div></li>
-    <li><div>מציגים את סצנת ההמשך.</div></li>
-    <li><div>הגלגל בוחר מורה אחרת. היא ממשיכה את הסיפור.</div></li>
-   </ol>
-   <div><div class="formula"><span>מי?</span><span>איפה?</span><span>מה קרה?</span><span>למה?</span><span>מה הם אומרים?</span></div>
-    <a class="wheel" href="${WHEEL}" target="_blank" rel="noopener">לגלגל ההגרלה</a></div>
-  </div>
-  ${talk('אותו משחק עם התלמידים. מי שמספר לא ראה את התמונה קודם.')}`}),
+  <div class="formula"><span>מי?</span><span>איפה?</span><span>מה קרה?</span><span>למה?</span><span>מה הם אומרים?</span><a class="wheel sm" href="${WHEEL}" target="_blank" rel="noopener">לגלגל ההגרלה</a></div>
+  ${gal([['midrash-1','סצנה'],['midrash-2','סצנת המשך']])}
+  ${talk('הגלגל בוחר מי מספרת את הסיפור שהתמונה מספרת.')}`}),
  voice:()=>({t:'מציירים מדיבור',h:`
-  <div class="cols2">
-   <ol class="steps">
-    <li><div>פותחים <b>Gemini</b> או <b>ChatGPT</b>.</div></li>
-    <li><div>לוחצים על <b>המיקרופון</b>.</div></li>
-    <li><div>אומרים בקול מה רוצים לראות.</div></li>
-    <li><div>משנים בקול: "תוסיף...", "תחליף...".</div></li>
-   </ol>
-   ${ex('אומרים','אני רוצה תמונה של משפחה בארוחת ערב בבית. כולם צוחקים. ציור צבעוני.')}
-  </div>
-  ${talk('תלמיד מתאר בקול. הכיתה בודקת: האם התמונה מתאימה למה שהוא אמר?')}
-  ${tryIt('צרו תמונה רק בדיבור, בלי להקליד.',GEMINI)}`}),
+  ${gal([['voice-1','לוחצים על המיקרופון ואומרים: "משפחה בארוחת ערב, כולם צוחקים"'],['voice-2','אומרים: "תוסיף עוגה על השולחן"']])}
+  ${talk('תלמיד מתאר בקול. הכיתה בודקת: התמונה מתאימה?')}`}),
  cards:()=>({t:'קלפי שיח',h:`
-  <div class="cols2">
-   <ol class="steps">
-    <li><div>כל מורה יוצרת <b>קלף אחד</b> לכיתה שלה.</div></li>
-    <li><div>בקלף יש תמונה ושאלה.</div></li>
-    <li><div>השאלה פתוחה, ואין תשובה אחת נכונה.</div></li>
-    <li><div>משתפות את הקלף עם הקבוצה.</div></li>
-   </ol>
-   ${ex('דוגמה לשאלה','מה היית עושה במקום הילד בתמונה? למה?')}
-  </div>
-  ${tryIt('צרו קלף שיח: תמונה ושאלה לתלמידים שלכם.',GEMINI)}`}),
+  ${gal([['cards-1','קלף: תמונה ושאלה'],['cards-2','קלף: תמונה ושאלה'],['cards-3','קלף: תמונה ושאלה']])}
+  ${tryIt('צרו קלף שיח לכיתה שלכם: תמונה ושאלה.',GEMINI)}`}),
  deck:()=>({t:'מצגת - מטקסט לתמונה',u:LINKS.deck,f:!!LINKS.deck,h:LINKS.deck?frame(LINKS.deck):'<div class="empty">המצגת תופיע כאן</div>'}),
  padlet:()=>({t:'פדלט: העלו את התוצרים',u:LINKS.padlet,f:!!LINKS.padlet,h:LINKS.padlet?frame(LINKS.padlet):'<div class="empty">הפדלט יופיע כאן</div>'}),
  rec:()=>{const id=ytId(LINKS.rec);return id?{t:'הקלטת השיעור',u:'https://youtu.be/'+id,f:true,h:frame('https://www.youtube-nocookie.com/embed/'+id+'?rel=0')}:{t:'הקלטת השיעור',u:LINKS.rec,f:!!LINKS.rec,h:LINKS.rec?frame(LINKS.rec):'<div class="empty">ההקלטה תעלה כאן אחרי המפגש</div>'}},
