@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>שיעור 2 · מטקסט לתמונה</title>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#0181C9;--deep:#0B4F7C;--yellow:#E5E633;--teal:#6BE3D1;--soft:#EEF8F6;--line:#E3ECEF;--orange:#FA7548;--ink:#2F3437;--body:#4A4A4A;--muted:#7A8489}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'Assistant','Heebo',sans-serif;direction:rtl;color:var(--body)}
+#vp{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#design{width:1600px;height:900px;flex:0 0 auto;position:relative;background:#F7FAFB;transform-origin:center;overflow:hidden}
+#design::before{content:'';position:absolute;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle,rgba(107,227,209,.28),rgba(107,227,209,0) 70%);top:-260px;right:-180px}
+#design::after{content:'';position:absolute;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(1,129,201,.12),rgba(1,129,201,0) 70%);bottom:-260px;left:-160px}
+
+/* פס עליון קבוע */
+.top{position:absolute;top:0;right:0;left:0;height:104px;display:flex;align-items:center;gap:22px;padding:0 64px;z-index:3;background:rgba(255,255,255,.85);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.top img{height:54px}
+.num{font-size:17px;font-weight:700;color:var(--blue);letter-spacing:.5px}
+.top h1{margin:0;font-size:38px;font-weight:700;color:var(--ink);line-height:1.1}
+.date{font-size:18px;color:var(--muted);font-weight:600;margin-top:2px}
+.actions{margin-right:auto;display:flex;gap:12px;align-items:center}
+.home{display:flex;align-items:center;gap:8px;color:var(--deep);text-decoration:none;font-weight:700;font-size:19px;padding:10px 18px;border-radius:999px;border:1px solid var(--line);background:#fff;transition:.2s}
+.home:hover{border-color:var(--teal)}
+.home svg,.fb svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.fb{display:flex;align-items:center;gap:8px;background:var(--orange);color:var(--ink);border:0;font:700 19px 'Assistant',sans-serif;padding:11px 22px;border-radius:999px;cursor:pointer;transition:.2s}
+.fb:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(250,117,72,.3)}
+
+/* רובריקות */
+.grid{position:absolute;top:150px;bottom:74px;right:64px;left:64px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr 1fr;gap:26px;z-index:2}
+.card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:34px 34px 30px;display:flex;flex-direction:column;align-items:flex-start;gap:14px;cursor:pointer;text-align:right;font-family:inherit;transition:.25s;position:relative;overflow:hidden}
+.card::after{content:'';position:absolute;bottom:0;right:0;left:0;height:4px;background:var(--teal);transform:scaleX(0);transform-origin:right;transition:.3s}
+.card:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(11,79,124,.10);border-color:#D2E6EA}
+.card:hover::after{transform:scaleX(1)}
+.ic{width:72px;height:72px;border-radius:20px;background:var(--soft);display:flex;align-items:center;justify-content:center}
+.ic svg{width:36px;height:36px;fill:none;stroke:var(--deep);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.card h2{margin:6px 0 0;font-size:32px;font-weight:700;color:var(--ink)}
+.card p{margin:0;font-size:21px;color:var(--muted);line-height:1.45}
+.card .go{margin-top:auto;font-size:18px;font-weight:700;color:var(--blue)}
+
+.sig{position:absolute;bottom:24px;left:0;right:0;text-align:center;font-size:14px;color:var(--muted);z-index:2}
+.sig a{color:inherit}
+
+/* חלון נפתח */
+#modal{position:absolute;inset:0;background:rgba(47,52,55,.35);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:20}
+#modal.on{display:flex;animation:fade .25s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.box{width:1280px;height:800px;background:#fff;border-radius:26px;box-shadow:0 30px 70px rgba(0,0,0,.18);display:flex;flex-direction:column;overflow:hidden;animation:up .3s ease}
+@keyframes up{from{transform:translateY(18px)}to{transform:none}}
+.bar{display:flex;align-items:center;gap:16px;padding:22px 36px 16px;border-bottom:1px solid var(--line)}
+.bar .ic{width:56px;height:56px;border-radius:16px}
+.bar .ic svg{width:28px;height:28px}
+.bar h2{margin:0;font-size:36px;color:var(--ink);font-weight:700;flex:1}
+.bar a{font-weight:700;font-size:18px;color:var(--deep)}
+.x{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:#fff;font:400 30px/1 'Assistant';color:var(--deep);cursor:pointer}
+.x:hover{background:var(--soft)}
+.content{flex:1;min-height:0;overflow:auto;padding:26px 44px 30px;font-size:26px;color:var(--ink);line-height:1.5}
+.content.frame{padding:0}
+.content iframe{width:100%;height:100%;border:0;display:block}
+.empty{height:100%;display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:700}
+
+/* תוכן החלונות */
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;counter-reset:s}
+.steps li{display:flex;gap:18px;align-items:flex-start;counter-increment:s}
+.steps li::before{content:counter(s);flex:0 0 44px;height:44px;border-radius:50%;background:var(--soft);color:var(--deep);font-weight:700;font-size:21px;display:flex;align-items:center;justify-content:center}
+.steps b{color:var(--deep)}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start}
+.formula{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 20px}
+.formula span{border:2px solid var(--teal);border-radius:999px;padding:5px 22px;font-weight:700;font-size:24px;background:#fff}
+.formula i{font-style:normal;color:var(--muted);align-self:center}
+.ex{background:var(--soft);border-radius:18px;padding:20px 26px;font-size:25px}
+.ex small{display:block;font-size:18px;font-weight:700;color:var(--blue);margin-bottom:4px}
+.copy{margin-top:12px;background:#fff;border:1px solid var(--line);color:var(--deep);font:700 17px 'Assistant';padding:5px 18px;border-radius:999px;cursor:pointer}
+.copy:hover{border-color:var(--teal)}
+.stores{display:flex;gap:14px;margin-top:18px;flex-wrap:wrap}
+.store{display:inline-block;background:var(--deep);color:#fff;text-decoration:none;font-weight:700;font-size:20px;padding:11px 22px;border-radius:12px}
+.note{margin-top:16px;font-size:21px;color:var(--muted)}
+.tips{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.tip{background:var(--soft);border-radius:18px;padding:18px 22px}
+.tip b{display:block;font-size:25px;color:var(--ink)}
+.tip span{font-size:20px;color:var(--muted)}
+.learned{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.learned li{background:var(--soft);border-radius:16px;padding:18px 24px;font-weight:700;display:flex;gap:14px;align-items:center}
+.learned li::before{content:'';width:12px;height:12px;border-radius:50%;background:var(--teal);flex:0 0 auto}
+/* התנסות */
+.try{margin-top:24px;border:2px solid var(--yellow);border-radius:18px;padding:18px 24px;display:flex;align-items:center;gap:20px;background:#fff}
+.try .lbl{flex:0 0 auto;background:var(--yellow);color:var(--ink);font-weight:700;font-size:20px;padding:6px 16px;border-radius:999px}
+.try .txt{flex:1;font-size:24px;font-weight:600}
+.try a{flex:0 0 auto;font-weight:700;font-size:19px;color:var(--deep);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:8px 18px}
+.try a:hover{border-color:var(--teal)}
+
+/* ===== מבנה הג'ניאלי ===== */
+.grid,.card{display:none}
+.sheet{position:absolute;top:24px;right:36px;left:36px;bottom:40px;background:#fff;border-radius:26px;box-shadow:0 14px 40px rgba(11,79,124,.12);z-index:1}
+.top{top:24px;right:36px;left:36px;width:auto;border-radius:26px 26px 0 0;background:transparent;backdrop-filter:none;padding:0 40px 0 40px}
+.badge{background:#2B78C5;color:#fff;font-weight:700;font-size:28px;border-radius:12px;padding:8px 22px}
+.cols{position:absolute;top:150px;bottom:76px;right:76px;left:76px;display:grid;grid-template-columns:1.1fr 1fr 1.1fr;gap:28px;z-index:2}
+.panel{border-radius:22px;padding:24px;display:flex;flex-direction:column;gap:16px;min-height:0}
+.panel.blue{background:#2B78C5}
+.panel.light{background:#DCEFFB;padding:22px 26px}
+.panel.light h2{margin:0 0 4px;font-size:32px;font-weight:700;color:#1E5D96;text-align:center}
+.learn{background:#fff;border-radius:16px;padding:18px 24px}
+.learn h3{margin:0 0 8px;font-size:26px;color:var(--ink);font-weight:700}
+.learn ol{margin:0;padding-right:26px;font-size:22px;color:var(--ink);line-height:1.6}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:14px;flex:1;min-height:0}
+.tile{background:#fff;border:0;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;font:700 22px 'Assistant',sans-serif;color:var(--ink);text-align:center;transition:.2s;padding:12px}
+.tile.main{flex-direction:row;gap:18px;font-size:28px;padding:22px}
+.tile:hover,.act:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(0,0,0,.15)}
+.cols .ic{width:58px;height:58px;border-radius:50%;background:#E2448F;flex:0 0 auto}
+.cols .ic svg{width:28px;height:28px;stroke:#fff}
+.row{display:flex;align-items:center;gap:16px;background:transparent;border:0;border-radius:14px;padding:10px 8px;cursor:pointer;text-decoration:none;font:700 24px 'Assistant',sans-serif;color:var(--ink);text-align:right;width:100%;transition:.2s}
+.row:hover{background:rgba(255,255,255,.65)}
+.row .ic{width:50px;height:50px}
+.row .ic svg{width:24px;height:24px}
+.sep{font-size:18px;font-weight:700;color:#1E5D96;border-top:1px solid rgba(30,93,150,.2);padding-top:10px;margin-top:4px}
+.list{display:flex;flex-direction:column;gap:2px;overflow:auto;min-height:0}
+.list .row{font-size:22px;padding:6px 8px}
+.list .row .ic{width:42px;height:42px;background:#7A5BD6}
+.list .row .ic svg{width:20px;height:20px}
+.act{flex:1;background:#fff;border:0;border-radius:16px;display:flex;align-items:center;gap:18px;padding:18px 22px;cursor:pointer;text-align:right;font:700 26px 'Assistant',sans-serif;color:var(--ink);transition:.2s}
+.act small{display:block;font-size:19px;font-weight:600;color:var(--muted);margin-top:2px}
+.muted{color:#1E5D96;font-size:19px}
+.sig{bottom:12px}
+.introw{height:100%;display:flex;align-items:center;justify-content:center}.introw ol{font-size:46px;font-weight:700;line-height:2;color:var(--ink)}
+
+/* עדכון 16.11 */
+.panel.blue .act{flex:0 0 auto}
+.panel.blue .learn{flex:1}
+.panel.blue:last-child .act{flex:1}
+.row.white{background:#fff;padding:9px 14px;font-size:22px}
+.row.white:hover{background:#F4FAFE;box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.row.white .ic{width:44px;height:44px}
+.panel.light{gap:10px}
+.list .row{font-size:20px;padding:4px 8px}
+.list .row .ic{width:36px;height:36px}
+.about{display:flex;gap:36px;align-items:center;background:var(--soft);border-radius:20px;padding:24px 30px;margin-bottom:26px}
+.about b{display:block;font-size:40px;color:var(--ink)}
+.about span{font-size:26px;color:var(--deep)}
+.about .av{width:110px;height:110px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.about .av img{height:60px}
+.introw2 h3{margin:0 0 8px;font-size:30px;color:var(--ink)}
+.introw2 ol{margin:0;font-size:36px;line-height:1.8}
+.svtabs{display:flex;gap:10px;margin-bottom:18px}
+.svtabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 22px;font:700 20px 'Assistant';color:var(--deep);cursor:pointer}
+.svtabs button.on{background:var(--deep);color:#fff;border-color:var(--deep)}
+.qrw{display:flex;gap:50px;align-items:center;justify-content:center}
+.qrw .q{padding:14px;border:3px solid var(--teal);border-radius:18px}
+.qrw ol{font-size:30px;line-height:1.9}
+.rhead{font-size:24px;color:var(--deep);margin-bottom:12px}.rhead b{font-size:44px;color:var(--blue)}
+.rgrid{display:grid;gap:18px}
+.rq{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.rq h4{margin:0 0 10px;font-size:21px;color:var(--ink);line-height:1.3}
+.bar2{display:grid;grid-template-columns:130px 1fr 30px;gap:10px;align-items:center;margin-bottom:8px;font-size:18px}
+.bt{background:var(--soft);height:20px;border-radius:10px;overflow:hidden}.bt i{display:block;height:100%;background:var(--blue);border-radius:10px;transition:width .6s}
+.answ{margin-top:16px}.answ h4{margin:0 0 8px;font-size:22px}
+.answ .cards{display:flex;flex-wrap:wrap;gap:10px}
+.answ .cards div{border:2px solid var(--yellow);border-radius:12px;padding:8px 16px;font-size:20px;color:#000;background:#fff}
+</style>
+<style>
+/* בלי שטח לבן ריק: התיבה בגודל התוכן, והרובריקות ממלאות */
+.panel.blue .learn{flex:0 0 auto}
+.panel.blue:first-child .act{flex:1}
+/* כל הקישורים כרובריקות לבנות */
+.panel.light{gap:8px}
+.list{gap:8px}
+.list .row{background:#fff;border-radius:14px;padding:5px 14px;font-size:21px}
+.panel.light .row.white{padding:5px 14px;font-size:21px}
+.panel.light .row.white .ic{width:40px;height:40px}
+.panel.light h2{font-size:28px;margin:0}
+.list{overflow:visible}
+.list .row:hover{background:#F4FAFE}
+.list .row .ic{width:40px;height:40px;background:#E2448F}
+.list .row .ic.yt{background:#FF0000}
+.list .row .ic.yt svg{fill:#fff;stroke:none}
+
+/* רובריקות בצדדים, משאבים באמצע (16.11) */
+.panel.blue{gap:12px;padding:20px}
+.panel.blue .act{flex:1 1 0;min-height:0;padding:10px 18px;gap:16px;font-size:23px}
+.panel.blue .act small{font-size:17px}
+.panel.blue .act .ic{width:50px;height:50px}
+.panel.blue .act .ic svg{width:24px;height:24px}
+.panel.blue .learn{flex:0 0 auto;padding:14px 20px}
+.panel.blue .learn h3{font-size:23px;margin-bottom:4px}
+.panel.blue .learn ol{font-size:19px;line-height:1.5}
+
+/* שקף עליי */
+.aboutme{display:grid;grid-template-columns:1.7fr 1fr;gap:34px;height:100%;align-items:center}
+.aboutme .me{display:flex;gap:30px;align-items:flex-start}
+.aboutme .ph{width:290px;height:290px;border-radius:50%;background:url(assets/shira.jpg) center/cover;border:6px solid #fff;box-shadow:0 18px 40px -16px rgba(11,79,124,.5);flex:0 0 auto}
+.aboutme .eye{font-size:21px;font-weight:700;color:var(--blue);letter-spacing:.06em;margin-bottom:4px}
+.aboutme b{display:block;font-size:56px;color:var(--deep);line-height:1.15}
+.aboutme .role{display:block;font-size:28px;color:var(--blue);font-weight:700;margin:6px 0 12px}
+.aboutme p{margin:0 0 10px;font-size:27px;line-height:1.5;color:var(--body)}
+.aboutme .you{background:var(--soft);border-radius:20px;padding:26px 30px}
+.aboutme .you h3{margin:0 0 10px;font-size:36px;color:var(--ink)}
+.aboutme .you ol{margin:0;font-size:32px;line-height:1.9;padding-right:30px}
+
+/* שתי רובריקות היכרות זו לצד זו */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:2.8 1 0;min-height:0}
+.tile2{background:#fff;border-radius:16px;display:flex;flex-direction:column;overflow:hidden;cursor:pointer;transition:.2s}
+.tile2:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(0,0,0,.15)}
+.tile2 .img{flex:1;min-height:0;background:#EAF4FB center/cover no-repeat;position:relative;display:flex;align-items:center;justify-content:center}
+.tile2 .img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tile2 .img em{font-style:normal;font-size:16px;font-weight:700;color:#7A8489}
+.tile2 .img img+em{display:none}
+.tile2 .me-img{background-image:url(assets/shira.jpg);background-position:center 30%}
+.tile2 span{padding:8px 10px;font-weight:700;font-size:21px;text-align:center;color:var(--ink)}
+.aboutme.solo{grid-template-columns:1fr}
+.aboutme .facts{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 16px}
+.aboutme .facts span{border:2px solid var(--teal);border-radius:999px;padding:4px 16px;font-size:22px;font-weight:700;color:var(--deep);background:#fff}
+.youwin{height:100%;display:flex;align-items:center;justify-content:center}
+.youwin ol{font-size:46px;font-weight:700;line-height:2;color:var(--ink)}
+
+/* חלון ועכשיו אתם */
+.youwin2{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;height:100%;align-items:stretch}
+.youwin2 .qs{display:flex;flex-direction:column;justify-content:center;gap:18px}
+.youwin2 .lead{margin:0 0 4px;font-size:28px;color:var(--muted);font-weight:600}
+.youwin2 .q{display:flex;align-items:center;gap:20px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px 24px;box-shadow:0 8px 20px rgba(11,79,124,.08)}
+.youwin2 .qi{width:64px;height:64px;border-radius:50%;background:#E2448F;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.youwin2 .qi svg{width:32px;height:32px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.youwin2 b{font-size:34px;color:var(--ink)}
+.youwin2 .yimg{border-radius:24px;background:#EAF4FB;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.youwin2 .yimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.youwin2 .yimg em{font-style:normal;font-size:22px;font-weight:700;color:#7A8489}
+.youwin2 .yimg img+em{display:none}
+.slead{margin:0 0 16px;font-size:26px;color:var(--deep);font-weight:600}
+
+/* ספרונים לדוגמה */
+.books{display:flex;gap:34px;justify-content:center;margin:22px 0 4px}
+.book{display:flex;flex-direction:column;align-items:center;gap:10px;text-decoration:none;width:200px;transition:.25s}
+.book:hover{transform:translateY(-6px) rotate(-2deg)}
+.cover{position:relative;width:118px;height:150px;border-radius:6px 14px 14px 6px;box-shadow:0 12px 22px -8px rgba(11,79,124,.45),inset -6px 0 0 rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center}
+.cover .spine{position:absolute;right:0;top:0;bottom:0;width:14px;border-radius:0 14px 14px 0;background:rgba(0,0,0,.12)}
+.cover svg{width:58px;height:58px;fill:none;stroke:#2F3437;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.book .bt{font-size:20px;font-weight:700;color:var(--deep);text-align:center;line-height:1.3}
+.cols2 .steps{gap:8px}
+.slead{margin:0 0 10px !important}
+</style>
+<style>
+/* שיעור 2 */
+.phead{color:#fff;font-weight:700;font-size:22px;text-align:center;padding:2px 0 0}
+.panel.blue .act{flex:1 1 0}
+.panel.blue .act.y{box-shadow:inset 0 0 0 3px var(--yellow)}
+.row .ic.rec{background:#FF0000}
+.talk{margin-top:20px;background:#fff;border:2px solid var(--teal);border-radius:18px;padding:16px 24px;display:flex;gap:18px;align-items:center}
+.talk .lbl{flex:0 0 auto;background:var(--teal);color:var(--ink);font-weight:700;font-size:20px;padding:6px 16px;border-radius:999px}
+.talk .txt{font-size:23px;font-weight:600}
+.warn{margin-top:14px;font-size:21px;color:var(--deep);background:#FFF9E0;border-radius:14px;padding:12px 20px}
+.timer{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:22px}
+.timer .t{font-size:180px;font-weight:800;color:var(--deep);line-height:1}
+.timer .tb{display:flex;gap:14px}
+.timer button{border:0;background:var(--deep);color:#fff;font:700 24px 'Assistant';padding:12px 34px;border-radius:999px;cursor:pointer}
+.timer button.sec{background:#fff;color:var(--deep);border:1px solid var(--line)}
+.timer p{margin:0;font-size:28px;color:var(--body);text-align:center}
+.wheel{display:inline-block;margin-top:12px;background:var(--deep);color:#fff;text-decoration:none;font-weight:700;font-size:20px;padding:10px 22px;border-radius:12px}
+.formula span{font-size:22px}
+.panel.light .row.white{flex:1 1 0;min-height:56px;max-height:112px;font-size:25px;padding:8px 18px}
+.panel.light .row.white .ic{width:52px;height:52px}
+.panel.light .row.white .ic svg{width:26px;height:26px}
+.list:empty{display:none}
+/* חלון בגובה התוכן, בלי שטח ריק */
+.box{height:auto;max-height:800px}
+.box:has(.content.frame),.box:has(.timer){height:800px}
+.content{flex:0 1 auto}
+.box:has(.content.frame) .content,.box:has(.timer) .content{flex:1}
+.panel.light{gap:12px}
+</style>
+</head>
+<body>
+<div id="vp"><div id="design" data-key="lesson-2-tel-sheva" data-v="1" data-file="שיעור-2.png">
+<!--DESIGN-START-->
+  <div class="sheet"></div>
+
+  <div class="top">
+    <span class="badge">שיעור 2</span><h1>מטקסט לתמונה</h1>
+    <div class="date">23.11</div>
+    <div class="actions">
+      <a class="home" href="index.html"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>עמוד הבית</a>
+      <button class="fb" data-open="feedback"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg>משוב</button>
+    </div>
+    <img src="assets/lomdot-logo-no-tagline.png" alt="לומדות">
+  </div>
+
+  <div class="cols">
+    <div class="panel blue">
+      <div class="phead">חלק 1 · לומדים ליצור</div>
+      <div role="button" tabindex="0" data-move class="act" data-open="prompt"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg></span><span data-edit>פרומפט טוב לתמונה<small>ומעבדת הסגנונות</small></span></div>
+      <div role="button" tabindex="0" data-move class="act" data-open="edit"><span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg></span><span data-edit>עריכת תמונה<small>מה השתנה?</small></span></div>
+      <div role="button" tabindex="0" data-move class="act" data-open="color"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1.1.9-2 2-2h2.4A4.6 4.6 0 0 0 22 9.8C22 6 17.5 3 12 3z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7" r="1"/></svg></span><span data-edit>צביעת תמונה ישנה<small>מתחברים לשורשים</small></span></div>
+      <div role="button" tabindex="0" data-move class="act" data-open="char"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M5 21c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg></span><span data-edit>דמות עקבית<small>יוצרים סיפור</small></span></div>
+      <div role="button" tabindex="0" data-move class="act" data-open="combine"><span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/><path d="M15 7h3a1 1 0 0 1 1 1v3M9 17H6a1 1 0 0 1-1-1v-3"/></svg></span><span data-edit>שילוב תמונות<small>אנשים, חפצים ומקום</small></span></div>
+      <div role="button" tabindex="0" data-move class="act" data-open="comic"><span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg></span><span data-edit>קומיקס<small>תמונות בלי טקסט</small></span></div>
+    </div>
+    <div class="panel light">
+      <h2>מתחם צפייה ומשאבים</h2>
+      <div role="button" tabindex="0" data-move class="row white" data-open="deck"><span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="12" rx="1.5"/><path d="M12 15v3M8 21l4-3 4 3"/><path d="M7 11l3-3 2 2 4-4"/></svg></span><span data-edit>מצגת השיעור</span></div>
+      <div role="button" tabindex="0" data-move class="row white" data-open="rec"><span class="ic rec"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10l6-3v10l-6-3"/></svg></span><span data-edit>הקלטת השיעור</span></div>
+      <div role="button" tabindex="0" data-move class="row white" data-open="padlet"><span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="5" rx="1"/><rect x="13" y="10" width="8" height="11" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/></svg></span><span data-edit>פדלט: העלו את התוצרים</span></div>
+      <a class="row white" href="https://gemini.google.com/share/d6e7352f6da8" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L4 19a1.5 1.5 0 0 0 1.3 2h13.4a1.5 1.5 0 0 0 1.3-2L14 9V3"/><path d="M7 15h10"/></svg></span><span>מעבדת הסגנונות</span></a>
+      <a class="row white" href="https://wheelofnames.com/" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg></span><span>גלגל ההגרלה</span></a>
+      <div class="list" id="res"><span class="muted">טוען...</span></div>
+    </div>
+    <div class="panel blue">
+      <div class="phead">חלק 2 · מדברים על תמונות</div>
+      <div role="button" tabindex="0" data-move class="act" data-open="pause"><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 8h12v6a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z"/><path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M9 3v2M13 3v2"/></svg></span><span data-edit>הפסקה<small>רבע שעה</small></span></div>
+      <div role="button" tabindex="0" data-move class="act y" data-open="midrash"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/><path d="M8 9h8M8 12h5"/></svg></span><span data-edit>מדרש תמונה<small>עם גלגל ההגרלה</small></span></div>
+      <div role="button" tabindex="0" data-move class="act y" data-open="voice"><span class="ic"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span><span data-edit>מציירים מדיבור<small>הוראה קולית לבינה</small></span></div>
+      <div role="button" tabindex="0" data-move class="act y" data-open="dub"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 5h10v7H7l-4 3z"/><path d="M21 10h-6v6h4l2 2z"/></svg></span><span data-edit>קומיקס מדובב<small>שתי מורות, שתי דמויות</small></span></div>
+      <div role="button" tabindex="0" data-move class="act y" data-open="cards"><span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="12" height="15" rx="2"/><path d="M8 3h11a2 2 0 0 1 2 2v13"/></svg></span><span data-edit>קלפי שיח<small>תרגיל מסכם</small></span></div>
+      <div role="button" tabindex="0" data-move class="act" data-open="learned"><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg></span><span data-edit>מה למדנו<small>סיכום המפגש</small></span></div>
+    </div>
+  </div>
+
+  <div class="sig">© שירה רוט זליקוביץ · הוראה יצירתית עם AI · <a href="https://wa.me/972523930628" target="_blank" rel="noopener">ווטסאפ</a> · <a href="https://www.lomdot.org/" target="_blank" rel="noopener">להזמנת סדנאות בינה מלאכותית</a></div>
+
+  <div id="modal"><div class="box"><div class="bar"><span class="ic" id="mIc"></span><h2 id="mTitle"></h2><a id="mExt" target="_blank" rel="noopener">פתיחה בחלון חדש</a><button class="x" id="mClose" aria-label="סגירה">×</button></div><div class="content" id="mBody"></div></div></div>
+<!--DESIGN-END-->
+</div></div>
+
+<script>
+/* ===== הגדרות ===== */
+const SESSION='2';
+const SHEET_ID='1jZSeNE40Kd5q3K09NQ1xOOg1wJtwcPlyOx9acNoUfdg'; // משאבים, הקלטה ומשוב נלקחים מהגיליון
+const LINKS={padlet:'',feedback:'',deck:'',rec:''}; // deck = קישור ההטמעה של המצגת · rec = קישור להקלטה (יוטיוב). אפשר גם בגיליון: סוג "הקלטה"
+const EXTRA=[]; // משאבים נוספים
+const GEMINI='https://gemini.google.com';
+const WHEEL='https://wheelofnames.com/';
+const STYLES='https://gemini.google.com/share/d6e7352f6da8';
+
+/* ===== תוכן החלונות ===== */
+const ex=(label,text)=>`<div class="ex"><small>${label}</small><span>${text}</span><br><button class="copy">העתקה</button></div>`;
+const tryIt=(text,link,lt)=>`<div class="try"><span class="lbl">התנסות</span><span class="txt">${text}</span>${link?`<a href="${link}" target="_blank" rel="noopener">${lt||'לפתיחת Gemini'}</a>`:''}</div>`;
+const talk=text=>`<div class="talk"><span class="lbl">בכיתה</span><span class="txt">${text}</span></div>`;
+const frame=u=>`<iframe src="${u}" allowfullscreen allow="fullscreen; clipboard-write"></iframe>`;
+const WIN={
+ prompt:()=>({t:'פרומפט טוב לתמונה',h:`
+  <div class="formula"><span>מה רואים</span><i>+</i><span>איפה</span><i>+</i><span>מתי</span><i>+</i><span>אווירה</span><i>+</i><span>סגנון</span></div>
+  <div class="cols2">
+   <ol class="steps">
+    <li><div><b>מה רואים:</b> "ילד ושני גמלים"</div></li>
+    <li><div><b>איפה:</b> "במדבר, ליד אוהל"</div></li>
+    <li><div><b>מתי:</b> "בבוקר", "בשקיעה", "בחורף"</div></li>
+    <li><div><b>אווירה:</b> "שמח", "שקט", "מצחיק"</div></li>
+    <li><div><b>סגנון:</b> צילום, ציור בצבעי מים, קומיקס, תלת-ממד</div></li>
+   </ol>
+   <div>${ex('דוגמה','ילד ושני גמלים במדבר, ליד אוהל, בשקיעה. אווירה שקטה. ציור בצבעי מים.')}
+    <a class="wheel" href="${STYLES}" target="_blank" rel="noopener">למעבדת הסגנונות</a></div>
+  </div>
+  ${talk('התלמידים אומרים את הפרומפט בקול, חלק אחרי חלק.')}
+  ${tryIt('צרו תמונה לנושא מהכיתה שלכם. נסו 2 סגנונות שונים.',GEMINI)}`}),
+ edit:()=>({t:'עריכת תמונה',h:`
+  <div class="cols2">
+   <ol class="steps">
+    <li><div>יוצרים תמונה, או מעלים תמונה.</div></li>
+    <li><div>כותבים מה לשנות, דבר אחד בכל פעם.</div></li>
+    <li><div><b>משנים:</b> "תחליף את החולצה לאדומה"</div></li>
+    <li><div><b>מוסיפים:</b> "תוסיף חתול ליד הדלת"</div></li>
+    <li><div><b>מוחקים:</b> "תמחק את הכיסא"</div></li>
+   </ol>
+   ${ex('דוגמה','תשאיר את התמונה כמו שהיא. רק תוסיף עץ ליד הבית, ותחליף את השמיים לשמיים של ערב.')}
+  </div>
+  ${talk('"מה השתנה?" מראים שתי תמונות. התלמידים אומרים: "פה יש..., ופה אין...".')}
+  ${tryIt('שנו בתמונה שלכם 2 דברים. בקשו מחברה למצוא מה השתנה.',GEMINI)}`}),
+ color:()=>({t:'צביעת תמונה ישנה',h:`
+  <div class="cols2">
+   <ol class="steps">
+    <li><div>מצלמים בטלפון תמונה ישנה בשחור-לבן.</div></li>
+    <li><div>מעלים אותה ל-<b>Gemini</b>.</div></li>
+    <li><div>כותבים: "תצבע את התמונה".</div></li>
+    <li><div>מבקשים: "אל תשנה את הפנים ואת האנשים".</div></li>
+   </ol>
+   <div>${ex('דוגמה','תצבע את התמונה בצבעים טבעיים. אל תשנה את האנשים, את הפנים ואת הבגדים.')}
+    <div class="warn">לפני שמעלים תמונה עם אנשים, שואלים את המשפחה. אפשר להתחיל בתמונה של מקום או חפץ.</div></div>
+  </div>
+  ${talk('התלמיד שואל את סבא או סבתא על התמונה. בכיתה הוא מספר: מי בתמונה? איפה? מה עשו פעם? מה השתנה היום?')}
+  ${tryIt('צבעו תמונה ישנה: מקום, חפץ או אירוע מהעבר.',GEMINI)}`}),
+ char:()=>({t:'דמות עקבית',h:`
+  <div class="cols2">
+   <ol class="steps">
+    <li><div>מתארים דמות אחת. מה רואים? גיל, שיער, בגדים.</div></li>
+    <li><div>נשארים <b>באותה שיחה</b>.</div></li>
+    <li><div>כותבים: "עכשיו אותו ילד ב..."</div></li>
+    <li><div>הדמות נשארת אותה דמות, והמקום משתנה.</div></li>
+   </ol>
+   <div>${ex('דוגמה','ילד בן 10, שיער שחור מתולתל, חולצה כחולה. ציור צבעוני. הילד בבית.')}
+    ${ex('ממשיכים','עכשיו אותו ילד בבית הספר.')}</div>
+  </div>
+  ${talk('כל תלמיד מספר תמונה אחת. יחד יוצא סיפור. מה יקרה בתמונה הבאה?')}
+  ${tryIt('צרו דמות ו-3 תמונות שלה במקומות שונים.',GEMINI)}`}),
+ combine:()=>({t:'שילוב תמונות',h:`
+  <div class="cols2">
+   <ol class="steps">
+    <li><div>מעלים כמה תמונות ביחד.</div></li>
+    <li><div>למשל: שני אנשים, וספל.</div></li>
+    <li><div>כותבים מה לעשות איתן.</div></li>
+    <li><div>הבינה יוצרת תמונה אחת חדשה.</div></li>
+   </ol>
+   <div>${ex('דוגמה','תושיב את שני האנשים בבית קפה. הם שותים מהספל הזה ומדברים.')}
+    <div class="warn">בהדגמה: משתמשים באנשים שהבינה יצרה.</div></div>
+  </div>
+  ${talk('התלמיד מסביר: מה חיברתי? איפה הם? מה הם עושים?')}
+  ${tryIt('חברו 2 או 3 תמונות לתמונה אחת.',GEMINI)}`}),
+ comic:()=>({t:'קומיקס',h:`
+  <div class="cols2">
+   <ol class="steps">
+    <li><div>מבקשים קומיקס של 4 ריבועים.</div></li>
+    <li><div>אותן דמויות בכל הריבועים.</div></li>
+    <li><div>מבקשים: <b>בלי טקסט ובלי בועות</b>.</div></li>
+    <li><div>את הבועות מוסיפים אחר כך, בקנבה או במצגת.</div></li>
+   </ol>
+   <div>${ex('דוגמה','קומיקס של 4 ריבועים: שני חברים קונים פירות בשוק. ציור צבעוני. בלי טקסט ובלי בועות.')}
+    <div class="warn">הבינה טועה בכתב עברי בתוך תמונה. לכן מוסיפים את הטקסט לבד.</div></div>
+  </div>
+  ${talk('בזוגות: ממציאים מה כל דמות אומרת, ומשחקים את השיחה בקול.')}
+  ${tryIt('צרו קומיקס של 4 ריבועים בלי טקסט.',GEMINI)}`}),
+ pause:()=>({t:'הפסקה',h:`<div class="timer"><div class="t" id="tm">15:00</div><div class="tb"><button id="tmGo">התחלה</button><button class="sec" id="tmReset">מההתחלה</button></div><p>בהפסקה: הכינו 2 תמונות למדרש תמונה.<br>סצנה אחת, וסצנת המשך.</p></div>`,after:timerInit}),
+ midrash:()=>({t:'מדרש תמונה',h:`
+  <div class="cols2">
+   <ol class="steps">
+    <li><div>כל אחת מכינה <b>2 תמונות</b>: סצנה, וסצנת המשך.</div></li>
+    <li><div>מורה מציגה את הסצנה הראשונה.</div></li>
+    <li><div>הגלגל בוחר מורה. היא מספרת את הסיפור שהתמונה מספרת.</div></li>
+    <li><div>מציגים את סצנת ההמשך.</div></li>
+    <li><div>הגלגל בוחר מורה אחרת. היא ממשיכה את הסיפור.</div></li>
+   </ol>
+   <div><div class="formula"><span>מי?</span><span>איפה?</span><span>מה קרה?</span><span>למה?</span><span>מה הם אומרים?</span></div>
+    <a class="wheel" href="${WHEEL}" target="_blank" rel="noopener">לגלגל ההגרלה</a></div>
+  </div>
+  ${talk('אותו משחק עם התלמידים. מי שמספר לא ראה את התמונה קודם.')}`}),
+ voice:()=>({t:'מציירים מדיבור',h:`
+  <div class="cols2">
+   <ol class="steps">
+    <li><div>פותחים <b>Gemini</b> או <b>ChatGPT</b>.</div></li>
+    <li><div>לוחצים על <b>המיקרופון</b>.</div></li>
+    <li><div>אומרים בקול מה רוצים לראות.</div></li>
+    <li><div>משנים בקול: "תוסיף...", "תחליף...".</div></li>
+   </ol>
+   ${ex('אומרים','אני רוצה תמונה של משפחה בארוחת ערב בבית. כולם צוחקים. ציור צבעוני.')}
+  </div>
+  ${talk('תלמיד מתאר בקול. הכיתה בודקת: האם התמונה מתאימה למה שהוא אמר?')}
+  ${tryIt('צרו תמונה רק בדיבור, בלי להקליד.',GEMINI)}`}),
+ dub:()=>({t:'קומיקס מדובב',h:`
+  <div class="cols2">
+   <ol class="steps">
+    <li><div>מציגים קומיקס בלי טקסט.</div></li>
+    <li><div>הגלגל בוחר <b>שתי מורות</b>.</div></li>
+    <li><div>כל אחת מדבבת דמות אחת, ומשחקות את השיחה בקול.</div></li>
+    <li><div>מסובבים שוב: שתי מורות אחרות, שיחה אחרת.</div></li>
+   </ol>
+   <div><div class="ex"><small>שואלים אחרי כל שיחה</small><span>מה היה שונה בין השיחות?</span></div>
+    <a class="wheel" href="${WHEEL}" target="_blank" rel="noopener">לגלגל ההגרלה</a></div>
+  </div>
+  ${talk('אותו קומיקס, הרבה שיחות. כל זוג תלמידים ממציא שיחה משלו.')}`}),
+ cards:()=>({t:'קלפי שיח',h:`
+  <div class="cols2">
+   <ol class="steps">
+    <li><div>כל מורה יוצרת <b>קלף אחד</b> לכיתה שלה.</div></li>
+    <li><div>בקלף יש תמונה ושאלה.</div></li>
+    <li><div>השאלה פתוחה, ואין תשובה אחת נכונה.</div></li>
+    <li><div>משתפות את הקלף עם הקבוצה.</div></li>
+   </ol>
+   ${ex('דוגמה לשאלה','מה היית עושה במקום הילד בתמונה? למה?')}
+  </div>
+  ${tryIt('צרו קלף שיח: תמונה ושאלה לתלמידים שלכם.',GEMINI)}`}),
+ deck:()=>({t:'מצגת השיעור',u:LINKS.deck,f:!!LINKS.deck,h:LINKS.deck?frame(LINKS.deck):'<div class="empty">המצגת תופיע כאן</div>'}),
+ padlet:()=>({t:'פדלט: העלו את התוצרים',u:LINKS.padlet,f:!!LINKS.padlet,h:LINKS.padlet?frame(LINKS.padlet):'<div class="empty">הפדלט יופיע כאן</div>'}),
+ rec:()=>{const id=ytId(LINKS.rec);return id?{t:'הקלטת השיעור',u:'https://youtu.be/'+id,f:true,h:frame('https://www.youtube-nocookie.com/embed/'+id+'?rel=0')}:{t:'הקלטת השיעור',u:LINKS.rec,f:!!LINKS.rec,h:LINKS.rec?frame(LINKS.rec):'<div class="empty">ההקלטה תעלה כאן אחרי המפגש</div>'}},
+ video:(el)=>({t:el.dataset.title||'סרטון',u:'https://youtu.be/'+el.dataset.vid,f:true,h:frame('https://www.youtube-nocookie.com/embed/'+el.dataset.vid+'?autoplay=1&rel=0')}),
+ learned:()=>({t:'מה למדנו',h:`<ul class="learned"><li>פרומפט טוב לתמונה</li><li>עריכת תמונה</li><li>צביעת תמונה ישנה</li><li>דמות עקבית</li><li>שילוב תמונות</li><li>קומיקס</li><li>מדרש תמונה</li><li>מציירים מדיבור</li></ul>`}),
+ feedback:()=>{const u=LINKS.feedback?LINKS.feedback.replace('{מפגש}',SESSION):'';const e=u&&u.includes('docs.google.com/forms')?u+(u.includes('?')?'&':'?')+'embedded=true':u;return {t:'משוב על המפגש',u,f:!!u,h:u?frame(e):'<div class="empty">טופס המשוב יופיע כאן</div>'}}
+};
+
+/* ===== שעון הפסקה ===== */
+let tmLeft=900,tmRun=false;
+function tmShow(){const el=document.getElementById('tm');if(el)el.textContent=String(Math.floor(tmLeft/60)).padStart(2,'0')+':'+String(tmLeft%60).padStart(2,'0')}
+function timerInit(){tmShow();
+  document.getElementById('tmGo').onclick=e=>{if(tmRun){clearInterval(window._tm);tmRun=false;e.target.textContent='המשך';return}
+    tmRun=true;e.target.textContent='עצירה';window._tm=setInterval(()=>{if(tmLeft>0)tmLeft--;tmShow();if(!tmLeft){clearInterval(window._tm);tmRun=false}},1000)};
+  document.getElementById('tmReset').onclick=()=>{clearInterval(window._tm);tmRun=false;tmLeft=900;tmShow();document.getElementById('tmGo').textContent='התחלה'}}
+
+/* ===== מנגנון החלון ===== */
+const $m=()=>document.getElementById('modal'),$b=()=>document.getElementById('mBody'),$e=()=>document.getElementById('mExt');
+function openWin(k,src){const modal=$m(),body=$b(),ext=$e();
+  const w=WIN[k](src);document.getElementById('mTitle').textContent=w.t;
+  const ic=src&&src.querySelector('.ic svg');document.getElementById('mIc').innerHTML=ic?ic.outerHTML:'';document.getElementById('mIc').style.display=ic?'':'none';
+  body.className='content'+(w.f?' frame':'');body.innerHTML=w.h;
+  if(w.u){ext.href=w.u;ext.style.display=''}else ext.style.display='none';
+  modal.classList.add('on'); if(w.after) w.after();
+  body.querySelectorAll('.copy').forEach(b=>b.onclick=()=>navigator.clipboard.writeText(b.parentNode.querySelector('span').textContent).then(()=>{b.textContent='הועתק';setTimeout(()=>b.textContent='העתקה',1500)}));
+}
+function closeWin(){clearInterval(window._tm);tmRun=false;const modal=$m(),body=$b();modal.classList.remove('on');body.innerHTML=''}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-open]');if(b)openWin(b.dataset.open,b)});
+document.addEventListener('keydown',e=>{const b=e.target.closest&&e.target.closest('[data-open]');if(b&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openWin(b.dataset.open,b)}});
+document.addEventListener('click',e=>{if(e.target.closest('#mClose'))closeWin()});
+document.addEventListener('click',e=>{if(e.target.id==='modal')closeWin()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeWin()});
+
+/* ===== משאבים, הקלטה ומשוב מהגיליון ===== */
+function loadSheet(){return new Promise((ok,fail)=>{const cb='cb'+Date.now(),sc=document.createElement('script');
+  window[cb]=r=>{try{const h=r.table.cols.map(c=>(c.label||'').trim());ok(r.table.rows.map(row=>{const o={};h.forEach((k,i)=>{const c=row.c&&row.c[i];o[k]=c?String(c.f!=null?c.f:(c.v!=null?c.v:'')).trim():''});return o}))}catch(e){fail(e)}};
+  sc.onerror=fail;sc.src=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?gid=0&headers=1&tqx=out:json;responseHandler:${cb}`;document.body.appendChild(sc);})}
+const mine=(rows,kind)=>rows.filter(r=>r['סוג']===kind&&r['קישור']&&(r['מפגש']===SESSION||String(r['מפגש']).indexOf('כל')===0)).sort((a,b)=>(b['מפגש']===SESSION)-(a['מפגש']===SESSION));
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ytId=u=>{const m=String(u||'').match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/);return m?m[1]:''};
+const YT_IC='<span class="ic yt"><svg viewBox="0 0 24 24"><path d="M9 7.5v9l7.5-4.5z"/></svg></span>';
+const LINK_IC='<span class="ic"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 6 0l3-3a4 4 0 0 0-6-6l-1 1"/><path d="M14 10a4 4 0 0 0-6 0l-3 3a4 4 0 0 0 6 6l1-1"/></svg></span>';
+loadSheet().then(rows=>{
+  const res=mine(rows,'משאב').concat(EXTRA.filter(x=>x.url).map(x=>({'שם':x.name,'קישור':x.url})));
+  document.getElementById('res').innerHTML=res.length?res.map(r=>{const id=ytId(r['קישור']);return id?`<div role="button" tabindex="0" class="row" data-open="video" data-vid="${esc(id)}" data-title="${esc(r['שם']||'')}">${YT_IC}${esc(r['שם']||'')}</div>`:`<a class="row" href="${esc(r['קישור'])}" target="_blank" rel="noopener">${LINK_IC}${esc(r['שם']||r['קישור'])}</a>`}).join(''):'';
+  if(!LINKS.padlet&&mine(rows,'פדלט')[0])LINKS.padlet=mine(rows,'פדלט')[0]['קישור'];
+  if(!LINKS.rec&&mine(rows,'הקלטה')[0])LINKS.rec=mine(rows,'הקלטה')[0]['קישור'];
+  if(!LINKS.deck&&mine(rows,'מצגת')[0])LINKS.deck=mine(rows,'מצגת')[0]['קישור'];
+  if(!LINKS.feedback&&mine(rows,'משוב')[0])LINKS.feedback=mine(rows,'משוב')[0]['קישור'];
+}).catch(()=>{document.getElementById('res').innerHTML=''});
+
+function fit(){const s=Math.min(innerWidth/1600,innerHeight/900);document.getElementById('design').style.zoom=s}
+addEventListener('resize',fit);fit();
+</script>
+
+<script>/* העמוד לא זז: מחזיר כל גלילה למקום */
+(function(){const vp=document.getElementById('vp');const r=()=>{if(vp&&(vp.scrollTop||vp.scrollLeft)){vp.scrollTop=0;vp.scrollLeft=0}if(scrollX||scrollY)scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0};addEventListener('scroll',e=>{if(e.target===document||e.target===vp||e.target===document.body||e.target===document.documentElement)r()},true);addEventListener('resize',r);r()})();</script>
+</body>
+</html>
