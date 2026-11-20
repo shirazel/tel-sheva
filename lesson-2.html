@@ -443,6 +443,23 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'H
 .wwin b{font-size:96px;color:#E2448F;line-height:1.1}
 .wok{margin-top:10px;background:var(--deep);color:#fff;border:0;border-radius:999px;font:700 24px 'Heebo',sans-serif;padding:10px 40px;cursor:pointer}
 button.wheel{border:0;cursor:pointer;font-family:'Heebo',sans-serif}
+/* הרעיונות שלנו: כפתור הוספה למעלה, שם קטן, טקסט גדול יותר */
+.ihd .iplus{margin-right:auto;font-size:22px;padding:8px 24px}
+.ihd b{font-size:32px}
+.iadd{border-top:0;padding-top:0;flex:0 0 auto}
+.iadd .iform{order:0;margin-bottom:12px}
+.iadd.on .iform{display:grid;grid-template-columns:170px 1fr auto;gap:10px;align-items:start}
+.iadd.on .iplus{display:inline-block}
+.iname{margin:0;font-size:22px;padding:8px 12px}
+.iform textarea{height:64px;font-size:24px}
+.ibtns{margin-top:0;flex-direction:column;gap:6px}
+.isend,.icancel{padding:6px 22px;font-size:21px}
+.imsg{grid-column:1/-1;margin-top:0}
+.imsg:empty{display:none}
+.ilist2{flex:1;min-height:0;overflow:auto}
+.ilist2 li{font-size:27px;padding:14px 20px}
+.ilist2 li .iwho{font-size:21px}
+.ilist2 li.iempty{font-size:25px}
 </style>
 </head>
 <body>
@@ -558,11 +575,11 @@ const curTech=()=>document.getElementById('mTitle').textContent;
 const techIdeas=t=>(IDEAS||[]).filter(r=>r.tech===t&&r.idea&&(!r.session||r.session===SESSION));
 function ideasUI(){const box=document.querySelector('#modal .box');removeIdeasUI();box.classList.add('has-ideas');
   box.insertAdjacentHTML('beforeend',`<button class="itab" type="button"><span class="bulb">${BULB}</span>הרעיונות שלנו<span class="icount"></span></button>
-   <div class="ipanel"><div class="ihd"><span class="bulb">${BULB}</span><b>הרעיונות שלנו לכיתה</b></div><ul class="ilist2"></ul>
-   <div class="iadd"><button class="iplus" type="button">+ הוסף רעיון</button><div class="iform"><input class="iname" maxlength="40" placeholder="השם שלי"><textarea maxlength="300" placeholder="איך אשלב את זה בכיתה? רעיון אחד, במשפט או שניים."></textarea><div class="ibtns"><button class="isend" type="button">שליחה</button><button class="icancel" type="button">ביטול</button></div></div><div class="imsg"></div></div></div>`);
+   <div class="ipanel"><div class="ihd"><span class="bulb">${BULB}</span><b>הרעיונות שלנו לכיתה</b><button class="iplus" type="button">+ הוסף רעיון</button></div>
+   <div class="iadd"><div class="iform"><input class="iname" maxlength="40" placeholder="השם שלי"><textarea maxlength="300" placeholder="איך אשלב את זה בכיתה? רעיון אחד, במשפט או שניים."></textarea><div class="ibtns"><button class="isend" type="button">שליחה</button><button class="icancel" type="button">ביטול</button></div></div><div class="imsg"></div></div><ul class="ilist2"></ul></div>`);
   box.querySelector('.itab').onclick=()=>{box.classList.toggle('ideas-open');box.scrollTop=0};
-  box.querySelector('.iplus').onclick=()=>{box.querySelector('.iadd').classList.add('on');try{box.querySelector('.iname').value=localStorage.getItem('ideaName')||''}catch(e){}box.querySelector('.imsg').textContent='';box.scrollTop=0;const nm=box.querySelector('.iname');(nm.value?box.querySelector('.iform textarea'):nm).focus({preventScroll:true});const pn=box.querySelector('.ipanel');pn.scrollTop=pn.scrollHeight};
-  box.querySelector('.icancel').onclick=()=>box.querySelector('.iadd').classList.remove('on');
+  box.querySelector('.iplus').onclick=()=>{box.querySelector('.iadd').classList.add('on');box.querySelector('.iplus').style.visibility='hidden';try{box.querySelector('.iname').value=localStorage.getItem('ideaName')||''}catch(e){}box.querySelector('.imsg').textContent='';box.scrollTop=0;const nm=box.querySelector('.iname');(nm.value?box.querySelector('.iform textarea'):nm).focus({preventScroll:true});const pn=box.querySelector('.ipanel');pn.scrollTop=pn.scrollHeight};
+  box.querySelector('.icancel').onclick=()=>{box.querySelector('.iadd').classList.remove('on');box.querySelector('.iplus').style.visibility=''};
   box.querySelector('.isend').onclick=sendIdea;
   renderIdeas()}
 function renderIdeas(){const box=document.querySelector('#modal .box');const ul=box&&box.querySelector('.ilist2');if(!ul)return;const list=techIdeas(curTech());
@@ -575,7 +592,7 @@ function sendIdea(){const box=document.querySelector('#modal .box'),ta=box.query
   if(!IDEAS_API){msg.textContent='הוספת רעיונות תעבוד אחרי שנחבר את הסקריפט.';return}
   const t=curTech();btn.disabled=true;msg.textContent='שולח...';
   jsonp(IDEAS_API+'?action=add&board=ideas&session='+encodeURIComponent(SESSION)+'&tech='+encodeURIComponent(t)+'&idea='+encodeURIComponent(idea)+'&name='+encodeURIComponent(name)).then(r=>{
-    if(!r||!r.ok)throw new Error(r&&r.error||'');(IDEAS=IDEAS||[]).push({session:SESSION,tech:t,idea,name});ta.value='';msg.textContent='תודה! הרעיון נוסף.';box.querySelector('.iadd').classList.remove('on');renderIdeas();
+    if(!r||!r.ok)throw new Error(r&&r.error||'');(IDEAS=IDEAS||[]).push({session:SESSION,tech:t,idea,name});ta.value='';msg.textContent='תודה! הרעיון נוסף.';box.querySelector('.iadd').classList.remove('on');box.querySelector('.iplus').style.visibility='';renderIdeas();
     const ul=box.querySelector('.ilist2');ul.scrollTop=ul.scrollHeight}).catch(()=>{msg.textContent='לא הצלחנו לשלוח. נסו שוב.'}).finally(()=>{btn.disabled=false})}
 (function(){const cb='cbI'+Date.now(),sc=document.createElement('script');
   window[cb]=r=>{try{const h=r.table.cols.map(c=>(c.label||'').trim());IDEAS=r.table.rows.map(row=>{const o={};h.forEach((k,i)=>{const c=row.c&&row.c[i];o[k]=c?String(c.f!=null?c.f:(c.v!=null?c.v:'')).trim():''});return {session:o['מפגש'],tech:o['טכניקה'],idea:o['רעיון'],name:o['שם']}})}catch(e){IDEAS=[]}renderIdeas()};
