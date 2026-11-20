@@ -385,6 +385,13 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'H
 .isend:disabled{opacity:.6}
 .icancel{background:#fff;color:var(--deep);border:1px solid var(--line);border-radius:999px;font:700 22px 'Heebo',sans-serif;padding:8px 24px;cursor:pointer}
 .imsg{margin-top:6px;font-size:20px;color:var(--deep);min-height:1em}
+.iname{width:100%;border:2px solid #5CE1E6;border-radius:14px;padding:8px 14px;font:600 23px 'Heebo',sans-serif;margin-bottom:8px;direction:rtl}
+.iname:focus{outline:none;border-color:#E2448F}
+.iform textarea{height:72px}
+.ilist2 li .iwho{display:block;margin-top:4px;font-size:19px;font-weight:700;color:#8A5A00}
+.ipanel{height:86%;overflow:auto}
+.box.ideas-open .itab{bottom:86%}
+.ilist2{flex:0 0 auto;overflow:visible}
 </style>
 </head>
 <body>
@@ -499,26 +506,26 @@ const techIdeas=t=>(IDEAS||[]).filter(r=>r.tech===t&&r.idea&&(!r.session||r.sess
 function ideasUI(){const box=document.querySelector('#modal .box');removeIdeasUI();box.classList.add('has-ideas');
   box.insertAdjacentHTML('beforeend',`<button class="itab" type="button"><span class="bulb">${BULB}</span>הרעיונות שלנו<span class="icount"></span></button>
    <div class="ipanel"><div class="ihd"><span class="bulb">${BULB}</span><b>הרעיונות שלנו לכיתה</b></div><ul class="ilist2"></ul>
-   <div class="iadd"><button class="iplus" type="button">+ הוסף רעיון</button><div class="iform"><textarea maxlength="300" placeholder="איך אשלב את זה בכיתה? רעיון אחד, במשפט או שניים."></textarea><div class="ibtns"><button class="isend" type="button">שליחה</button><button class="icancel" type="button">ביטול</button></div></div><div class="imsg"></div></div></div>`);
+   <div class="iadd"><button class="iplus" type="button">+ הוסף רעיון</button><div class="iform"><input class="iname" maxlength="40" placeholder="השם שלי"><textarea maxlength="300" placeholder="איך אשלב את זה בכיתה? רעיון אחד, במשפט או שניים."></textarea><div class="ibtns"><button class="isend" type="button">שליחה</button><button class="icancel" type="button">ביטול</button></div></div><div class="imsg"></div></div></div>`);
   box.querySelector('.itab').onclick=()=>box.classList.toggle('ideas-open');
-  box.querySelector('.iplus').onclick=()=>{box.querySelector('.iadd').classList.add('on');box.querySelector('.imsg').textContent='';box.querySelector('.iform textarea').focus()};
+  box.querySelector('.iplus').onclick=()=>{box.querySelector('.iadd').classList.add('on');try{box.querySelector('.iname').value=localStorage.getItem('ideaName')||''}catch(e){}box.querySelector('.imsg').textContent='';box.querySelector('.iform textarea').focus()};
   box.querySelector('.icancel').onclick=()=>box.querySelector('.iadd').classList.remove('on');
   box.querySelector('.isend').onclick=sendIdea;
   renderIdeas()}
 function renderIdeas(){const box=document.querySelector('#modal .box');const ul=box&&box.querySelector('.ilist2');if(!ul)return;const list=techIdeas(curTech());
-  ul.innerHTML=IDEAS===null?'<li class="iempty">טוען...</li>':list.length?list.map(r=>`<li>${esc(r.idea)}</li>`).join(''):'<li class="iempty">עוד אין רעיונות. היו הראשונים!</li>';
+  ul.innerHTML=IDEAS===null?'<li class="iempty">טוען...</li>':list.length?list.map(r=>`<li>${esc(r.idea)}${r.name?`<span class="iwho">${esc(r.name)}</span>`:''}</li>`).join(''):'<li class="iempty">עוד אין רעיונות. היו הראשונים!</li>';
   box.querySelector('.icount').textContent=list.length?list.length:''}
 function removeIdeasUI(){const box=document.querySelector('#modal .box');if(!box)return;box.querySelectorAll('.itab,.ipanel').forEach(x=>x.remove());box.classList.remove('has-ideas','ideas-open')}
 function jsonp(url){return new Promise((ok,fail)=>{const cb='cbJ'+Date.now()+Math.floor(Math.random()*1e4),sc=document.createElement('script');const t=setTimeout(()=>{fail(new Error('timeout'));sc.remove()},15000);
   window[cb]=r=>{clearTimeout(t);ok(r);sc.remove();delete window[cb]};sc.onerror=()=>{clearTimeout(t);fail(new Error('net'))};sc.src=url+(url.includes('?')?'&':'?')+'callback='+cb;document.body.appendChild(sc)})}
-function sendIdea(){const box=document.querySelector('#modal .box'),ta=box.querySelector('.iform textarea'),msg=box.querySelector('.imsg'),btn=box.querySelector('.isend');const idea=ta.value.trim();if(!idea){ta.focus();return}
+function sendIdea(){const box=document.querySelector('#modal .box'),ta=box.querySelector('.iform textarea'),msg=box.querySelector('.imsg'),btn=box.querySelector('.isend');const idea=ta.value.trim();const nm=box.querySelector('.iname');const name=nm.value.trim();if(!name){nm.focus();msg.textContent='כתבו את השם שלכם.';return}if(!idea){ta.focus();return}try{localStorage.setItem('ideaName',name)}catch(e){}
   if(!IDEAS_API){msg.textContent='הוספת רעיונות תעבוד אחרי שנחבר את הסקריפט.';return}
   const t=curTech();btn.disabled=true;msg.textContent='שולח...';
-  jsonp(IDEAS_API+'?action=add&session='+encodeURIComponent(SESSION)+'&tech='+encodeURIComponent(t)+'&idea='+encodeURIComponent(idea)).then(r=>{
-    if(!r||!r.ok)throw new Error(r&&r.error||'');(IDEAS=IDEAS||[]).push({session:SESSION,tech:t,idea});ta.value='';msg.textContent='תודה! הרעיון נוסף.';box.querySelector('.iadd').classList.remove('on');renderIdeas();
+  jsonp(IDEAS_API+'?action=add&session='+encodeURIComponent(SESSION)+'&tech='+encodeURIComponent(t)+'&idea='+encodeURIComponent(idea)+'&name='+encodeURIComponent(name)).then(r=>{
+    if(!r||!r.ok)throw new Error(r&&r.error||'');(IDEAS=IDEAS||[]).push({session:SESSION,tech:t,idea,name});ta.value='';msg.textContent='תודה! הרעיון נוסף.';box.querySelector('.iadd').classList.remove('on');renderIdeas();
     const ul=box.querySelector('.ilist2');ul.scrollTop=ul.scrollHeight}).catch(()=>{msg.textContent='לא הצלחנו לשלוח. נסו שוב.'}).finally(()=>{btn.disabled=false})}
 (function(){const cb='cbI'+Date.now(),sc=document.createElement('script');
-  window[cb]=r=>{try{const h=r.table.cols.map(c=>(c.label||'').trim());IDEAS=r.table.rows.map(row=>{const o={};h.forEach((k,i)=>{const c=row.c&&row.c[i];o[k]=c?String(c.f!=null?c.f:(c.v!=null?c.v:'')).trim():''});return {session:o['מפגש'],tech:o['טכניקה'],idea:o['רעיון']}})}catch(e){IDEAS=[]}renderIdeas()};
+  window[cb]=r=>{try{const h=r.table.cols.map(c=>(c.label||'').trim());IDEAS=r.table.rows.map(row=>{const o={};h.forEach((k,i)=>{const c=row.c&&row.c[i];o[k]=c?String(c.f!=null?c.f:(c.v!=null?c.v:'')).trim():''});return {session:o['מפגש'],tech:o['טכניקה'],idea:o['רעיון'],name:o['שם']}})}catch(e){IDEAS=[]}renderIdeas()};
   sc.onerror=()=>{IDEAS=[];renderIdeas()};sc.src=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent('רעיונות')}&headers=1&tqx=out:json;responseHandler:${cb}`;document.body.appendChild(sc)})();
 
 /* ===== שעון הפסקה ===== */
