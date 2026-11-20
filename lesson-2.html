@@ -418,6 +418,31 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'H
 .pcard figcaption b{font-size:21px;color:var(--ink);line-height:1.3}
 .pcard figcaption span{font-size:18px;font-weight:700;color:#8A5A00}
 .pcard figcaption a{font-size:18px;color:var(--blue)}
+/* גלגל ההגרלה */
+.box:has(.wheelwin){height:800px}
+.box:has(.wheelwin) .content{flex:1;overflow:hidden}
+.wheelwin{position:relative;height:100%;display:grid;grid-template-columns:1fr 380px;gap:30px;align-items:center}
+.wl{display:flex;justify-content:center}
+.wwrap{position:relative;width:560px;height:560px}
+.wwrap canvas{width:100%;height:100%;filter:drop-shadow(0 12px 24px rgba(11,79,124,.2))}
+.wptr{position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:22px solid transparent;border-right:22px solid transparent;border-top:44px solid #2F3437}
+.wgo{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:96px;height:96px;border-radius:50%;border:0;background:#0B4F7C;color:#fff;font:800 24px 'Heebo',sans-serif;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.25)}
+.wgo:hover{background:#E2448F}
+.wr{display:flex;flex-direction:column;gap:10px;align-items:stretch}
+.wjoin{background:#F0FBFC;border:2px solid #5CE1E6;border-radius:20px;padding:16px;text-align:center}
+.wjoin b{display:block;font-size:24px;color:var(--deep);margin-bottom:10px}
+.wqr{display:flex;justify-content:center;margin-bottom:8px}
+.wqr img,.wqr canvas{border:8px solid #fff;border-radius:8px}
+.wlink{display:block;font-size:15px;color:var(--blue);direction:ltr;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wcount{font-size:24px;font-weight:700;text-align:center;color:var(--ink)}
+.wopt{font-size:20px;display:flex;gap:8px;align-items:center;justify-content:center}
+.wreset{background:#fff;color:var(--deep);border:1px solid var(--line);border-radius:999px;font:700 20px 'Heebo',sans-serif;padding:8px 18px;cursor:pointer}
+.wwin{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:rgba(255,255,255,.92);border-radius:20px;z-index:3}
+.wwin.on{display:flex;animation:fade .25s}
+.wwin span{font-size:30px;color:var(--muted);font-weight:700}
+.wwin b{font-size:96px;color:#E2448F;line-height:1.1}
+.wok{margin-top:10px;background:var(--deep);color:#fff;border:0;border-radius:999px;font:700 24px 'Heebo',sans-serif;padding:10px 40px;cursor:pointer}
+button.wheel{border:0;cursor:pointer;font-family:'Heebo',sans-serif}
 </style>
 </head>
 <body>
@@ -450,7 +475,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'H
       <div role="button" tabindex="0" data-move class="mrow" data-open="deck"><span class="art"><svg class="a" viewBox="0 0 64 64"><rect x="6" y="8" width="52" height="38" rx="5" fill="#fff" stroke="#2B78C5" stroke-width="3"/><rect x="6" y="8" width="52" height="7" rx="3" fill="#2B78C5"/><path d="M20 38l8-20h4l8 20M23 31h14" stroke="#E2448F" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M42 36l9-9 3 3-9 9h-3z" fill="#FFC83D"/><path d="M32 46v8M24 56h16" stroke="#2B78C5" stroke-width="3" stroke-linecap="round"/></svg></span><span data-edit>מצגת - מטקסט לתמונה</span></div>
       <a class="mrow" href="https://www.mako.co.il/news-specials/data_n12/Article-b22396c82e52981027.htm" target="_blank" rel="noopener"><span class="art"><svg class="a" viewBox="0 0 64 64"><path d="M4 32C11 19 21 13 32 13s21 6 28 19c-7 13-17 19-28 19S11 45 4 32z" fill="#fff" stroke="#D7263D" stroke-width="3.5" stroke-linejoin="round"/><circle cx="32" cy="32" r="11" fill="#D7263D"/><circle cx="32" cy="32" r="4.5" fill="#fff"/></svg></span><span>זהו את התמונה</span></a>
       <a class="mrow" href="https://gemini.google.com/share/d6e7352f6da8" target="_blank" rel="noopener"><span class="art"><svg class="a" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#F8C6D3"/><path d="M26 12h12M28 12v14L16 48a4 4 0 0 0 3.5 6h25a4 4 0 0 0 3.5-6L36 26V12" fill="#fff" stroke="#C2185B" stroke-width="3" stroke-linejoin="round"/><path d="M20 42h24l4 7a3 3 0 0 1-2.6 4.5H18.6A3 3 0 0 1 16 49z" fill="#E2448F"/><circle cx="28" cy="46" r="2" fill="#fff"/><circle cx="35" cy="48" r="1.5" fill="#fff"/></svg></span><span>נסו את מעבדת הסגנונות</span></a>
-      <a class="mrow" href="https://wheelofnames.com/" target="_blank" rel="noopener"><span class="art"><svg class="a" viewBox="0 0 64 64"><g transform="translate(32 35)"><path d="M0 0L0-26A26 26 0 0 1 22.5-13z" fill="#E2448F"/><path d="M0 0L22.5-13A26 26 0 0 1 22.5 13z" fill="#FFC83D"/><path d="M0 0L22.5 13A26 26 0 0 1 0 26z" fill="#3DBE7A"/><path d="M0 0L0 26A26 26 0 0 1-22.5 13z" fill="#2B78C5"/><path d="M0 0L-22.5 13A26 26 0 0 1-22.5-13z" fill="#7A5BD6"/><path d="M0 0L-22.5-13A26 26 0 0 1 0-26z" fill="#FA7548"/><circle r="5" fill="#fff"/></g><path d="M27 2h10l-5 9z" fill="#2F3437"/></svg></span><span>גלגל ההגרלה</span></a>
+      <div role="button" tabindex="0" data-move class="mrow" data-open="wheel"><span class="art"><svg class="a" viewBox="0 0 64 64"><g transform="translate(32 35)"><path d="M0 0L0-26A26 26 0 0 1 22.5-13z" fill="#E2448F"/><path d="M0 0L22.5-13A26 26 0 0 1 22.5 13z" fill="#FFC83D"/><path d="M0 0L22.5 13A26 26 0 0 1 0 26z" fill="#3DBE7A"/><path d="M0 0L0 26A26 26 0 0 1-22.5 13z" fill="#2B78C5"/><path d="M0 0L-22.5 13A26 26 0 0 1-22.5-13z" fill="#7A5BD6"/><path d="M0 0L-22.5-13A26 26 0 0 1 0-26z" fill="#FA7548"/><circle r="5" fill="#fff"/></g><path d="M27 2h10l-5 9z" fill="#2F3437"/></svg></span><span>גלגל ההגרלה</span></div>
       <div class="list" id="res"></div>
       <div role="button" tabindex="0" data-move class="upload" data-open="products"><span class="art"><svg class="a" viewBox="0 0 64 64"><path d="M32 4c9 7 13 18 11 32H21C19 22 23 11 32 4z" fill="#fff" stroke="#2B78C5" stroke-width="3" stroke-linejoin="round"/><circle cx="32" cy="22" r="5" fill="#9FDCF5" stroke="#2B78C5" stroke-width="2.5"/><path d="M21 28l-8 10v7l9-5zM43 28l8 10v7l-9-5z" fill="#2B78C5"/><path d="M26 40c0 7 3 11 6 16 3-5 6-9 6-16z" fill="#FA7548"/></svg></span><span data-edit>העלו את תוצרי השיעור</span></div>
     </div>
@@ -471,6 +496,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'H
 <!--DESIGN-END-->
 </div></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 /* ===== הגדרות ===== */
 const SESSION='2';
@@ -507,11 +533,12 @@ const WIN={
   ${gal([['comic-1','קומיקס של 4 ריבועים: שני חברים בשוק. עם בועות דיבור בעברית']])}`}),
  pause:()=>({t:'הפסקה',h:`<div class="timer"><div class="t" id="tm">15:00</div><div class="tb"><button id="tmGo">התחלה</button><button class="sec" id="tmReset">מההתחלה</button></div><p>בהפסקה: הכינו 2 תמונות למדרש תמונה.<br>סצנה אחת, וסצנת המשך.</p></div>`,after:timerInit}),
  midrash:()=>({t:'מדרש תמונה',h:`
-  <div class="formula"><span>מי?</span><span>איפה?</span><span>מה קרה?</span><span>למה?</span><span>מה הם אומרים?</span><a class="wheel sm" href="${WHEEL}" target="_blank" rel="noopener">לגלגל ההגרלה</a></div>
+  <div class="formula"><span>מי?</span><span>איפה?</span><span>מה קרה?</span><span>למה?</span><span>מה הם אומרים?</span><button class="wheel sm" type="button" data-open="wheel">לגלגל ההגרלה</button></div>
   ${gal([['midrash-1','סצנה'],['midrash-2','סצנת המשך']])}`}),
  voice:()=>({t:'מציירים מדיבור',h:`
   ${gal([['voice-1','לוחצים על המיקרופון ואומרים: "משפחה בארוחת ערב, כולם צוחקים"'],['voice-2','אומרים: "תוסיף עוגה על השולחן"']])}`}),
  deck:()=>({t:'מצגת - מטקסט לתמונה',u:LINKS.deck,f:!!LINKS.deck,h:LINKS.deck?frame(LINKS.deck):'<div class="empty">המצגת תופיע כאן</div>'}),
+ wheel:()=>({t:'גלגל ההגרלה',h:wheelHTML(),after:wheelInit}),
  products:()=>({t:'תוצרי השיעור',h:prodHTML(),after:prodInit}),
  rec:()=>{const id=ytId(LINKS.rec);return id?{t:'הקלטת השיעור',u:'https://youtu.be/'+id,f:true,h:frame('https://www.youtube-nocookie.com/embed/'+id+'?rel=0')}:{t:'הקלטת השיעור',u:LINKS.rec,f:!!LINKS.rec,h:LINKS.rec?frame(LINKS.rec):'<div class="empty">ההקלטה תעלה כאן אחרי המפגש</div>'}},
  video:(el)=>({t:el.dataset.title||'סרטון',u:'https://youtu.be/'+el.dataset.vid,f:true,h:frame('https://www.youtube-nocookie.com/embed/'+el.dataset.vid+'?autoplay=1&rel=0')}),
@@ -583,6 +610,34 @@ function sendProduct(){const b=$b(),msg=b.querySelector('.pmsg'),btn=b.querySele
   window[cb]=r=>{try{const h=r.table.cols.map(c=>(c.label||'').trim());PRODUCTS=r.table.rows.map(row=>{const o={};h.forEach((k,i)=>{const c=row.c&&row.c[i];o[k]=c?String(c.f!=null?c.f:(c.v!=null?c.v:'')).trim():''});return {session:o['מפגש'],name:o['שם'],title:o['מה יצרתי'],image:o['תמונה'],link:o['קישור']}}).reverse()}catch(e){PRODUCTS=[]}renderProducts()};
   sc.onerror=()=>{PRODUCTS=[];renderProducts()};sc.src=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent('תוצרים')}&headers=1&tqx=out:json;responseHandler:${cb}`;document.body.appendChild(sc)})();
 
+
+/* ===== גלגל ההגרלה: בתוך העמוד. המורים מוסיפים שמות בקישור join.html, השמות נשמרים בגיליון (לשונית "גלגל") ===== */
+const WCOL=['#E2448F','#FFC83D','#3DBE7A','#2B78C5','#7A5BD6','#FA7548','#5CE1E6','#F28AB2'];
+let WNAMES=[],WOUT=new Set(),wAngle=0,wSpin=false;
+const joinURL=()=>new URL('join.html?s='+SESSION,location.href).href;
+function wheelHTML(){return `<div class="wheelwin"><div class="wl"><div class="wwrap"><canvas id="wc" width="620" height="620"></canvas><div class="wptr"></div><button class="wgo" type="button">סיבוב</button></div></div>
+  <div class="wr"><div class="wjoin"><b>הכניסו את השם שלכם</b><div class="wqr" id="wqr"></div><a class="wlink" href="${joinURL()}" target="_blank" rel="noopener">${joinURL().replace(/^https?:\/\//,'')}</a></div>
+   <div class="wcount" id="wcount"></div><label class="wopt"><input type="checkbox" id="wrm" checked> מי שנבחר יוצא מהגלגל</label><button class="wreset" type="button">כולם חוזרים לגלגל</button></div>
+  <div class="wwin" id="wwin"><span>נבחר/ה:</span><b id="wname"></b><button type="button" class="wok">המשך</button></div></div>`}
+function wList(){return WNAMES.filter(n=>!WOUT.has(n))}
+function wDraw(){const c=document.getElementById('wc');if(!c)return;const x=c.getContext('2d'),L=wList(),R=300,cx=310,cy=310;x.clearRect(0,0,620,620);
+  if(!L.length){x.fillStyle='#EAF4FB';x.beginPath();x.arc(cx,cy,R,0,7);x.fill();x.fillStyle='#7A8489';x.font="700 30px Heebo";x.textAlign='center';x.fillText('מחכים לשמות...',cx,cy+10);return}
+  const a=2*Math.PI/L.length;L.forEach((n,i)=>{const s=wAngle+i*a-Math.PI/2;x.beginPath();x.moveTo(cx,cy);x.arc(cx,cy,R,s,s+a);x.closePath();x.fillStyle=WCOL[i%WCOL.length];x.fill();x.strokeStyle='#fff';x.lineWidth=3;x.stroke();
+    x.save();x.translate(cx,cy);const md=s+a/2,flip=Math.cos(md)<0;x.rotate(flip?md+Math.PI:md);x.textAlign=flip?'left':'right';x.direction='rtl';x.fillStyle='#fff';const fs=Math.max(18,Math.min(34,260/L.length+14));x.font=`700 ${fs}px Heebo`;x.fillText(n.length>16?n.slice(0,15)+'…':n,flip?-(R-22):R-22,fs/3);x.restore()});
+  x.beginPath();x.arc(cx,cy,34,0,7);x.fillStyle='#fff';x.fill();x.strokeStyle='#0B4F7C';x.lineWidth=4;x.stroke()}
+function wSpinGo(){const L=wList();if(wSpin||!L.length)return;wSpin=true;const a=2*Math.PI/L.length,pick=Math.floor(Math.random()*L.length);
+  const target=-(pick*a+a/2)+(Math.random()-.5)*a*.7;const start=wAngle,turns=6*2*Math.PI;let end=target;while(end<start+turns)end+=2*Math.PI;const t0=performance.now(),D=5200;
+  (function step(t){const k=Math.min(1,(t-t0)/D),e=1-Math.pow(1-k,4);wAngle=start+(end-start)*e;wDraw();if(k<1)requestAnimationFrame(step);else{wSpin=false;wAngle%=2*Math.PI;const w=L[pick];document.getElementById('wname').textContent=w;document.getElementById('wwin').classList.add('on');if(document.getElementById('wrm').checked)WOUT.add(w)}})(t0)}
+function wCount(){const el=document.getElementById('wcount');if(el)el.textContent=WNAMES.length?`${wList().length} שמות בגלגל`:'עוד אין שמות'}
+function loadNames(){const cb='cbW'+Date.now(),sc=document.createElement('script');
+  window[cb]=r=>{try{const h=r.table.cols.map(c=>(c.label||'').trim());const seen=new Set();const L=[];r.table.rows.forEach(row=>{const o={};h.forEach((k,i)=>{const c=row.c&&row.c[i];o[k]=c?String(c.f!=null?c.f:(c.v!=null?c.v:'')).trim():''});const n=o['שם'];if(n&&(!o['מפגש']||o['מפגש']===SESSION)&&!seen.has(n)){seen.add(n);L.push(n)}});
+    if(L.join('|')!==WNAMES.join('|')){WNAMES=L;if(!wSpin)wDraw()}wCount()}catch(e){}sc.remove();delete window[cb]};
+  sc.onerror=()=>sc.remove();sc.src=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent('גלגל')}&headers=1&tqx=out:json;responseHandler:${cb}&t=${Date.now()}`;document.body.appendChild(sc)}
+function wheelInit(){const b=$b();wDraw();wCount();loadNames();clearInterval(window._wl);window._wl=setInterval(loadNames,4000);
+  try{new QRCode(document.getElementById('wqr'),{text:joinURL(),width:170,height:170,colorDark:'#0B4F7C'})}catch(e){}
+  b.querySelector('.wgo').onclick=wSpinGo;b.querySelector('.wok').onclick=()=>document.getElementById('wwin').classList.remove('on');
+  b.querySelector('.wreset').onclick=()=>{WOUT.clear();wDraw();wCount()}}
+
 /* ===== שעון הפסקה ===== */
 let tmLeft=900,tmRun=false;
 function tmShow(){const el=document.getElementById('tm');if(el)el.textContent=String(Math.floor(tmLeft/60)).padStart(2,'0')+':'+String(tmLeft%60).padStart(2,'0')}
@@ -602,7 +657,7 @@ function openWin(k,src){const modal=$m(),body=$b(),ext=$e();
   modal.classList.add('on'); if(w.after) w.after();
   body.querySelectorAll('.copy').forEach(b=>b.onclick=()=>navigator.clipboard.writeText(b.parentNode.querySelector('span').textContent).then(()=>{b.textContent='הועתק';setTimeout(()=>b.textContent='העתקה',1500)}));
 }
-function closeWin(){removeIdeasUI();clearInterval(window._tm);tmRun=false;const modal=$m(),body=$b();modal.classList.remove('on');body.innerHTML=''}
+function closeWin(){clearInterval(window._wl);removeIdeasUI();clearInterval(window._tm);tmRun=false;const modal=$m(),body=$b();modal.classList.remove('on');body.innerHTML=''}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-open]');if(b)openWin(b.dataset.open,b)});
 document.addEventListener('keydown',e=>{const b=e.target.closest&&e.target.closest('[data-open]');if(b&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openWin(b.dataset.open,b)}});
 document.addEventListener('click',e=>{if(e.target.closest('#mClose'))closeWin()});
