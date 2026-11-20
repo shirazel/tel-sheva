@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>שיעור 1 · מבוא לבינה מלאכותית</title>
-<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--blue:#0181C9;--deep:#0B4F7C;--yellow:#E5E633;--teal:#6BE3D1;--soft:#EEF8F6;--line:#E3ECEF;--orange:#FA7548;--ink:#2F3437;--body:#4A4A4A;--muted:#7A8489}
 *{box-sizing:border-box}
-html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'Assistant','Heebo',sans-serif;direction:rtl;color:var(--body)}
+html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'Heebo',sans-serif;direction:rtl;color:var(--body)}
 #vp{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
 #design{width:1600px;height:900px;flex:0 0 auto;position:relative;background:#F7FAFB;transform-origin:center;overflow:hidden}
 #design::before{content:'';position:absolute;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle,rgba(107,227,209,.28),rgba(107,227,209,0) 70%);top:-260px;right:-180px}
@@ -24,7 +24,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'A
 .home{display:flex;align-items:center;gap:8px;color:var(--deep);text-decoration:none;font-weight:700;font-size:19px;padding:10px 18px;border-radius:999px;border:1px solid var(--line);background:#fff;transition:.2s}
 .home:hover{border-color:var(--teal)}
 .home svg,.fb svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.fb{display:flex;align-items:center;gap:8px;background:var(--orange);color:var(--ink);border:0;font:700 19px 'Assistant',sans-serif;padding:11px 22px;border-radius:999px;cursor:pointer;transition:.2s}
+.fb{display:flex;align-items:center;gap:8px;background:var(--orange);color:var(--ink);border:0;font:700 19px 'Heebo',sans-serif;padding:11px 22px;border-radius:999px;cursor:pointer;transition:.2s}
 .fb:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(250,117,72,.3)}
 
 /* רובריקות */
@@ -53,7 +53,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'A
 .bar .ic svg{width:28px;height:28px}
 .bar h2{margin:0;font-size:36px;color:var(--ink);font-weight:700;flex:1}
 .bar a{font-weight:700;font-size:18px;color:var(--deep)}
-.x{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:#fff;font:400 30px/1 'Assistant';color:var(--deep);cursor:pointer}
+.x{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:#fff;font:400 30px/1 'Heebo';color:var(--deep);cursor:pointer}
 .x:hover{background:var(--soft)}
 .content{flex:1;min-height:0;overflow:auto;padding:26px 44px 30px;font-size:26px;color:var(--ink);line-height:1.5}
 .content.frame{padding:0}
@@ -71,7 +71,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'A
 .formula i{font-style:normal;color:var(--muted);align-self:center}
 .ex{background:var(--soft);border-radius:18px;padding:20px 26px;font-size:25px}
 .ex small{display:block;font-size:18px;font-weight:700;color:var(--blue);margin-bottom:4px}
-.copy{margin-top:12px;background:#fff;border:1px solid var(--line);color:var(--deep);font:700 17px 'Assistant';padding:5px 18px;border-radius:999px;cursor:pointer}
+.copy{margin-top:12px;background:#fff;border:1px solid var(--line);color:var(--deep);font:700 17px 'Heebo';padding:5px 18px;border-radius:999px;cursor:pointer}
 .copy:hover{border-color:var(--teal)}
 .stores{display:flex;gap:14px;margin-top:18px;flex-wrap:wrap}
 .store{display:inline-block;background:var(--deep);color:#fff;text-decoration:none;font-weight:700;font-size:20px;padding:11px 22px;border-radius:12px}
@@ -104,12 +104,12 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'A
 .learn h3{margin:0 0 8px;font-size:26px;color:var(--ink);font-weight:700}
 .learn ol{margin:0;padding-right:26px;font-size:22px;color:var(--ink);line-height:1.6}
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:14px;flex:1;min-height:0}
-.tile{background:#fff;border:0;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;font:700 22px 'Assistant',sans-serif;color:var(--ink);text-align:center;transition:.2s;padding:12px}
+.tile{background:#fff;border:0;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;font:700 22px 'Heebo',sans-serif;color:var(--ink);text-align:center;transition:.2s;padding:12px}
 .tile.main{flex-direction:row;gap:18px;font-size:28px;padding:22px}
 .tile:hover,.act:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(0,0,0,.15)}
 .cols .ic{width:58px;height:58px;border-radius:50%;background:#E2448F;flex:0 0 auto}
 .cols .ic svg{width:28px;height:28px;stroke:#fff}
-.row{display:flex;align-items:center;gap:16px;background:transparent;border:0;border-radius:14px;padding:10px 8px;cursor:pointer;text-decoration:none;font:700 24px 'Assistant',sans-serif;color:var(--ink);text-align:right;width:100%;transition:.2s}
+.row{display:flex;align-items:center;gap:16px;background:transparent;border:0;border-radius:14px;padding:10px 8px;cursor:pointer;text-decoration:none;font:700 24px 'Heebo',sans-serif;color:var(--ink);text-align:right;width:100%;transition:.2s}
 .row:hover{background:rgba(255,255,255,.65)}
 .row .ic{width:50px;height:50px}
 .row .ic svg{width:24px;height:24px}
@@ -118,7 +118,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'A
 .list .row{font-size:22px;padding:6px 8px}
 .list .row .ic{width:42px;height:42px;background:#7A5BD6}
 .list .row .ic svg{width:20px;height:20px}
-.act{flex:1;background:#fff;border:0;border-radius:16px;display:flex;align-items:center;gap:18px;padding:18px 22px;cursor:pointer;text-align:right;font:700 26px 'Assistant',sans-serif;color:var(--ink);transition:.2s}
+.act{flex:1;background:#fff;border:0;border-radius:16px;display:flex;align-items:center;gap:18px;padding:18px 22px;cursor:pointer;text-align:right;font:700 26px 'Heebo',sans-serif;color:var(--ink);transition:.2s}
 .act small{display:block;font-size:19px;font-weight:600;color:var(--muted);margin-top:2px}
 .muted{color:#1E5D96;font-size:19px}
 .sig{bottom:12px}
@@ -142,7 +142,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'A
 .introw2 h3{margin:0 0 8px;font-size:30px;color:var(--ink)}
 .introw2 ol{margin:0;font-size:36px;line-height:1.8}
 .svtabs{display:flex;gap:10px;margin-bottom:18px}
-.svtabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 22px;font:700 20px 'Assistant';color:var(--deep);cursor:pointer}
+.svtabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 22px;font:700 20px 'Heebo';color:var(--deep);cursor:pointer}
 .svtabs button.on{background:var(--deep);color:#fff;border-color:var(--deep)}
 .qrw{display:flex;gap:50px;align-items:center;justify-content:center}
 .qrw .q{padding:14px;border:3px solid var(--teal);border-radius:18px}

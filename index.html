@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>עברית דבורה עם בינה מלאכותית · תל שבע</title>
-<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--blue:#0181C9;--panel:#2B78C5;--deep:#0B4F7C;--teal:#6BE3D1;--soft:#EEF8F6;--line:#E3ECEF;--orange:#FA7548;--pink:#E2448F;--ink:#2F3437;--muted:#5E686D}
 *{box-sizing:border-box}
-html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'Assistant','Heebo',sans-serif;direction:rtl;color:var(--ink)}
+html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'Heebo',sans-serif;direction:rtl;color:var(--ink)}
 #vp{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
 #stage{width:1600px;height:900px;flex:0 0 auto;position:relative;background:#F7FAFB;transform-origin:center;overflow:hidden}
 #stage::before{content:'';position:absolute;width:680px;height:680px;border-radius:50%;background:radial-gradient(circle,rgba(107,227,209,.30),rgba(107,227,209,0) 70%);top:-280px;right:-200px}
@@ -29,8 +29,8 @@ h1{margin:12px 0 0;font-size:46px;font-weight:700;color:var(--deep);text-align:c
 .s .top{display:flex;align-items:center;gap:12px}
 .s .n{width:46px;height:46px;border-radius:50%;background:var(--pink);color:#fff;font-size:25px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
 .s .d{font-size:23px;font-weight:700;color:var(--blue)}
-.s h2{margin:2px 0 0;font-size:25px;font-weight:700;line-height:1.25}
-.s .desc{margin:0;font-size:18px;line-height:1.4;color:var(--muted)}
+.s h2{margin:0;font-size:23px;font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.s .desc{margin:0;font-size:16.5px;line-height:1.35;color:var(--muted)}
 .s .t{margin-top:auto;align-self:flex-start;font-size:16px;font-weight:700;color:var(--deep);background:#EAF4FB;border-radius:999px;padding:3px 12px}
 .s .t.task{background:#FFF4CF;color:#6B5A00}
 a.s:hover{transform:translateY(-4px);box-shadow:0 14px 28px rgba(0,0,0,.2)}
