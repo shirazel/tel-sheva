@@ -519,6 +519,8 @@ button.wheel{border:0;cursor:pointer;font-family:'Heebo',sans-serif}
 .psbg{display:flex;gap:10px;flex-wrap:wrap}
 .psw{width:56px;height:56px;border-radius:14px;border:3px solid #fff;box-shadow:0 0 0 1px var(--line);cursor:pointer}
 .psw.on{box-shadow:0 0 0 3px #E2448F}
+.padfs #modal{background:transparent;backdrop-filter:none}
+.padfs .box:has(.pad){width:1600px;height:900px;max-height:none;border-radius:0;box-shadow:none;animation:none}
 .padfab{position:absolute;left:32px;bottom:28px;z-index:4;width:76px;height:76px;border-radius:50%;border:0;background:#E2448F;color:#fff;padding:0;cursor:pointer;box-shadow:0 8px 22px rgba(226,68,143,.4);display:flex;align-items:center;justify-content:center;transition:transform .15s}
 .padfab svg{width:36px;height:36px;fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round}
 .padfab:hover{transform:scale(1.07)}
@@ -724,7 +726,7 @@ function wheelInit(){const b=$b();wDraw();wCount();loadNames();clearInterval(win
 const PAD_ID='products-'+SESSION;
 const PAD_BG={sky:'linear-gradient(135deg,#CFE8FA,#EEF9FC)',mint:'linear-gradient(135deg,#CFF3E6,#F1FFF8)',peach:'linear-gradient(135deg,#FFD9C7,#FFF3EA)',lemon:'linear-gradient(135deg,#FFEDA8,#FFFAE3)',lavender:'linear-gradient(135deg,#DCD2FF,#F5F1FF)',pink:'linear-gradient(135deg,#FFD3E3,#FFF2F7)',cork:'radial-gradient(#B9895B 1.2px,transparent 1.6px) 0 0/16px 16px,#D6A97B',navy:'linear-gradient(135deg,#0B4F7C,#2B78C5)'};
 const PAD_BG_NAMES={sky:'שמיים',mint:'מנטה',peach:'אפרסק',lemon:'לימון',lavender:'לבנדר',pink:'ורוד',cork:'שעם',navy:'כחול כהה'};
-const IC={heart:'<svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>',
+const IC={full:'<svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>',shrink:'<svg viewBox="0 0 24 24"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>',heart:'<svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>',
  bubble:'<svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>',
  pen:'<svg viewBox="0 0 24 24"><path d="M4 20l4-1 11-11-3-3L5 16z"/></svg>',
  bin:'<svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>',
@@ -745,7 +747,7 @@ function padLoad(){if(!IDEAS_API){if(padTries++<20)setTimeout(padLoad,700);else 
   jsonp(IDEAS_API+'?action=pad&board='+encodeURIComponent(PAD_ID)).then(r=>{if(!r||!r.ok)throw new Error();PAD=r;padRender()}).catch(()=>{if(!PAD)padMsg('לא הצלחנו לטעון את הלוח. נסו לרענן.')})}
 function padMsg(t){const b=document.querySelector('.padbody');if(b)b.innerHTML=`<div class="padempty">${esc(t)}</div>`}
 function padHTML(){return `<div class="pad"><div class="padhd"><b class="padttl">תוצרי השיעור</b><span class="padsp"></span>
-  <button class="padico padgear" type="button" title="עריכת הלוח">${IC.gear}</button><button class="padico padlock" type="button" title="כניסת עורכת">${IC.gear}</button></div>
+  <button class="padico padfull" type="button" title="מסך מלא">${document.fullscreenElement?IC.shrink:IC.full}</button><button class="padico padgear" type="button" title="עריכת הלוח">${IC.gear}</button><button class="padico padlock" type="button" title="כניסת עורכת">${IC.gear}</button></div>
   <div class="padbody"><div class="padempty">טוען את הלוח...</div></div><button class="padfab padadd" type="button" title="פוסט חדש" aria-label="פוסט חדש"><svg viewBox="0 0 24 24"><path d="M12 4v16M4 12h16"/></svg></button><div class="padov"></div></div>`}
 function padCard(p){const likes=(PAD.likes[p.id]||[]),liked=likes.includes(PAD_CLIENT),cms=PAD.comments.filter(c=>c.post===p.id),open=padOpenC.has(p.id),can=padMine(p.id)||padIsEditor();
   return `<article class="pc" data-id="${esc(p.id)}">${p.image?`<img class="pcimg" src="${esc(p.image)}" alt="" loading="lazy">`:''}
@@ -793,9 +795,12 @@ function padSaveSettings(){const ov=document.querySelector('.padov'),msg=ov.quer
 function padLogin(){padOverlay(`<h3>כניסת עורכת</h3><input class="pl-key" type="password" placeholder="סיסמת העורכת"><div class="pfb"><button class="padbtn pl-go" type="button">כניסה</button><button class="padbtn2 pf-cancel" type="button">ביטול</button><span class="pf-msg"></span></div>`);document.querySelector('.pl-key').focus({preventScroll:true})}
 function padDoLogin(){const ov=document.querySelector('.padov'),k=ov.querySelector('.pl-key').value,msg=ov.querySelector('.pf-msg');msg.textContent='בודק...';
   padPost({action:'padCheckEditor',editorKey:k}).then(r=>{if(!r.editor){msg.textContent='הסיסמה לא נכונה.';return}lsSet('padEditorKey',k);padClose();padRender()}).catch(()=>{msg.textContent='לא הצלחנו לבדוק.'})}
+function padFull(){if(document.fullscreenElement){document.exitFullscreen();return}const r=document.documentElement.requestFullscreen;if(r)r.call(document.documentElement).catch(()=>{})}
+document.addEventListener('fullscreenchange',()=>{const on=!!document.fullscreenElement;document.body.classList.toggle('padfs',on&&!!document.querySelector('.pad'));const b=document.querySelector('.padfull');if(b){b.innerHTML=on?IC.shrink:IC.full;b.title=on?'יציאה ממסך מלא':'מסך מלא'}});
 function padClick(e){const t=e.target;const card=t.closest('.pc');const id=card&&card.dataset.id;
   if(t.closest('.padadd'))return padForm(null,'');
   if(t.closest('.padaddto'))return padForm(null,t.closest('.padaddto').dataset.shelf);
+  if(t.closest('.padfull'))return padFull();
   if(t.closest('.padgear'))return padSettingsForm();
   if(t.closest('.padlock'))return padLogin();
   if(t.closest('.pf-cancel'))return padClose();
@@ -834,7 +839,7 @@ function openWin(k,src){const modal=$m(),body=$b(),ext=$e();
   modal.classList.add('on'); if(w.after) w.after();
   body.querySelectorAll('.copy').forEach(b=>b.onclick=()=>navigator.clipboard.writeText(b.parentNode.querySelector('span').textContent).then(()=>{b.textContent='הועתק';setTimeout(()=>b.textContent='העתקה',1500)}));
 }
-function closeWin(){clearInterval(padTimer);clearInterval(window._wl);removeIdeasUI();clearInterval(window._tm);tmRun=false;const modal=$m(),body=$b();modal.classList.remove('on');body.innerHTML=''}
+function closeWin(){clearInterval(padTimer);if(document.fullscreenElement&&document.querySelector('.pad'))document.exitFullscreen().catch(()=>{});clearInterval(window._wl);removeIdeasUI();clearInterval(window._tm);tmRun=false;const modal=$m(),body=$b();modal.classList.remove('on');body.innerHTML=''}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-open]');if(b)openWin(b.dataset.open,b)});
 document.addEventListener('keydown',e=>{const b=e.target.closest&&e.target.closest('[data-open]');if(b&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openWin(b.dataset.open,b)}});
 document.addEventListener('click',e=>{if(e.target.closest('#mClose'))closeWin()});
