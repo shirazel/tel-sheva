@@ -324,6 +324,22 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'H
 .mrow{flex:1 1 0;max-height:96px;min-height:58px}
 .mrow .art{width:60px;height:60px}
 .upload{margin-top:6px}
+/* קיר רעיונות */
+.try.idea{border-color:#E2448F;margin-top:14px}
+.try.idea .lbl{background:#E2448F;color:#fff}
+.try .ib{flex:0 0 auto;font:700 21px 'Heebo',sans-serif;color:#fff;background:#E2448F;border:0;border-radius:999px;padding:9px 22px;cursor:pointer}
+.try .ib:hover{background:#C2185B}
+.content .talk{margin-top:14px}
+.content .try{margin-top:12px}
+.fig .ph{height:290px}
+.gal[style*="--n:2"] .ph{height:250px}
+.gal[style*="--n:4"] .ph{height:250px}
+.gal[style*="--n:1"] .ph{height:330px}
+.fig .cap{min-height:0}
+.fig{justify-content:flex-end}
+.gal{align-items:end}
+.content .talk,.content .try{padding:10px 22px}
+.content{padding-top:18px;padding-bottom:22px}
 </style>
 </head>
 <body>
@@ -381,7 +397,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'H
 /* ===== הגדרות ===== */
 const SESSION='2';
 const SHEET_ID='1jZSeNE40Kd5q3K09NQ1xOOg1wJtwcPlyOx9acNoUfdg'; // משאבים, הקלטה ומשוב נלקחים מהגיליון
-const LINKS={drive:'',padlet:'',feedback:'',deck:'https://view.genially.com/67591197f6a8dfa1887600f7/presentation-2025',rec:''}; // deck = קישור ההטמעה של המצגת · rec = קישור להקלטה (יוטיוב). אפשר גם בגיליון: סוג "הקלטה"
+const LINKS={ideas:'',drive:'',padlet:'',feedback:'',deck:'https://view.genially.com/67591197f6a8dfa1887600f7/presentation-2025',rec:''}; // deck = קישור ההטמעה של המצגת · rec = קישור להקלטה (יוטיוב). אפשר גם בגיליון: סוג "הקלטה"
 const EXTRA=[]; // משאבים נוספים
 const GEMINI='https://gemini.google.com';
 const WHEEL='https://wheelofnames.com/';
@@ -391,6 +407,7 @@ const STYLES='https://gemini.google.com/share/d6e7352f6da8';
 const ex=(label,text)=>`<div class="ex"><small>${label}</small><span>${text}</span><br><button class="copy">העתקה</button></div>`;
 const tryIt=(text,link,lt)=>`<div class="try"><span class="lbl">התנסות</span><span class="txt">${text}</span>${link?`<a href="${link}" target="_blank" rel="noopener">${lt||'לפתיחת Gemini'}</a>`:''}</div>`;
 const talk=text=>`<div class="talk"><span class="lbl">בכיתה</span><span class="txt">${text}</span></div>`;
+const idea=()=>`<div class="try idea"><span class="lbl">הקיר המשותף</span><span class="txt">איך אשלב את זה בכיתה? כתבו רעיון אחד.</span><button class="ib" data-open="ideas">לקיר הרעיונות</button></div>`;
 const frame=u=>`<iframe src="${u}" allowfullscreen allow="fullscreen; clipboard-write"></iframe>`;
 /* תמונות לדוגמה: שמים קובץ בתיקייה assets/lesson2 בשם שמופיע כאן, והוא מופיע בחלון */
 const IMG='assets/lesson2/';
@@ -398,32 +415,41 @@ const gal=items=>`<div class="gal" style="--n:${items.length}">${items.map(([f,c
 const WIN={
  prompt:()=>({t:'פרומפט טוב לתמונה',h:`
   <div class="formula"><span>מה רואים</span><i>+</i><span>איפה</span><i>+</i><span>מתי</span><i>+</i><span>אווירה</span><i>+</i><span>סגנון</span><a class="wheel sm" href="${STYLES}" target="_blank" rel="noopener">למעבדת הסגנונות</a></div>
-  ${gal([['prompt-1','ילדה קוראת ספר בספרייה. צילום'],['prompt-2','אותו דבר, ציור בצבעי מים'],['prompt-3','אותו דבר, קומיקס']])}
-  ${talk('התלמידים אומרים את הפרומפט בקול, חלק אחרי חלק.')}`}),
+  ${gal([['prompt-1','ילדה קוראת ספר. צילום'],['prompt-2','אותו דבר, ציור בצבעי מים'],['prompt-3','אותו דבר, קומיקס']])}
+  ${talk('התלמידים אומרים את הפרומפט בקול, חלק אחרי חלק.')}
+  ${idea()}`}),
  edit:()=>({t:'עריכת תמונה',h:`
   ${gal([['edit-1','צור תמונה של ילד בחצר'],['edit-2','שנה את צבע החולצה'],['edit-3','תוסיף חתול']])}
-  ${talk('"מה השתנה?" התלמידים אומרים: "פה יש..., ופה אין...".')}`}),
+  ${talk('"מה השתנה?" התלמידים אומרים: "פה יש..., ופה אין...".')}
+  ${idea()}`}),
  color:()=>({t:'צביעת תמונה ישנה',h:`
   ${gal([['color-1','תמונה ישנה'],['color-2','תקן את התמונה וצבע אותה']])}
   ${talk('התלמיד שואל את סבא או סבתא, ומספר: מי? איפה? מה עשו פעם?')}
-  ${LINKS.drive?tryIt('בחרו תמונה בשחור-לבן מהתיקייה, ותקנו וצבעו אותה.',LINKS.drive,'לתיקיית התמונות'):tryIt('תיקיית תמונות בשחור-לבן לתרגול תעלה כאן.')}`}),
+  ${LINKS.drive?tryIt('בחרו תמונה בשחור-לבן מהתיקייה, ותקנו וצבעו אותה.',LINKS.drive,'לתיקיית התמונות'):tryIt('תיקיית תמונות בשחור-לבן לתרגול תעלה כאן.')}
+  ${idea()}`}),
  char:()=>({t:'דמות עקבית',h:`
   ${gal([['char-1','ילד בן 10, חולצה כחולה'],['char-2','עכשיו אותו ילד בבית הספר'],['char-3','עכשיו אותו ילד בשוק']])}
-  ${talk('כל תלמיד ממציא סיפור קצר ב-3 תמונות, ומספר אותו בקול.')}`}),
+  ${talk('כל תלמיד ממציא סיפור קצר ב-3 תמונות, ומספר אותו בקול.')}
+  ${idea()}`}),
  combine:()=>({t:'שילוב תמונות',h:`
-  ${gal([['combine-1','תמונה 1'],['combine-2','תמונה 2'],['combine-3','תמונה 3'],['combine-4','תושיב אותם בבית קפה, עם הספל הזה']])}`}),
+  ${gal([['combine-1','תמונה 1'],['combine-2','תמונה 2'],['combine-3','תמונה 3'],['combine-4','תושיב אותם בבית קפה, עם הספל הזה']])}
+  ${idea()}`}),
  comic:()=>({t:'קומיקס',h:`
   ${gal([['comic-1','קומיקס של 4 ריבועים: שני חברים בשוק. בלי טקסט ובלי בועות']])}
-  ${talk('בזוגות: ממציאים מה כל דמות אומרת, ומשחקים בקול.')}`}),
+  ${talk('בזוגות: ממציאים מה כל דמות אומרת, ומשחקים בקול.')}
+  ${idea()}`}),
  pause:()=>({t:'הפסקה',h:`<div class="timer"><div class="t" id="tm">15:00</div><div class="tb"><button id="tmGo">התחלה</button><button class="sec" id="tmReset">מההתחלה</button></div><p>בהפסקה: הכינו 2 תמונות למדרש תמונה.<br>סצנה אחת, וסצנת המשך.</p></div>`,after:timerInit}),
  midrash:()=>({t:'מדרש תמונה',h:`
   <div class="formula"><span>מי?</span><span>איפה?</span><span>מה קרה?</span><span>למה?</span><span>מה הם אומרים?</span><a class="wheel sm" href="${WHEEL}" target="_blank" rel="noopener">לגלגל ההגרלה</a></div>
   ${gal([['midrash-1','סצנה'],['midrash-2','סצנת המשך']])}
-  ${talk('הגלגל בוחר מי מספרת את הסיפור שהתמונה מספרת.')}`}),
+  ${talk('הגלגל בוחר מי מספרת את הסיפור שהתמונה מספרת.')}
+  ${idea()}`}),
  voice:()=>({t:'מציירים מדיבור',h:`
   ${gal([['voice-1','לוחצים על המיקרופון ואומרים: "משפחה בארוחת ערב, כולם צוחקים"'],['voice-2','אומרים: "תוסיף עוגה על השולחן"']])}
-  ${talk('תלמיד מתאר בקול. הכיתה בודקת: התמונה מתאימה?')}`}),
+  ${talk('תלמיד מתאר בקול. הכיתה בודקת: התמונה מתאימה?')}
+  ${idea()}`}),
  deck:()=>({t:'מצגת - מטקסט לתמונה',u:LINKS.deck,f:!!LINKS.deck,h:LINKS.deck?frame(LINKS.deck):'<div class="empty">המצגת תופיע כאן</div>'}),
+ ideas:()=>({t:'קיר הרעיונות: איך אשלב בכיתה?',u:LINKS.ideas,f:!!LINKS.ideas,h:LINKS.ideas?frame(LINKS.ideas):'<div class="empty">קיר הרעיונות יופיע כאן</div>'}),
  padlet:()=>({t:'פדלט: העלו את התוצרים',u:LINKS.padlet,f:!!LINKS.padlet,h:LINKS.padlet?frame(LINKS.padlet):'<div class="empty">הפדלט יופיע כאן</div>'}),
  rec:()=>{const id=ytId(LINKS.rec);return id?{t:'הקלטת השיעור',u:'https://youtu.be/'+id,f:true,h:frame('https://www.youtube-nocookie.com/embed/'+id+'?rel=0')}:{t:'הקלטת השיעור',u:LINKS.rec,f:!!LINKS.rec,h:LINKS.rec?frame(LINKS.rec):'<div class="empty">ההקלטה תעלה כאן אחרי המפגש</div>'}},
  video:(el)=>({t:el.dataset.title||'סרטון',u:'https://youtu.be/'+el.dataset.vid,f:true,h:frame('https://www.youtube-nocookie.com/embed/'+el.dataset.vid+'?autoplay=1&rel=0')}),
@@ -473,6 +499,7 @@ const LINK_IC='<span class="ic"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0
 loadSheet().then(rows=>{
   const res=mine(rows,'משאב').concat(EXTRA.filter(x=>x.url).map(x=>({'שם':x.name,'קישור':x.url})));
   document.getElementById('res').innerHTML=res.length?res.map(r=>{const id=ytId(r['קישור']);return id?`<div role="button" tabindex="0" class="row" data-open="video" data-vid="${esc(id)}" data-title="${esc(r['שם']||'')}">${YT_IC}${esc(r['שם']||'')}</div>`:`<a class="row" href="${esc(r['קישור'])}" target="_blank" rel="noopener">${LINK_IC}${esc(r['שם']||r['קישור'])}</a>`}).join(''):'';
+  if(!LINKS.ideas&&mine(rows,'קיר')[0])LINKS.ideas=mine(rows,'קיר')[0]['קישור'];
   if(!LINKS.drive&&mine(rows,'תיקייה')[0])LINKS.drive=mine(rows,'תיקייה')[0]['קישור'];
   if(!LINKS.padlet&&mine(rows,'פדלט')[0])LINKS.padlet=mine(rows,'פדלט')[0]['קישור'];
   if(!LINKS.rec&&mine(rows,'הקלטה')[0])LINKS.rec=mine(rows,'הקלטה')[0]['קישור'];
