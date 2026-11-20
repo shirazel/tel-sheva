@@ -310,7 +310,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'H
 .mrow{font-size:28px}
 .upload{font-size:29px}
 /* הגדלת תמונה בלחיצה */
-.fig .ph img{cursor:zoom-in}
+.fig .ph img,.pcard img{cursor:zoom-in}
 #zoom{position:absolute;inset:0;z-index:40;background:rgba(20,30,36,.82);display:none;align-items:center;justify-content:center;cursor:zoom-out}
 #zoom.on{display:flex;animation:fade .2s}
 #zoom img{max-width:1480px;max-height:800px;border-radius:18px;box-shadow:0 30px 70px rgba(0,0,0,.4);background:#fff}
@@ -392,6 +392,32 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'H
 .ipanel{height:86%;overflow:auto}
 .box.ideas-open .itab{bottom:86%}
 .ilist2{flex:0 0 auto;overflow:visible}
+/* תוצרי השיעור */
+.box:has(.prod){height:800px}
+.box:has(.prod) .content{flex:1}
+.prod .ptop{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.prod .plead{font-size:26px;font-weight:700;color:var(--deep)}
+.pplus{background:var(--deep);color:#fff;border:0;border-radius:999px;font:700 23px 'Heebo',sans-serif;padding:10px 28px;cursor:pointer}
+.prod.adding .pplus{display:none}
+.pform{display:none;background:#F0FBFC;border:2px solid #5CE1E6;border-radius:18px;padding:16px 18px;margin-bottom:16px}
+.prod.adding .pform{display:block}
+.prow{display:flex;gap:12px;align-items:center;margin-bottom:10px}
+.prow input:not([type=file]){flex:1;border:2px solid #5CE1E6;border-radius:12px;padding:8px 14px;font:500 22px 'Heebo',sans-serif;background:#fff}
+.prow input:focus{outline:none;border-color:#E2448F}
+.pname{flex:0 0 260px!important}
+.pfile{flex:0 0 auto;background:#5CE1E6;border-radius:999px;padding:9px 24px;font-weight:700;font-size:22px;cursor:pointer}
+.pprev{display:none;width:64px;height:64px;object-fit:cover;border-radius:10px;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.pform .ibtns{align-items:center}
+.pmsg{margin:0 10px}
+.pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.pgrid .iempty{grid-column:1/-1;background:#F4FAFD;border-radius:14px;padding:18px;font-size:23px;color:var(--muted);text-align:center}
+.pcard{margin:0;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 4px 12px rgba(11,79,124,.08);display:flex;flex-direction:column}
+.pcard img{width:100%;height:190px;object-fit:cover;cursor:zoom-in;background:#F4FAFD}
+.pcard .plinkbox{height:190px;display:flex;align-items:center;justify-content:center;background:#F4FAFD;color:var(--deep);font-weight:700;font-size:22px}
+.pcard figcaption{padding:10px 14px;display:flex;flex-direction:column;gap:2px}
+.pcard figcaption b{font-size:21px;color:var(--ink);line-height:1.3}
+.pcard figcaption span{font-size:18px;font-weight:700;color:#8A5A00}
+.pcard figcaption a{font-size:18px;color:var(--blue)}
 </style>
 </head>
 <body>
@@ -426,7 +452,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'H
       <a class="mrow" href="https://gemini.google.com/share/d6e7352f6da8" target="_blank" rel="noopener"><span class="art"><svg class="a" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#F8C6D3"/><path d="M26 12h12M28 12v14L16 48a4 4 0 0 0 3.5 6h25a4 4 0 0 0 3.5-6L36 26V12" fill="#fff" stroke="#C2185B" stroke-width="3" stroke-linejoin="round"/><path d="M20 42h24l4 7a3 3 0 0 1-2.6 4.5H18.6A3 3 0 0 1 16 49z" fill="#E2448F"/><circle cx="28" cy="46" r="2" fill="#fff"/><circle cx="35" cy="48" r="1.5" fill="#fff"/></svg></span><span>נסו את מעבדת הסגנונות</span></a>
       <a class="mrow" href="https://wheelofnames.com/" target="_blank" rel="noopener"><span class="art"><svg class="a" viewBox="0 0 64 64"><g transform="translate(32 35)"><path d="M0 0L0-26A26 26 0 0 1 22.5-13z" fill="#E2448F"/><path d="M0 0L22.5-13A26 26 0 0 1 22.5 13z" fill="#FFC83D"/><path d="M0 0L22.5 13A26 26 0 0 1 0 26z" fill="#3DBE7A"/><path d="M0 0L0 26A26 26 0 0 1-22.5 13z" fill="#2B78C5"/><path d="M0 0L-22.5 13A26 26 0 0 1-22.5-13z" fill="#7A5BD6"/><path d="M0 0L-22.5-13A26 26 0 0 1 0-26z" fill="#FA7548"/><circle r="5" fill="#fff"/></g><path d="M27 2h10l-5 9z" fill="#2F3437"/></svg></span><span>גלגל ההגרלה</span></a>
       <div class="list" id="res"></div>
-      <div role="button" tabindex="0" data-move class="upload" data-open="padlet"><span class="art"><svg class="a" viewBox="0 0 64 64"><path d="M32 4c9 7 13 18 11 32H21C19 22 23 11 32 4z" fill="#fff" stroke="#2B78C5" stroke-width="3" stroke-linejoin="round"/><circle cx="32" cy="22" r="5" fill="#9FDCF5" stroke="#2B78C5" stroke-width="2.5"/><path d="M21 28l-8 10v7l9-5zM43 28l8 10v7l-9-5z" fill="#2B78C5"/><path d="M26 40c0 7 3 11 6 16 3-5 6-9 6-16z" fill="#FA7548"/></svg></span><span data-edit>העלו את תוצרי השיעור</span></div>
+      <div role="button" tabindex="0" data-move class="upload" data-open="products"><span class="art"><svg class="a" viewBox="0 0 64 64"><path d="M32 4c9 7 13 18 11 32H21C19 22 23 11 32 4z" fill="#fff" stroke="#2B78C5" stroke-width="3" stroke-linejoin="round"/><circle cx="32" cy="22" r="5" fill="#9FDCF5" stroke="#2B78C5" stroke-width="2.5"/><path d="M21 28l-8 10v7l9-5zM43 28l8 10v7l-9-5z" fill="#2B78C5"/><path d="M26 40c0 7 3 11 6 16 3-5 6-9 6-16z" fill="#FA7548"/></svg></span><span data-edit>העלו את תוצרי השיעור</span></div>
     </div>
     <div class="panel blue">
       <div class="phead">חלק 2 · מדברים על תמונות</div>
@@ -486,7 +512,7 @@ const WIN={
  voice:()=>({t:'מציירים מדיבור',h:`
   ${gal([['voice-1','לוחצים על המיקרופון ואומרים: "משפחה בארוחת ערב, כולם צוחקים"'],['voice-2','אומרים: "תוסיף עוגה על השולחן"']])}`}),
  deck:()=>({t:'מצגת - מטקסט לתמונה',u:LINKS.deck,f:!!LINKS.deck,h:LINKS.deck?frame(LINKS.deck):'<div class="empty">המצגת תופיע כאן</div>'}),
- padlet:()=>({t:'פדלט: העלו את התוצרים',u:LINKS.padlet,f:!!LINKS.padlet,h:LINKS.padlet?frame(LINKS.padlet):'<div class="empty">הפדלט יופיע כאן</div>'}),
+ products:()=>({t:'תוצרי השיעור',h:prodHTML(),after:prodInit}),
  rec:()=>{const id=ytId(LINKS.rec);return id?{t:'הקלטת השיעור',u:'https://youtu.be/'+id,f:true,h:frame('https://www.youtube-nocookie.com/embed/'+id+'?rel=0')}:{t:'הקלטת השיעור',u:LINKS.rec,f:!!LINKS.rec,h:LINKS.rec?frame(LINKS.rec):'<div class="empty">ההקלטה תעלה כאן אחרי המפגש</div>'}},
  video:(el)=>({t:el.dataset.title||'סרטון',u:'https://youtu.be/'+el.dataset.vid,f:true,h:frame('https://www.youtube-nocookie.com/embed/'+el.dataset.vid+'?autoplay=1&rel=0')}),
  learned:()=>({t:'מה למדנו',h:`<ul class="learned"><li>פרומפט טוב לתמונה</li><li>עריכת תמונה</li><li>צביעת תמונה ישנה</li><li>דמות עקבית</li><li>שילוב תמונות</li><li>קומיקס</li><li>מדרש תמונה</li><li>מציירים מדיבור</li></ul>`}),
@@ -521,12 +547,41 @@ function jsonp(url){return new Promise((ok,fail)=>{const cb='cbJ'+Date.now()+Mat
 function sendIdea(){const box=document.querySelector('#modal .box'),ta=box.querySelector('.iform textarea'),msg=box.querySelector('.imsg'),btn=box.querySelector('.isend');const idea=ta.value.trim();const nm=box.querySelector('.iname');const name=nm.value.trim();if(!name){nm.focus({preventScroll:true});msg.textContent='כתבו את השם שלכם.';return}if(!idea){ta.focus({preventScroll:true});return}try{localStorage.setItem('ideaName',name)}catch(e){}
   if(!IDEAS_API){msg.textContent='הוספת רעיונות תעבוד אחרי שנחבר את הסקריפט.';return}
   const t=curTech();btn.disabled=true;msg.textContent='שולח...';
-  jsonp(IDEAS_API+'?action=add&session='+encodeURIComponent(SESSION)+'&tech='+encodeURIComponent(t)+'&idea='+encodeURIComponent(idea)+'&name='+encodeURIComponent(name)).then(r=>{
+  jsonp(IDEAS_API+'?action=add&board=ideas&session='+encodeURIComponent(SESSION)+'&tech='+encodeURIComponent(t)+'&idea='+encodeURIComponent(idea)+'&name='+encodeURIComponent(name)).then(r=>{
     if(!r||!r.ok)throw new Error(r&&r.error||'');(IDEAS=IDEAS||[]).push({session:SESSION,tech:t,idea,name});ta.value='';msg.textContent='תודה! הרעיון נוסף.';box.querySelector('.iadd').classList.remove('on');renderIdeas();
     const ul=box.querySelector('.ilist2');ul.scrollTop=ul.scrollHeight}).catch(()=>{msg.textContent='לא הצלחנו לשלוח. נסו שוב.'}).finally(()=>{btn.disabled=false})}
 (function(){const cb='cbI'+Date.now(),sc=document.createElement('script');
   window[cb]=r=>{try{const h=r.table.cols.map(c=>(c.label||'').trim());IDEAS=r.table.rows.map(row=>{const o={};h.forEach((k,i)=>{const c=row.c&&row.c[i];o[k]=c?String(c.f!=null?c.f:(c.v!=null?c.v:'')).trim():''});return {session:o['מפגש'],tech:o['טכניקה'],idea:o['רעיון'],name:o['שם']}})}catch(e){IDEAS=[]}renderIdeas()};
   sc.onerror=()=>{IDEAS=[];renderIdeas()};sc.src=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent('רעיונות')}&headers=1&tqx=out:json;responseHandler:${cb}`;document.body.appendChild(sc)})();
+
+
+/* ===== תוצרי השיעור: גלריה + העלאה (במקום פדלט) =====
+   קריאה: מהגיליון, לשונית "תוצרים". העלאה: דרך הסקריפט משאבי-השתלמויות.gs */
+let PRODUCTS=null;
+function prodHTML(){return `<div class="prod"><div class="ptop"><span class="plead">התוצרים שלנו מהמפגש</span><button class="pplus" type="button">+ העלאת תוצר</button></div>
+  <div class="pform"><div class="prow"><input class="pname" maxlength="40" placeholder="השם שלי"><input class="ptitle" maxlength="200" placeholder="מה יצרתי? משפט אחד"></div>
+   <div class="prow"><label class="pfile">בחירת תמונה<input type="file" accept="image/*" hidden></label><img class="pprev" alt=""><input class="plink" maxlength="500" placeholder="או קישור (לא חובה)" dir="ltr"></div>
+   <div class="ibtns"><button class="isend psend" type="button">העלאה</button><button class="icancel pcancel" type="button">ביטול</button><span class="imsg pmsg"></span></div></div>
+  <div class="pgrid"></div></div>`}
+function renderProducts(){const g=document.querySelector('#mBody .pgrid');if(!g)return;const list=(PRODUCTS||[]).filter(r=>(r.image||r.link)&&(!r.session||r.session===SESSION));
+  g.innerHTML=PRODUCTS===null?'<div class="iempty">טוען...</div>':list.length?list.map(r=>`<figure class="pcard">${r.image?`<img src="${esc(r.image)}" alt="" loading="lazy">`:`<a class="plinkbox" href="${esc(r.link)}" target="_blank" rel="noopener">פתיחת הקישור</a>`}<figcaption><b>${esc(r.title||'')}</b><span>${esc(r.name||'')}</span>${r.image&&r.link?`<a href="${esc(r.link)}" target="_blank" rel="noopener">קישור</a>`:''}</figcaption></figure>`).join(''):'<div class="iempty">עוד אין תוצרים. העלו את הראשון!</div>'}
+let prodImg=null;
+function prodInit(){const b=$b();prodImg=null;
+  b.querySelector('.pplus').onclick=()=>{b.querySelector('.prod').classList.add('adding');try{b.querySelector('.pname').value=localStorage.getItem('ideaName')||''}catch(e){}};
+  b.querySelector('.pcancel').onclick=()=>b.querySelector('.prod').classList.remove('adding');
+  b.querySelector('.pfile input').onchange=e=>{const f=e.target.files[0];if(!f)return;shrinkImage(f).then(d=>{prodImg=d;const pv=b.querySelector('.pprev');pv.src='data:image/jpeg;base64,'+d;pv.style.display='block'}).catch(()=>{b.querySelector('.pmsg').textContent='לא הצלחנו לקרוא את התמונה.'})};
+  b.querySelector('.psend').onclick=sendProduct;renderProducts()}
+function shrinkImage(file){return new Promise((ok,fail)=>{const r=new FileReader();r.onerror=fail;r.onload=()=>{const im=new Image();im.onerror=fail;im.onload=()=>{const m=1400,k=Math.min(1,m/Math.max(im.width,im.height));const c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',.85).split(',')[1])};im.src=r.result};r.readAsDataURL(file)})}
+function sendProduct(){const b=$b(),msg=b.querySelector('.pmsg'),btn=b.querySelector('.psend');const name=b.querySelector('.pname').value.trim(),title=b.querySelector('.ptitle').value.trim(),link=b.querySelector('.plink').value.trim();
+  if(!name){msg.textContent='כתבו את השם שלכם.';return}if(!prodImg&&!link){msg.textContent='בחרו תמונה או הדביקו קישור.';return}
+  if(!IDEAS_API){msg.textContent='העלאת תוצרים תעבוד אחרי שנחבר את הסקריפט.';return}
+  try{localStorage.setItem('ideaName',name)}catch(e){}btn.disabled=true;msg.textContent='מעלה...';
+  fetch(IDEAS_API,{method:'POST',body:JSON.stringify({board:'products',session:SESSION,name,title,link,image:prodImg?{type:'image/jpeg',data:prodImg}:null})}).then(r=>r.json()).then(r=>{
+    if(!r||!r.ok)throw new Error(r&&r.error||'');(PRODUCTS=PRODUCTS||[]).unshift(r.row);prodImg=null;['.ptitle','.plink'].forEach(s=>b.querySelector(s).value='');b.querySelector('.pfile input').value='';b.querySelector('.pprev').style.display='none';
+    b.querySelector('.prod').classList.remove('adding');msg.textContent='';renderProducts()}).catch(()=>{msg.textContent='לא הצלחנו להעלות. נסו שוב.'}).finally(()=>{btn.disabled=false})}
+(function(){const cb='cbP'+Date.now(),sc=document.createElement('script');
+  window[cb]=r=>{try{const h=r.table.cols.map(c=>(c.label||'').trim());PRODUCTS=r.table.rows.map(row=>{const o={};h.forEach((k,i)=>{const c=row.c&&row.c[i];o[k]=c?String(c.f!=null?c.f:(c.v!=null?c.v:'')).trim():''});return {session:o['מפגש'],name:o['שם'],title:o['מה יצרתי'],image:o['תמונה'],link:o['קישור']}}).reverse()}catch(e){PRODUCTS=[]}renderProducts()};
+  sc.onerror=()=>{PRODUCTS=[];renderProducts()};sc.src=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent('תוצרים')}&headers=1&tqx=out:json;responseHandler:${cb}`;document.body.appendChild(sc)})();
 
 /* ===== שעון הפסקה ===== */
 let tmLeft=900,tmRun=false;
@@ -554,7 +609,7 @@ document.addEventListener('click',e=>{if(e.target.closest('#mClose'))closeWin()}
 document.addEventListener('click',e=>{if(e.target.id==='modal')closeWin()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(closeZoom())return;closeWin()}});
 /* ===== הגדלת תמונה ===== */
-document.addEventListener('click',e=>{const im=e.target.closest('.fig .ph img');if(!im)return;e.stopPropagation();const z=document.getElementById('zoom');z.querySelector('img').src=im.src;z.classList.add('on')},true);
+document.addEventListener('click',e=>{const im=e.target.closest('.fig .ph img,.pcard img');if(!im)return;e.stopPropagation();const z=document.getElementById('zoom');z.querySelector('img').src=im.src;z.classList.add('on')},true);
 document.getElementById('zoom').addEventListener('click',()=>document.getElementById('zoom').classList.remove('on'));
 function closeZoom(){const z=document.getElementById('zoom');if(z.classList.contains('on')){z.classList.remove('on');return true}return false}
 
@@ -573,7 +628,6 @@ loadSheet().then(rows=>{
   document.getElementById('res').innerHTML=res.length?res.map(r=>{const id=ytId(r['קישור']);return id?`<div role="button" tabindex="0" class="row" data-open="video" data-vid="${esc(id)}" data-title="${esc(r['שם']||'')}">${YT_IC}${esc(r['שם']||'')}</div>`:`<a class="row" href="${esc(r['קישור'])}" target="_blank" rel="noopener">${LINK_IC}${esc(r['שם']||r['קישור'])}</a>`}).join(''):'';
   if(!IDEAS_API){const sr=rows.find(r=>r['סוג']==='סקריפט'&&r['קישור']);if(sr)IDEAS_API=sr['קישור']}
   if(!LINKS.drive&&mine(rows,'תיקייה')[0])LINKS.drive=mine(rows,'תיקייה')[0]['קישור'];
-  if(!LINKS.padlet&&mine(rows,'פדלט')[0])LINKS.padlet=mine(rows,'פדלט')[0]['קישור'];
   if(!LINKS.rec&&mine(rows,'הקלטה')[0])LINKS.rec=mine(rows,'הקלטה')[0]['קישור'];
   if(!LINKS.deck&&mine(rows,'מצגת')[0])LINKS.deck=mine(rows,'מצגת')[0]['קישור'];
   if(!LINKS.feedback&&mine(rows,'משוב')[0])LINKS.feedback=mine(rows,'משוב')[0]['קישור'];
