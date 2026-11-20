@@ -745,7 +745,7 @@ function padLoad(){if(!IDEAS_API){if(padTries++<20)setTimeout(padLoad,700);else 
   jsonp(IDEAS_API+'?action=pad&board='+encodeURIComponent(PAD_ID)).then(r=>{if(!r||!r.ok)throw new Error();PAD=r;padRender()}).catch(()=>{if(!PAD)padMsg('לא הצלחנו לטעון את הלוח. נסו לרענן.')})}
 function padMsg(t){const b=document.querySelector('.padbody');if(b)b.innerHTML=`<div class="padempty">${esc(t)}</div>`}
 function padHTML(){return `<div class="pad"><div class="padhd"><b class="padttl">תוצרי השיעור</b><span class="padsp"></span>
-  <button class="padico padgear" type="button" title="עריכת הלוח">${IC.gear}</button><button class="padico padlock" type="button" title="כניסת עורכת">${IC.lock}</button></div>
+  <button class="padico padgear" type="button" title="עריכת הלוח">${IC.gear}</button><button class="padico padlock" type="button" title="כניסת עורכת">${IC.gear}</button></div>
   <div class="padbody"><div class="padempty">טוען את הלוח...</div></div><button class="padfab padadd" type="button" title="פוסט חדש" aria-label="פוסט חדש"><svg viewBox="0 0 24 24"><path d="M12 4v16M4 12h16"/></svg></button><div class="padov"></div></div>`}
 function padCard(p){const likes=(PAD.likes[p.id]||[]),liked=likes.includes(PAD_CLIENT),cms=PAD.comments.filter(c=>c.post===p.id),open=padOpenC.has(p.id),can=padMine(p.id)||padIsEditor();
   return `<article class="pc" data-id="${esc(p.id)}">${p.image?`<img class="pcimg" src="${esc(p.image)}" alt="" loading="lazy">`:''}
