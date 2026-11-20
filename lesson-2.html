@@ -340,6 +340,19 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'H
 .gal{align-items:end}
 .content .talk,.content .try{padding:10px 22px}
 .content{padding-top:18px;padding-bottom:22px}
+/* לשונית הרעיונות שלנו לכיתה */
+.ideas{margin-top:16px;border:2px solid #F5B800;border-radius:18px 18px 18px 18px;background:#FFF8DC;overflow:hidden}
+.ideas .ihead{width:100%;display:flex;align-items:center;gap:14px;padding:10px 18px;background:transparent;border:0;font:inherit;color:var(--ink);text-align:right;cursor:pointer}
+.ideas div.ihead{cursor:default}
+.ideas .bulb{width:46px;height:46px;flex:0 0 auto}
+.ideas .bulb svg{width:100%;height:100%}
+.ideas b{flex:0 0 auto;font-size:25px;color:#8A5A00}
+.ideas .ione{flex:1;font-size:25px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ideas .imore{flex:0 0 auto;font-size:19px;font-weight:700;background:#F5B800;color:#fff;border-radius:999px;padding:4px 14px}
+.ideas .ilist{display:none;list-style:none;margin:0;padding:4px 18px 16px;gap:10px;flex-direction:column}
+.ideas.open .ilist{display:flex}
+.ideas.open .ione,.ideas.open .imore{visibility:hidden}
+.ideas .ilist li{background:#fff;border-radius:12px;padding:10px 16px;font-size:24px;border-right:5px solid #F5B800}
 </style>
 </head>
 <body>
@@ -380,8 +393,8 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'H
       <div class="phead">חלק 2 · מדברים על תמונות</div>
       <div role="button" tabindex="0" data-move class="act" data-open="pause"><span class="art"><svg class="a" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#FFE3D6"/><path d="M14 28h30v10a12 12 0 0 1-12 12h-6a12 12 0 0 1-12-12z" fill="#FA7548"/><path d="M44 31h3a6 6 0 0 1 0 12h-4" fill="none" stroke="#FA7548" stroke-width="4"/><path d="M22 10c-3 4 3 6 0 10M30 10c-3 4 3 6 0 10M38 10c-3 4 3 6 0 10" stroke="#B5BEC3" stroke-width="2.5" fill="none" stroke-linecap="round"/><rect x="12" y="50" width="34" height="4" rx="2" fill="#E25C30"/></svg></span><span data-edit>הפסקה<small>רבע שעה</small></span></div>
       <div role="button" tabindex="0" data-move class="act y" data-open="comic"><span class="art"><svg class="a" viewBox="0 0 64 64"><rect x="6" y="6" width="24" height="24" rx="4" fill="#FFC83D"/><rect x="34" y="6" width="24" height="24" rx="4" fill="#9FDCF5"/><rect x="6" y="34" width="24" height="24" rx="4" fill="#F6B8D9"/><rect x="34" y="34" width="24" height="24" rx="4" fill="#A8E6C1"/><path d="M41 11h11a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3h-6l-4 3v-3a3 3 0 0 1-2-3v-5a3 3 0 0 1 1-3z" fill="#fff"/><path d="M18 39l2.5 5 5.5.8-4 3.9 1 5.5-5-2.6-5 2.6 1-5.5-4-3.9 5.5-.8z" fill="#fff"/></svg></span><span data-edit>קומיקס<small>עם טקסט בעברית</small></span></div>
-      <div role="button" tabindex="0" data-move class="act y" data-open="midrash"><span class="art"><svg class="a" viewBox="0 0 64 64"><path d="M6 12a6 6 0 0 1 6-6h26a6 6 0 0 1 6 6v14a6 6 0 0 1-6 6H20l-9 7v-7h1a6 6 0 0 1-6-6z" fill="#2B78C5"/><path d="M58 32a6 6 0 0 0-6-6H30a6 6 0 0 0-6 6v12a6 6 0 0 0 6 6h16l8 6v-6a6 6 0 0 0 4-6z" fill="#FFC83D"/><circle cx="34" cy="38" r="2.5" fill="#fff"/><circle cx="41" cy="38" r="2.5" fill="#fff"/><circle cx="48" cy="38" r="2.5" fill="#fff"/></svg></span><span data-edit>מדרש תמונה<small>עם גלגל ההגרלה</small></span></div>
       <div role="button" tabindex="0" data-move class="act y" data-open="voice"><span class="art"><svg class="a" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#FFE0E6"/><rect x="24" y="9" width="16" height="28" rx="8" fill="#E2445C"/><path d="M17 29a15 15 0 0 0 30 0" fill="none" stroke="#0B4F7C" stroke-width="3.5" stroke-linecap="round"/><path d="M32 44v9M24 53h16" stroke="#0B4F7C" stroke-width="3.5" stroke-linecap="round"/><path d="M28 17h8M28 23h8" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".7"/></svg></span><span data-edit>מציירים מדיבור<small>הוראה קולית לבינה</small></span></div>
+      <div role="button" tabindex="0" data-move class="act y" data-open="midrash"><span class="art"><svg class="a" viewBox="0 0 64 64"><path d="M6 12a6 6 0 0 1 6-6h26a6 6 0 0 1 6 6v14a6 6 0 0 1-6 6H20l-9 7v-7h1a6 6 0 0 1-6-6z" fill="#2B78C5"/><path d="M58 32a6 6 0 0 0-6-6H30a6 6 0 0 0-6 6v12a6 6 0 0 0 6 6h16l8 6v-6a6 6 0 0 0 4-6z" fill="#FFC83D"/><circle cx="34" cy="38" r="2.5" fill="#fff"/><circle cx="41" cy="38" r="2.5" fill="#fff"/><circle cx="48" cy="38" r="2.5" fill="#fff"/></svg></span><span data-edit>מדרש תמונה<small>עם גלגל ההגרלה</small></span></div>
       <div role="button" tabindex="0" data-move class="act" data-open="learned"><span class="art"><svg class="a" viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="#3DBE7A"/><path d="M20 33l8 8 16-17" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-edit>מה למדנו<small>סיכום המפגש</small></span></div>
     </div>
   </div>
@@ -415,47 +428,45 @@ const gal=items=>`<div class="gal" style="--n:${items.length}">${items.map(([f,c
 const WIN={
  prompt:()=>({t:'פרומפט טוב לתמונה',h:`
   <div class="formula"><span>מה רואים</span><i>+</i><span>איפה</span><i>+</i><span>מתי</span><i>+</i><span>אווירה</span><i>+</i><span>סגנון</span><a class="wheel sm" href="${STYLES}" target="_blank" rel="noopener">למעבדת הסגנונות</a></div>
-  ${gal([['prompt-1','ילדה קוראת ספר. צילום'],['prompt-2','אותו דבר, ציור בצבעי מים'],['prompt-3','אותו דבר, קומיקס']])}
-  ${talk('התלמידים אומרים את הפרומפט בקול, חלק אחרי חלק.')}
-  ${idea()}`}),
+  ${gal([['prompt-1','ילדה קוראת ספר. צילום'],['prompt-2','אותו דבר, ציור בצבעי מים'],['prompt-3','אותו דבר, קומיקס']])}`}),
  edit:()=>({t:'עריכת תמונה',h:`
-  ${gal([['edit-1','צור תמונה של ילד בחצר'],['edit-2','שנה את צבע החולצה'],['edit-3','תוסיף חתול']])}
-  ${talk('"מה השתנה?" התלמידים אומרים: "פה יש..., ופה אין...".')}
-  ${idea()}`}),
+  ${gal([['edit-1','צור תמונה של ילד בחצר'],['edit-2','שנה את צבע החולצה'],['edit-3','תוסיף חתול']])}`}),
  color:()=>({t:'צביעת תמונה ישנה',h:`
   ${gal([['color-1','תמונה ישנה'],['color-2','תקן את התמונה וצבע אותה']])}
-  ${talk('התלמיד שואל את סבא או סבתא, ומספר: מי? איפה? מה עשו פעם?')}
-  ${LINKS.drive?tryIt('בחרו תמונה בשחור-לבן מהתיקייה, ותקנו וצבעו אותה.',LINKS.drive,'לתיקיית התמונות'):tryIt('תיקיית תמונות בשחור-לבן לתרגול תעלה כאן.')}
-  ${idea()}`}),
+  ${LINKS.drive?tryIt('בחרו תמונה בשחור-לבן מהתיקייה, ותקנו וצבעו אותה.',LINKS.drive,'לתיקיית התמונות'):tryIt('תיקיית תמונות בשחור-לבן לתרגול תעלה כאן.')}`}),
  char:()=>({t:'דמות עקבית',h:`
-  ${gal([['char-1','ילד בן 10, חולצה כחולה'],['char-2','עכשיו אותו ילד בבית הספר'],['char-3','עכשיו אותו ילד בשוק']])}
-  ${talk('כל תלמיד ממציא סיפור קצר ב-3 תמונות, ומספר אותו בקול.')}
-  ${idea()}`}),
+  ${gal([['char-1','ילד בן 10, חולצה כחולה'],['char-2','עכשיו אותו ילד בבית הספר'],['char-3','עכשיו אותו ילד בשוק']])}`}),
  combine:()=>({t:'שילוב תמונות',h:`
-  ${gal([['combine-1','תמונה 1'],['combine-2','תמונה 2'],['combine-3','תמונה 3'],['combine-4','תושיב אותם בבית קפה, עם הספל הזה']])}
-  ${idea()}`}),
+  ${gal([['combine-1','תמונה 1'],['combine-2','תמונה 2'],['combine-3','תמונה 3'],['combine-4','תושיב אותם בבית קפה, עם הספל הזה']])}`}),
  comic:()=>({t:'קומיקס',h:`
-  ${gal([['comic-1','קומיקס של 4 ריבועים: שני חברים בשוק. עם בועות דיבור בעברית']])}
-  ${talk('בזוגות: ממציאים מה כל דמות אומרת, ומשחקים בקול.')}
-  ${idea()}`}),
+  ${gal([['comic-1','קומיקס של 4 ריבועים: שני חברים בשוק. עם בועות דיבור בעברית']])}`}),
  pause:()=>({t:'הפסקה',h:`<div class="timer"><div class="t" id="tm">15:00</div><div class="tb"><button id="tmGo">התחלה</button><button class="sec" id="tmReset">מההתחלה</button></div><p>בהפסקה: הכינו 2 תמונות למדרש תמונה.<br>סצנה אחת, וסצנת המשך.</p></div>`,after:timerInit}),
  midrash:()=>({t:'מדרש תמונה',h:`
   <div class="formula"><span>מי?</span><span>איפה?</span><span>מה קרה?</span><span>למה?</span><span>מה הם אומרים?</span><a class="wheel sm" href="${WHEEL}" target="_blank" rel="noopener">לגלגל ההגרלה</a></div>
-  ${gal([['midrash-1','סצנה'],['midrash-2','סצנת המשך']])}
-  ${talk('הגלגל בוחר מי מספרת את הסיפור שהתמונה מספרת.')}
-  ${idea()}`}),
+  ${gal([['midrash-1','סצנה'],['midrash-2','סצנת המשך']])}`}),
  voice:()=>({t:'מציירים מדיבור',h:`
-  ${gal([['voice-1','לוחצים על המיקרופון ואומרים: "משפחה בארוחת ערב, כולם צוחקים"'],['voice-2','אומרים: "תוסיף עוגה על השולחן"']])}
-  ${talk('תלמיד מתאר בקול. הכיתה בודקת: התמונה מתאימה?')}
-  ${idea()}`}),
+  ${gal([['voice-1','לוחצים על המיקרופון ואומרים: "משפחה בארוחת ערב, כולם צוחקים"'],['voice-2','אומרים: "תוסיף עוגה על השולחן"']])}`}),
  deck:()=>({t:'מצגת - מטקסט לתמונה',u:LINKS.deck,f:!!LINKS.deck,h:LINKS.deck?frame(LINKS.deck):'<div class="empty">המצגת תופיע כאן</div>'}),
- ideas:()=>({t:'קיר הרעיונות: איך אשלב בכיתה?',u:LINKS.ideas,f:!!LINKS.ideas,h:LINKS.ideas?frame(LINKS.ideas):'<div class="empty">קיר הרעיונות יופיע כאן</div>'}),
  padlet:()=>({t:'פדלט: העלו את התוצרים',u:LINKS.padlet,f:!!LINKS.padlet,h:LINKS.padlet?frame(LINKS.padlet):'<div class="empty">הפדלט יופיע כאן</div>'}),
  rec:()=>{const id=ytId(LINKS.rec);return id?{t:'הקלטת השיעור',u:'https://youtu.be/'+id,f:true,h:frame('https://www.youtube-nocookie.com/embed/'+id+'?rel=0')}:{t:'הקלטת השיעור',u:LINKS.rec,f:!!LINKS.rec,h:LINKS.rec?frame(LINKS.rec):'<div class="empty">ההקלטה תעלה כאן אחרי המפגש</div>'}},
  video:(el)=>({t:el.dataset.title||'סרטון',u:'https://youtu.be/'+el.dataset.vid,f:true,h:frame('https://www.youtube-nocookie.com/embed/'+el.dataset.vid+'?autoplay=1&rel=0')}),
  learned:()=>({t:'מה למדנו',h:`<ul class="learned"><li>פרומפט טוב לתמונה</li><li>עריכת תמונה</li><li>צביעת תמונה ישנה</li><li>דמות עקבית</li><li>שילוב תמונות</li><li>קומיקס</li><li>מדרש תמונה</li><li>מציירים מדיבור</li></ul>`}),
  feedback:()=>{const u=LINKS.feedback?LINKS.feedback.replace('{מפגש}',SESSION):'';const e=u&&u.includes('docs.google.com/forms')?u+(u.includes('?')?'&':'?')+'embedded=true':u;return {t:'משוב על המפגש',u,f:!!u,h:u?frame(e):'<div class="empty">טופס המשוב יופיע כאן</div>'}}
 };
+
+
+/* ===== הרעיונות שלנו לכיתה (מהגיליון, לשונית "רעיונות") ===== */
+const TECH=['prompt','edit','color','char','combine','comic','midrash','voice'];
+let IDEAS=null;
+const BULB='<svg viewBox="0 0 64 64"><path d="M32 6a18 18 0 0 0-10 33c2 1.6 3 3.6 3 6v3h14v-3c0-2.4 1-4.4 3-6A18 18 0 0 0 32 6z" fill="#FFC83D"/><rect x="25" y="50" width="14" height="4" rx="2" fill="#7A8489"/><rect x="27" y="56" width="10" height="4" rx="2" fill="#7A8489"/><path d="M27 30l5 6 5-6" stroke="#E29A00" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function ideasBox(t){const list=(IDEAS||[]).filter(r=>r['טכניקה']===t&&r['רעיון']&&(!r['מפגש']||r['מפגש']===SESSION));
+  if(!list.length) return `<div class="ideas"><div class="ihead"><span class="bulb">${BULB}</span><b>הרעיונות שלנו לכיתה</b><span class="ione muted">${IDEAS?'עוד אין רעיונות':'טוען...'}</span></div></div>`;
+  return `<div class="ideas"><button class="ihead" type="button"><span class="bulb">${BULB}</span><b>הרעיונות שלנו לכיתה</b><span class="ione">${esc(list[0]['רעיון'])}</span>${list.length>1?`<span class="imore">עוד ${list.length-1}</span>`:''}</button><ul class="ilist">${list.map(r=>`<li>${esc(r['רעיון'])}</li>`).join('')}</ul></div>`}
+function fillIdeas(){const body=$b();if(!body)return;const box=body.querySelector('.ideas');if(!box)return;const t=document.getElementById('mTitle').textContent;box.outerHTML=ideasBox(t);
+  const h=body.querySelector('.ideas .ihead');if(h&&h.tagName==='BUTTON')h.onclick=()=>{h.parentNode.classList.toggle('open');body.scrollTop=body.scrollHeight}}
+(function(){const cb='cbI'+Date.now(),sc=document.createElement('script');
+  window[cb]=r=>{try{const h=r.table.cols.map(c=>(c.label||'').trim());IDEAS=r.table.rows.map(row=>{const o={};h.forEach((k,i)=>{const c=row.c&&row.c[i];o[k]=c?String(c.f!=null?c.f:(c.v!=null?c.v:'')).trim():''});return o})}catch(e){IDEAS=[]}fillIdeas()};
+  sc.onerror=()=>{IDEAS=[];fillIdeas()};sc.src=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent('רעיונות')}&headers=1&tqx=out:json;responseHandler:${cb}`;document.body.appendChild(sc)})();
 
 /* ===== שעון הפסקה ===== */
 let tmLeft=900,tmRun=false;
@@ -472,6 +483,7 @@ function openWin(k,src){const modal=$m(),body=$b(),ext=$e();
   const ic=src&&src.querySelector('.art svg,.ic svg');document.getElementById('mIc').innerHTML=ic?ic.outerHTML:'';document.getElementById('mIc').style.display=ic?'':'none';
   body.className='content'+(w.f?' frame':'');body.innerHTML=w.h;
   if(w.u){ext.href=w.u;ext.style.display=''}else ext.style.display='none';
+  if(TECH.includes(k)){body.insertAdjacentHTML('beforeend','<div class="ideas"></div>');fillIdeas()}
   modal.classList.add('on'); if(w.after) w.after();
   body.querySelectorAll('.copy').forEach(b=>b.onclick=()=>navigator.clipboard.writeText(b.parentNode.querySelector('span').textContent).then(()=>{b.textContent='הועתק';setTimeout(()=>b.textContent='העתקה',1500)}));
 }
@@ -499,7 +511,6 @@ const LINK_IC='<span class="ic"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0
 loadSheet().then(rows=>{
   const res=mine(rows,'משאב').concat(EXTRA.filter(x=>x.url).map(x=>({'שם':x.name,'קישור':x.url})));
   document.getElementById('res').innerHTML=res.length?res.map(r=>{const id=ytId(r['קישור']);return id?`<div role="button" tabindex="0" class="row" data-open="video" data-vid="${esc(id)}" data-title="${esc(r['שם']||'')}">${YT_IC}${esc(r['שם']||'')}</div>`:`<a class="row" href="${esc(r['קישור'])}" target="_blank" rel="noopener">${LINK_IC}${esc(r['שם']||r['קישור'])}</a>`}).join(''):'';
-  if(!LINKS.ideas&&mine(rows,'קיר')[0])LINKS.ideas=mine(rows,'קיר')[0]['קישור'];
   if(!LINKS.drive&&mine(rows,'תיקייה')[0])LINKS.drive=mine(rows,'תיקייה')[0]['קישור'];
   if(!LINKS.padlet&&mine(rows,'פדלט')[0])LINKS.padlet=mine(rows,'פדלט')[0]['קישור'];
   if(!LINKS.rec&&mine(rows,'הקלטה')[0])LINKS.rec=mine(rows,'הקלטה')[0]['קישור'];
