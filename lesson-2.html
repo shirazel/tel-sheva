@@ -507,8 +507,8 @@ function ideasUI(){const box=document.querySelector('#modal .box');removeIdeasUI
   box.insertAdjacentHTML('beforeend',`<button class="itab" type="button"><span class="bulb">${BULB}</span>הרעיונות שלנו<span class="icount"></span></button>
    <div class="ipanel"><div class="ihd"><span class="bulb">${BULB}</span><b>הרעיונות שלנו לכיתה</b></div><ul class="ilist2"></ul>
    <div class="iadd"><button class="iplus" type="button">+ הוסף רעיון</button><div class="iform"><input class="iname" maxlength="40" placeholder="השם שלי"><textarea maxlength="300" placeholder="איך אשלב את זה בכיתה? רעיון אחד, במשפט או שניים."></textarea><div class="ibtns"><button class="isend" type="button">שליחה</button><button class="icancel" type="button">ביטול</button></div></div><div class="imsg"></div></div></div>`);
-  box.querySelector('.itab').onclick=()=>box.classList.toggle('ideas-open');
-  box.querySelector('.iplus').onclick=()=>{box.querySelector('.iadd').classList.add('on');try{box.querySelector('.iname').value=localStorage.getItem('ideaName')||''}catch(e){}box.querySelector('.imsg').textContent='';box.querySelector('.iform textarea').focus()};
+  box.querySelector('.itab').onclick=()=>{box.classList.toggle('ideas-open');box.scrollTop=0};
+  box.querySelector('.iplus').onclick=()=>{box.querySelector('.iadd').classList.add('on');try{box.querySelector('.iname').value=localStorage.getItem('ideaName')||''}catch(e){}box.querySelector('.imsg').textContent='';box.scrollTop=0;const nm=box.querySelector('.iname');(nm.value?box.querySelector('.iform textarea'):nm).focus({preventScroll:true});const pn=box.querySelector('.ipanel');pn.scrollTop=pn.scrollHeight};
   box.querySelector('.icancel').onclick=()=>box.querySelector('.iadd').classList.remove('on');
   box.querySelector('.isend').onclick=sendIdea;
   renderIdeas()}
@@ -518,7 +518,7 @@ function renderIdeas(){const box=document.querySelector('#modal .box');const ul=
 function removeIdeasUI(){const box=document.querySelector('#modal .box');if(!box)return;box.querySelectorAll('.itab,.ipanel').forEach(x=>x.remove());box.classList.remove('has-ideas','ideas-open')}
 function jsonp(url){return new Promise((ok,fail)=>{const cb='cbJ'+Date.now()+Math.floor(Math.random()*1e4),sc=document.createElement('script');const t=setTimeout(()=>{fail(new Error('timeout'));sc.remove()},15000);
   window[cb]=r=>{clearTimeout(t);ok(r);sc.remove();delete window[cb]};sc.onerror=()=>{clearTimeout(t);fail(new Error('net'))};sc.src=url+(url.includes('?')?'&':'?')+'callback='+cb;document.body.appendChild(sc)})}
-function sendIdea(){const box=document.querySelector('#modal .box'),ta=box.querySelector('.iform textarea'),msg=box.querySelector('.imsg'),btn=box.querySelector('.isend');const idea=ta.value.trim();const nm=box.querySelector('.iname');const name=nm.value.trim();if(!name){nm.focus();msg.textContent='כתבו את השם שלכם.';return}if(!idea){ta.focus();return}try{localStorage.setItem('ideaName',name)}catch(e){}
+function sendIdea(){const box=document.querySelector('#modal .box'),ta=box.querySelector('.iform textarea'),msg=box.querySelector('.imsg'),btn=box.querySelector('.isend');const idea=ta.value.trim();const nm=box.querySelector('.iname');const name=nm.value.trim();if(!name){nm.focus({preventScroll:true});msg.textContent='כתבו את השם שלכם.';return}if(!idea){ta.focus({preventScroll:true});return}try{localStorage.setItem('ideaName',name)}catch(e){}
   if(!IDEAS_API){msg.textContent='הוספת רעיונות תעבוד אחרי שנחבר את הסקריפט.';return}
   const t=curTech();btn.disabled=true;msg.textContent='שולח...';
   jsonp(IDEAS_API+'?action=add&session='+encodeURIComponent(SESSION)+'&tech='+encodeURIComponent(t)+'&idea='+encodeURIComponent(idea)+'&name='+encodeURIComponent(name)).then(r=>{
