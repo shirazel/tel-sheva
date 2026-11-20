@@ -519,6 +519,10 @@ button.wheel{border:0;cursor:pointer;font-family:'Heebo',sans-serif}
 .psbg{display:flex;gap:10px;flex-wrap:wrap}
 .psw{width:56px;height:56px;border-radius:14px;border:3px solid #fff;box-shadow:0 0 0 1px var(--line);cursor:pointer}
 .psw.on{box-shadow:0 0 0 3px #E2448F}
+.padfab{position:absolute;left:32px;bottom:28px;z-index:4;width:76px;height:76px;border-radius:50%;border:0;background:#E2448F;color:#fff;padding:0;cursor:pointer;box-shadow:0 8px 22px rgba(226,68,143,.4);display:flex;align-items:center;justify-content:center;transition:transform .15s}
+.padfab svg{width:36px;height:36px;fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round}
+.padfab:hover{transform:scale(1.07)}
+.padbody{padding-bottom:110px}
 </style>
 </head>
 <body>
@@ -741,8 +745,8 @@ function padLoad(){if(!IDEAS_API){if(padTries++<20)setTimeout(padLoad,700);else 
   jsonp(IDEAS_API+'?action=pad&board='+encodeURIComponent(PAD_ID)).then(r=>{if(!r||!r.ok)throw new Error();PAD=r;padRender()}).catch(()=>{if(!PAD)padMsg('לא הצלחנו לטעון את הלוח. נסו לרענן.')})}
 function padMsg(t){const b=document.querySelector('.padbody');if(b)b.innerHTML=`<div class="padempty">${esc(t)}</div>`}
 function padHTML(){return `<div class="pad"><div class="padhd"><b class="padttl">תוצרי השיעור</b><span class="padsp"></span>
-  <button class="padbtn padadd" type="button">+ פוסט חדש</button><button class="padico padgear" type="button" title="עריכת הלוח">${IC.gear}</button><button class="padico padlock" type="button" title="כניסת עורכת">${IC.lock}</button></div>
-  <div class="padbody"><div class="padempty">טוען את הלוח...</div></div><div class="padov"></div></div>`}
+  <button class="padico padgear" type="button" title="עריכת הלוח">${IC.gear}</button><button class="padico padlock" type="button" title="כניסת עורכת">${IC.lock}</button></div>
+  <div class="padbody"><div class="padempty">טוען את הלוח...</div></div><button class="padfab padadd" type="button" title="פוסט חדש" aria-label="פוסט חדש"><svg viewBox="0 0 24 24"><path d="M12 4v16M4 12h16"/></svg></button><div class="padov"></div></div>`}
 function padCard(p){const likes=(PAD.likes[p.id]||[]),liked=likes.includes(PAD_CLIENT),cms=PAD.comments.filter(c=>c.post===p.id),open=padOpenC.has(p.id),can=padMine(p.id)||padIsEditor();
   return `<article class="pc" data-id="${esc(p.id)}">${p.image?`<img class="pcimg" src="${esc(p.image)}" alt="" loading="lazy">`:''}
    <div class="pcb">${p.title?`<b class="pct">${esc(p.title)}</b>`:''}${p.text?`<p class="pctx">${nl2br(p.text)}</p>`:''}${p.link?`<a class="pcl" href="${esc(p.link)}" target="_blank" rel="noopener">${esc(p.link.replace(/^https?:\/\//,'').slice(0,40))}</a>`:''}<span class="pcw">${esc(p.name)}</span></div>
@@ -755,7 +759,7 @@ function padRender(){const root=document.querySelector('.pad');if(!root||!PAD)re
   const keep=document.activeElement&&document.activeElement.closest&&document.activeElement.closest('.pccf');if(keep)return;
   if(S.layout==='shelves'&&(S.shelves||[]).length){const shelves=S.shelves.slice();const other=posts.filter(p=>!shelves.includes(p.shelf));
     body.innerHTML=`<div class="pshelves">${shelves.map(sh=>`<section class="pshelf"><div class="pshh"><b>${esc(sh)}</b><button class="padaddto" data-shelf="${esc(sh)}" type="button" title="פוסט חדש במדף">+</button></div><div class="pshc">${posts.filter(p=>p.shelf===sh).map(padCard).join('')}</div></section>`).join('')}${other.length?`<section class="pshelf"><div class="pshh"><b>שונות</b></div><div class="pshc">${other.map(padCard).join('')}</div></section>`:''}</div>`}
-  else body.innerHTML=posts.length?`<div class="pwall">${posts.map(padCard).join('')}</div>`:'<div class="padempty">עוד אין פוסטים. לחצו על "+ פוסט חדש".</div>'}
+  else body.innerHTML=posts.length?`<div class="pwall">${posts.map(padCard).join('')}</div>`:'<div class="padempty">עוד אין פוסטים. לחצו על הפלוס למטה.</div>'}
 function padOverlay(html){const ov=document.querySelector('.padov');ov.innerHTML=`<div class="padpanel">${html}</div>`;ov.classList.add('on')}
 function padClose(){const ov=document.querySelector('.padov');if(ov){ov.classList.remove('on');ov.innerHTML=''}}
 let padImg=null;
