@@ -406,7 +406,7 @@ function loadSheetFrom(id,gid){return new Promise((ok,fail)=>{const cb='cb'+Date
 function loadSheet(){return new Promise((ok,fail)=>{const cb='cb'+Date.now(),sc=document.createElement('script');
   window[cb]=r=>{try{const h=r.table.cols.map(c=>(c.label||'').trim());ok(r.table.rows.map(row=>{const o={};h.forEach((k,i)=>{const c=row.c&&row.c[i];o[k]=c?String(c.f!=null?c.f:(c.v!=null?c.v:'')).trim():''});return o}))}catch(e){fail(e)}};
   sc.onerror=fail;sc.src=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?gid=0&headers=1&tqx=out:json;responseHandler:${cb}`;document.body.appendChild(sc);})}
-const mine=(rows,kind)=>rows.filter(r=>r['סוג']===kind&&r['קישור']&&(r['מפגש']===SESSION||String(r['מפגש']).indexOf('כל')===0)).sort((a,b)=>(b['מפגש']===SESSION)-(a['מפגש']===SESSION));
+const mine=(rows,kind)=>rows.filter(r=>r['סוג']===kind&&r['קישור']&&(r['מפגש']===SESSION||!r['מפגש']||String(r['מפגש']).indexOf('כל')===0)).sort((a,b)=>(b['מפגש']===SESSION)-(a['מפגש']===SESSION));
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const ytId=u=>{const m=String(u).match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/);return m?m[1]:''};
 const YT_IC='<span class="ic yt"><svg viewBox="0 0 24 24"><path d="M9 7.5v9l7.5-4.5z"/></svg></span>';
