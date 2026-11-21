@@ -562,6 +562,10 @@ button.wheel{border:0;cursor:pointer;font-family:'Heebo',sans-serif}
 .pshaud{display:flex;flex-direction:column;gap:8px}.pshaud audio{width:100%;min-width:420px}.pshaud a{color:#7FD7F5;font-size:20px}
 .pshframe{width:62%;height:100%;border:0;border-radius:16px;background:#000}
 .pshmain .pcfile{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2);font-size:22px}.pshmain .pcfile svg{stroke:#fff}
+.pcask{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#FFF1F6;border-top:1px solid #F7C6DA;font-size:18px;font-weight:700;color:#8A1E4F}
+.pcask span{flex:1}
+.pcyes,.pcno{border:0;border-radius:999px;padding:6px 16px;font:700 17px 'Heebo',sans-serif;cursor:pointer}
+.pcyes{background:#E2448F;color:#fff}.pcno{background:#fff;color:var(--deep);border:1px solid var(--line)}
 .padfab{position:absolute;left:32px;bottom:28px;z-index:4;width:76px;height:76px;border-radius:50%;border:0;background:#E2448F;color:#fff;padding:0;cursor:pointer;box-shadow:0 8px 22px rgba(226,68,143,.4);display:flex;align-items:center;justify-content:center;transition:transform .15s}
 .padfab svg{width:36px;height:36px;fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round}
 .padfab:hover{transform:scale(1.07)}
@@ -811,7 +815,7 @@ function padRender(){const root=document.querySelector('.pad');if(!root||!PAD)re
   root.style.background=padBg(S.bg);root.classList.toggle('dark',S.bg==='navy'||/^https?:/.test(S.bg||''));
   root.querySelector('.padttl').textContent=S.title||'תוצרי השיעור';root.querySelector('.padgear').style.display=padIsEditor()?'':'none';root.querySelector('.padlock').style.display=padIsEditor()?'none':'';
   const posts=PAD.posts.slice().reverse(),body=root.querySelector('.padbody');
-  const keep=document.activeElement&&document.activeElement.closest&&document.activeElement.closest('.pccf');if(keep)return;
+  const keep=document.activeElement&&document.activeElement.closest&&document.activeElement.closest('.pccf');if(keep||root.querySelector('.pcask'))return;
   if(S.layout==='shelves'&&(S.shelves||[]).length){const shelves=S.shelves.slice();const other=posts.filter(p=>!shelves.includes(p.shelf));
     body.innerHTML=`<div class="pshelves">${shelves.map(sh=>`<section class="pshelf"><div class="pshh"><b>${esc(sh)}</b><button class="padaddto" data-shelf="${esc(sh)}" type="button" title="פוסט חדש במדף">+</button></div><div class="pshc">${posts.filter(p=>p.shelf===sh).map(padCard).join('')}</div></section>`).join('')}${other.length?`<section class="pshelf"><div class="pshh"><b>שונות</b></div><div class="pshc">${other.map(padCard).join('')}</div></section>`:''}</div>`}
   else body.innerHTML=posts.length?`<div class="pwall">${[0,1,2,3].map(c=>`<div class="pcol">${posts.filter((p,i)=>i%4===c).map(padCard).join('')}</div>`).join('')}</div>`:'<div class="padempty">עוד אין פוסטים. לחצו על הפלוס למטה.</div>'}
@@ -892,7 +896,9 @@ function padClick(e){const t=e.target;const card=t.closest('.pc');const id=card&
   if(t.closest('.pccs-send')){const f=t.closest('.pccf'),name=f.querySelector('.pccn').value.trim(),text=f.querySelector('.pcct').value.trim();if(!name){f.querySelector('.pccn').focus();return}if(!text)return;lsSet('ideaName',name);
     PAD.comments.push({post:id,id:'tmp',name,text});document.activeElement.blur();padRender();padPost({action:'padComment',id,name,text}).then(()=>padLoad()).catch(()=>padLoad());return}
   if(t.closest('.pcedit'))return padForm(p);
-  if(t.closest('.pcdel')){if(!confirm('למחוק את הפוסט?'))return;PAD.posts=PAD.posts.filter(x=>x.id!==id);padRender();padPost({action:'padDel',id,token:padTokens()[id]||'',editorKey:padEditorKey()}).then(()=>padLoad()).catch(e=>{alert('לא נמחק: '+e.message);padLoad()});return}}
+  if(t.closest('.pcdel')){const card=t.closest('.pc');if(card.querySelector('.pcask'))return;card.insertAdjacentHTML('beforeend','<div class="pcask"><span>למחוק את הפוסט?</span><button class="pcyes" type="button">כן, למחוק</button><button class="pcno" type="button">לא</button></div>');return}
+  if(t.closest('.pcno')){t.closest('.pcask').remove();return}
+  if(t.closest('.pcyes')){t.closest('.pcask').remove();PAD.posts=PAD.posts.filter(x=>x.id!==id);padRender();padPost({action:'padDel',id,token:padTokens()[id]||'',editorKey:padEditorKey()}).then(()=>padLoad()).catch(e=>{alert('לא נמחק: '+e.message);padLoad()});return}}
 function padInit(){const root=document.querySelector('.pad');root.addEventListener('click',padClick);
   root.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.classList.contains('pcct')){e.preventDefault();const b=e.target.closest('.pccf').querySelector('.pccs-send');b&&b.click()}if(e.key==="Enter"&&e.target.classList.contains("pl-key"))padDoLogin()});
   root.addEventListener('change',e=>{if(e.target.name==='pslay')document.querySelector('.ps-shw').style.opacity=e.target.value==='shelves'?1:.5});
