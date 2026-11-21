@@ -294,6 +294,10 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'H
 .fig .ph em{font-style:normal;font-size:22px;font-weight:700;color:var(--muted);line-height:1.4}
 .fig .ph em small{font-size:16px;font-weight:600;direction:ltr;display:inline-block}
 .fig .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#fff}
+/* כשיש תמונה: המסגרת בגודל התמונה, בלי קו מקווקו */
+.fig .ph.has{border:0;background:transparent;overflow:visible}
+.fig .ph.has em{display:none}
+.fig .ph.has img{position:static;width:auto;height:auto;max-width:100%;max-height:100%;border-radius:14px;box-shadow:0 10px 26px -10px rgba(11,79,124,.45);background:transparent}
 .fig .arr{position:absolute;right:-30px;top:58%;font-size:30px;font-weight:800;color:var(--blue)}
 .gal[style*="--n:4"] .ph{height:300px}
 .gal[style*="--n:1"] .ph{height:420px}
@@ -646,7 +650,7 @@ const idea=()=>`<div class="try idea"><span class="lbl">הקיר המשותף</s
 const frame=u=>`<iframe src="${u}" allowfullscreen allow="fullscreen; clipboard-write"></iframe>`;
 /* תמונות לדוגמה: שמים קובץ בתיקייה assets/lesson2 בשם שמופיע כאן, והוא מופיע בחלון */
 const IMG='assets/lesson2/';
-const gal=items=>`<div class="gal" style="--n:${items.length}">${items.map(([f,c],i)=>`<figure class="fig">${i?'<span class="arr">&larr;</span>':''}<figcaption class="cap">${c}</figcaption><div class="ph"><img src="${IMG+f}.jpg" alt="" onerror="this.remove()"><em>מקום לתמונה<br><small>${f}.jpg</small></em></div></figure>`).join('')}</div>`;
+const gal=items=>`<div class="gal" style="--n:${items.length}">${items.map(([f,c],i)=>`<figure class="fig">${i?'<span class="arr">&larr;</span>':''}<figcaption class="cap">${c}</figcaption><div class="ph"><img src="${IMG+f}.jpg" alt="" onload="this.parentNode.classList.add('has')" onerror="this.remove()"><em>מקום לתמונה<br><small>${f}.jpg</small></em></div></figure>`).join('')}</div>`;
 const WIN={
  prompt:()=>({t:'פרומפט טוב לתמונה',h:`
   <div class="formula"><span>מה רואים</span><i>+</i><span>איפה</span><i>+</i><span>מתי</span><i>+</i><span>אווירה</span><i>+</i><span>סגנון</span><a class="wheel sm" href="${STYLES}" target="_blank" rel="noopener">למעבדת הסגנונות</a></div>
