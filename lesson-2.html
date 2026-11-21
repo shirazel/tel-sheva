@@ -346,13 +346,12 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'H
 .fig{justify-content:flex-end}
 .gal{align-items:end}
 /* צביעת תמונה ישנה: הכיתוב בצד, התמונות גדולות, ותיקייה כאייקון */
-.sidewrap{position:relative}
 .gal.side{gap:60px}
 .gal.side .fig{flex-direction:row;align-items:center;gap:18px}
-.gal.side .fig .cap{flex:0 0 150px;min-height:0;font-size:26px;align-items:center}
+.gal.side .fig .cap{flex:0 0 170px;min-height:0;font-size:28px;flex-direction:column;align-items:flex-start;justify-content:center;gap:16px}
 .gal.side .ph{flex:1;height:500px}
 .gal.side .arr{right:-46px;top:50%;transform:translateY(-50%)}
-.folderbtn{position:absolute;left:0;bottom:0;width:72px;height:72px;border-radius:50%;border:3px solid var(--yellow);background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px -8px rgba(0,0,0,.3)}
+.folderbtn{width:72px;height:72px;border-radius:50%;border:3px solid var(--yellow);background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px -8px rgba(0,0,0,.3)}
 .folderbtn svg{width:36px;height:36px;fill:#FFE27A;stroke:#8A6A00;stroke-width:1.6;stroke-linejoin:round}
 .folderbtn:hover{transform:scale(1.06)}
 .folderbtn.off{opacity:.45}
@@ -669,9 +668,8 @@ const WIN={
   ${gal([['prompt-1','ילדה קוראת ספר. צילום'],['prompt-2','אותו דבר, ציור בצבעי מים'],['prompt-3','אותו דבר, קומיקס']])}`}),
  edit:()=>({t:'עריכת תמונה',h:`
   ${gal([['edit-1','צור תמונה של ילד בחצר'],['edit-2','שנה את צבע החולצה'],['edit-3','תוסיף חתול']])}`}),
- color:()=>({t:'צביעת תמונה ישנה',h:`
-  <div class="sidewrap">${gal([['color-1','תמונה ישנה'],['color-2','תקן את התמונה וצבע אותה']],'side')}
-  ${LINKS.drive?`<a class="folderbtn" href="${LINKS.drive}" target="_blank" rel="noopener" title="תיקיית תמונות בשחור-לבן לתרגול" aria-label="תיקיית תמונות לתרגול">${FOLDER_IC}</a>`:`<span class="folderbtn off" title="תיקיית התמונות עוד לא מחוברת" aria-label="תיקיית תמונות לתרגול">${FOLDER_IC}</span>`}</div>`}),
+ color:()=>{const fb=LINKS.drive?`<a class="folderbtn" href="${LINKS.drive}" target="_blank" rel="noopener" title="תיקיית תמונות בשחור-לבן לתרגול" aria-label="תיקיית תמונות לתרגול">${FOLDER_IC}</a>`:`<span class="folderbtn off" title="תיקיית התמונות עוד לא מחוברת" aria-label="תיקיית תמונות לתרגול">${FOLDER_IC}</span>`;
+  return {t:'צביעת תמונה ישנה',h:gal([['color-1',`<span>תמונה ישנה</span>${fb}`],['color-2','תקן את התמונה וצבע אותה']],'side')}},
  char:()=>({t:'דמות עקבית',h:`
   ${gal([['char-1','ילד מתולתל, חולצת פסים'],['char-2','עכשיו אותו ילד ברחוב, עם גלידה'],['char-3','עכשיו אותו ילד על אופניים בחוף']])}`}),
  combine:()=>({t:'שילוב תמונות',h:`
