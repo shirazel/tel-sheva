@@ -348,6 +348,14 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'H
 .gal{align-items:end}
 /* צביעת תמונה ישנה: הכיתוב בצד, התמונות גדולות, ותיקייה כאייקון */
 .gal.side{gap:60px}
+/* קומיקס: פרומפט לדוגמה בצד */
+.pwrap{display:flex;align-items:center;gap:36px}
+.pwrap .gal{flex:1;margin:0}
+.gal.nocap .cap{display:none}
+.gal.nocap .ph{height:540px}
+.pbox{flex:0 0 380px;background:#FFFBEA;border:2px solid var(--yellow);border-radius:20px;padding:22px 26px;display:flex;flex-direction:column;gap:12px}
+.pbox .pbl{align-self:flex-start;background:var(--yellow);color:var(--ink);font-weight:700;font-size:20px;padding:5px 16px;border-radius:999px}
+.pbox p{margin:0;font-size:30px;font-weight:600;line-height:1.5;color:var(--ink)}
 .gal.side .fig{flex-direction:row;align-items:center;gap:18px}
 .gal.side .fig .cap{flex:0 0 170px;min-height:0;font-size:28px;flex-direction:column;align-items:flex-start;justify-content:center;gap:16px}
 .gal.side .ph{flex:1;height:500px}
@@ -676,7 +684,7 @@ const WIN={
  combine:()=>({t:'שילוב תמונות',h:`
   ${gal([['combine-1','הבחור'],['combine-2','הספל'],['combine-3','החולצה'],['combine-4','תלביש לו את החולצה, ותושיב אותו בבית קפה עם הספל']])}`}),
  comic:()=>({t:'קומיקס',h:`
-  ${gal([['comic-1','קומיקס של 4 ריבועים עם בועות דיבור בעברית']])}`}),
+  <div class="pwrap"><div class="pbox"><span class="pbl">פרומפט לדוגמה</span><p>צור קומיקס בן 4 חלקים על ילד שפוגש נחליאלי ביום חורף. עם טקסט בעברית.</p></div>${gal([['comic-1','']],'nocap')}</div>`}),
  pause:()=>({t:'הפסקה',h:`<div class="timer"><div class="t" id="tm">15:00</div><div class="tb"><button id="tmGo">התחלה</button><button class="sec" id="tmReset">מההתחלה</button></div><p>בהפסקה: הכינו 2 תמונות למדרש תמונה.<br>סצנה אחת, וסצנת המשך.</p></div>`,after:timerInit}),
  midrash:()=>({t:'מדרש תמונה',h:`
   <div class="formula"><span>מי?</span><span>איפה?</span><span>מה קרה?</span><span>למה?</span><span>מה הם אומרים?</span><button class="wheel sm" type="button" data-open="wheel">לגלגל ההגרלה</button></div>
