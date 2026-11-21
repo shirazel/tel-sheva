@@ -683,7 +683,7 @@ const FOLDER_IC='<svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 
 const dictWave=()=>Array.from({length:34},(_,i)=>`<i style="--h:${(18+Math.round(70*Math.abs(Math.sin(i*1.7)*Math.cos(i*.45))))}%"></i>`).join('');
 const dictCap=(lead,say)=>`<span class="dlead">${lead}</span><span class="dsay">"${say}"</span><button type="button" class="dictbar" data-say="${say}" title="השמעה"><span class="dx">×</span><span class="dwave">${dictWave()}</span><span class="dplay"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l10-6.5z"/></svg></span><span class="dsend"><svg viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></span></button>`;
 function dictSay(btn){const ss=window.speechSynthesis;if(!ss)return;const was=btn.classList.contains('on');ss.cancel();document.querySelectorAll('.dictbar.on').forEach(b=>b.classList.remove('on'));if(was)return;
-  const u=new SpeechSynthesisUtterance(btn.dataset.say);u.lang='he-IL';u.rate=.95;const v=ss.getVoices().find(x=>/^he|^iw/i.test(x.lang));if(v)u.voice=v;
+  const u=new SpeechSynthesisUtterance(btn.dataset.say);u.lang='he-IL';u.rate=.95;const hv=ss.getVoices().filter(x=>/^he|^iw/i.test(x.lang));const v=hv.find(x=>/hila|female|נשי|google/i.test(x.name))||hv.find(x=>!/asaf|avri|male/i.test(x.name))||hv[0];if(v)u.voice=v;
   u.onend=u.onerror=()=>btn.classList.remove('on');btn.classList.add('on');ss.speak(u)}
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.dictbar');if(b){e.preventDefault();e.stopPropagation();dictSay(b)}},true);
 try{speechSynthesis.getVoices()}catch(e){}
