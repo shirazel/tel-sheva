@@ -293,7 +293,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'H
 .fig .ph{position:relative;height:360px;border:2px dashed #B8CFDA;border-radius:18px;background:#F4FAFD;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
 .fig .ph em{font-style:normal;font-size:22px;font-weight:700;color:var(--muted);line-height:1.4}
 .fig .ph em small{font-size:16px;font-weight:600;direction:ltr;display:inline-block}
-.fig .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#fff}
+.fig .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#fff}
 .fig .arr{position:absolute;right:-30px;top:58%;font-size:30px;font-weight:800;color:var(--blue)}
 .gal[style*="--n:4"] .ph{height:300px}
 .gal[style*="--n:1"] .ph{height:420px}
@@ -657,7 +657,7 @@ const WIN={
   ${gal([['color-1','תמונה ישנה'],['color-2','תקן את התמונה וצבע אותה']])}
   ${LINKS.drive?tryIt('בחרו תמונה בשחור-לבן מהתיקייה, ותקנו וצבעו אותה.',LINKS.drive,'לתיקיית התמונות'):tryIt('תיקיית תמונות בשחור-לבן לתרגול תעלה כאן.')}`}),
  char:()=>({t:'דמות עקבית',h:`
-  ${gal([['char-1','ילד בן 10, חולצה כחולה'],['char-2','עכשיו אותו ילד בבית הספר'],['char-3','עכשיו אותו ילד בשוק']])}`}),
+  ${gal([['char-1','ילד מתולתל, חולצת פסים'],['char-2','עכשיו אותו ילד ברחוב, עם גלידה'],['char-3','עכשיו אותו ילד על אופניים בחוף']])}`}),
  combine:()=>({t:'שילוב תמונות',h:`
   ${gal([['combine-1','תמונה 1'],['combine-2','תמונה 2'],['combine-3','תמונה 3'],['combine-4','תושיב אותם בבית קפה, עם הספל הזה']])}`}),
  comic:()=>({t:'קומיקס',h:`
