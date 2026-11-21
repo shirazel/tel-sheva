@@ -351,6 +351,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'H
 .gal.side .fig .cap{flex:0 0 170px;min-height:0;font-size:28px;flex-direction:column;align-items:flex-start;justify-content:center;gap:16px}
 .gal.side .ph{flex:1;height:500px}
 .gal.side .arr{right:-46px;top:50%;transform:translateY(-50%)}
+.ic.fold svg{fill:#FFE27A;stroke:#8A6A00;stroke-width:1.6;stroke-linejoin:round}
 .folderbtn{width:72px;height:72px;border-radius:50%;border:3px solid var(--yellow);background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px -8px rgba(0,0,0,.3)}
 .folderbtn svg{width:36px;height:36px;fill:#FFE27A;stroke:#8A6A00;stroke-width:1.6;stroke-linejoin:round}
 .folderbtn:hover{transform:scale(1.06)}
@@ -668,8 +669,7 @@ const WIN={
   ${gal([['prompt-1','ילדה קוראת ספר. צילום'],['prompt-2','אותו דבר, ציור בצבעי מים'],['prompt-3','אותו דבר, קומיקס']])}`}),
  edit:()=>({t:'עריכת תמונה',h:`
   ${gal([['edit-1','צור תמונה של ילד בחצר'],['edit-2','שנה את צבע החולצה'],['edit-3','תוסיף חתול']])}`}),
- color:()=>{const fb=LINKS.drive?`<a class="folderbtn" href="${LINKS.drive}" target="_blank" rel="noopener" title="תיקיית תמונות בשחור-לבן לתרגול" aria-label="תיקיית תמונות לתרגול">${FOLDER_IC}</a>`:`<span class="folderbtn off" title="תיקיית התמונות עוד לא מחוברת" aria-label="תיקיית תמונות לתרגול">${FOLDER_IC}</span>`;
-  return {t:'צביעת תמונה ישנה',h:gal([['color-1',`<span>תמונה ישנה</span>${fb}`],['color-2','תקן את התמונה וצבע אותה']],'side')}},
+ color:()=>({t:'צביעת תמונה ישנה',h:gal([['color-1','תמונה ישנה'],['color-2','תקן את התמונה וצבע אותה']],'side')}),
  char:()=>({t:'דמות עקבית',h:`
   ${gal([['char-1','ילד מתולתל, חולצת פסים'],['char-2','עכשיו אותו ילד ברחוב, עם גלידה'],['char-3','עכשיו אותו ילד על אופניים בחוף']])}`}),
  combine:()=>({t:'שילוב תמונות',h:`
@@ -1016,8 +1016,8 @@ const ytId=u=>{const m=String(u||'').match(/(?:youtu\.be\/|v=|embed\/|shorts\/)(
 const YT_IC='<span class="ic yt"><svg viewBox="0 0 24 24"><path d="M9 7.5v9l7.5-4.5z"/></svg></span>';
 const LINK_IC='<span class="ic"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 6 0l3-3a4 4 0 0 0-6-6l-1 1"/><path d="M14 10a4 4 0 0 0-6 0l-3 3a4 4 0 0 0 6 6l1-1"/></svg></span>';
 loadSheet().then(rows=>{
-  const res=mine(rows,'משאב').concat(EXTRA.filter(x=>x.url).map(x=>({'שם':x.name,'קישור':x.url})));
-  document.getElementById('res').innerHTML=res.length?res.map(r=>{const id=ytId(r['קישור']);return id?`<div role="button" tabindex="0" class="row" data-open="video" data-vid="${esc(id)}" data-title="${esc(r['שם']||'')}">${YT_IC}${esc(r['שם']||'')}</div>`:`<a class="row" href="${esc(r['קישור'])}" target="_blank" rel="noopener">${LINK_IC}${esc(r['שם']||r['קישור'])}</a>`}).join(''):'';
+  const res=mine(rows,'תיקייה').map(r=>Object.assign({folder:1},r)).concat(mine(rows,'משאב')).concat(EXTRA.filter(x=>x.url).map(x=>({'שם':x.name,'קישור':x.url})));
+  document.getElementById('res').innerHTML=res.length?res.map(r=>{const id=ytId(r['קישור']);if(r.folder)return `<a class="row" href="${esc(r['קישור'])}" target="_blank" rel="noopener"><span class="ic fold">${FOLDER_IC}</span>${esc(r['שם']||'תיקייה')}</a>`;return id?`<div role="button" tabindex="0" class="row" data-open="video" data-vid="${esc(id)}" data-title="${esc(r['שם']||'')}">${YT_IC}${esc(r['שם']||'')}</div>`:`<a class="row" href="${esc(r['קישור'])}" target="_blank" rel="noopener">${LINK_IC}${esc(r['שם']||r['קישור'])}</a>`}).join(''):'';
   if(!IDEAS_API){const sr=rows.find(r=>r['סוג']==='סקריפט'&&r['קישור']);if(sr)IDEAS_API=sr['קישור']}
   if(!LINKS.drive&&mine(rows,'תיקייה')[0])LINKS.drive=mine(rows,'תיקייה')[0]['קישור'];
   if(!LINKS.rec&&mine(rows,'הקלטה')[0])LINKS.rec=mine(rows,'הקלטה')[0]['קישור'];
