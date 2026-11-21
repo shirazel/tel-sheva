@@ -63,10 +63,11 @@ a.s .go{position:absolute;top:22px;left:18px;background:var(--orange);color:var(
 </div></div>
 
 <script>
-/* page = עמוד המפגש. מפגש בלי page מוצג "בקרוב" */
+/* page = עמוד המפגש. מפגש בלי page מוצג "בקרוב".
+   openAt = מתי העמוד נפתח (שעון ישראל). עד אז הכרטיס מוצג "בקרוב" */
 const SESSIONS=[
  {date:'16.11',type:'פרונטלי',title:'מבוא לבינה מלאכותית',desc:'מה זה בינה מלאכותית, איך כותבים לבינה ומדברים איתה בטלפון',page:'lesson-1.html'},
- {date:'23.11',type:'בזום',title:'מטקסט לתמונה',desc:'מדרש תמונה, חידות, משחקי מילים וקלפי שיח',page:'lesson-2.html'},
+ {date:'23.11',type:'בזום',title:'מטקסט לתמונה',desc:'מדרש תמונה, חידות, משחקי מילים וקלפי שיח',page:'lesson-2.html',openAt:'2026-11-23T15:00:00+02:00'},
  {date:'30.11',type:'בזום',title:'NotebookLM',desc:'פודקאסט וסרטון בעברית מדוברת מתוך החומרים שלנו'},
  {date:'7.12',type:'בזום',title:'יצירת סרטונים',desc:'סרטון בלי קול, והתלמידים מדבבים אותו'},
  {date:'14.12',type:'פרונטלי',title:'יצירת אפליקציות',desc:'מקליט קול ומשחקי דיבור בקוד'},
@@ -74,10 +75,14 @@ const SESSIONS=[
  {date:'11.1',type:'מטלה',title:'מערך שיעור',desc:'מערך על בסיס 3 פרקטיקות, והעברתו בכיתה'},
  {date:'18.1',type:'פרונטלי',title:'למידת עמיתים וסיכום',desc:'מציגים את השיעורים, רפלקציה וסיכום'}
 ];
-document.getElementById('grid').innerHTML=SESSIONS.map((s,i)=>{
+const isOpen=s=>s.page&&(!s.openAt||Date.now()>=Date.parse(s.openAt));
+function drawCards(){document.getElementById('grid').innerHTML=SESSIONS.map((s,i)=>{
   const inner=`<div class="top"><span class="n">${i+1}</span><span class="d">${s.date}</span></div><h2>${s.title}</h2><p class="desc">${s.desc||''}</p><span class="t${s.type==='מטלה'?' task':''}">${s.type}</span>`;
-  return s.page?`<a class="s" href="${s.page}">${inner}<span class="go">כניסה</span></a>`:`<div class="s soon">${inner}</div>`;
-}).join('');
+  return isOpen(s)?`<a class="s" href="${s.page}">${inner}<span class="go">כניסה</span></a>`:`<div class="s soon">${inner}</div>`;
+}).join('')}
+drawCards();
+/* אם העמוד פתוח כשמגיעה שעת הפתיחה, הכרטיס נפתח לבד */
+SESSIONS.forEach(s=>{const w=s.openAt?Date.parse(s.openAt)-Date.now():0;if(w>0&&w<864e5)setTimeout(drawCards,w+500)});
 function fit(){const s=Math.min(innerWidth/1600,innerHeight/900);document.getElementById('stage').style.zoom=s}
 addEventListener('resize',fit);fit();
 </script>
