@@ -775,7 +775,7 @@ function wheelInit(){const b=$b();wDraw();wCount();loadNames();clearInterval(win
 const PAD_ID='products-'+SESSION;
 const PAD_BG={sky:'linear-gradient(135deg,#CFE8FA,#EEF9FC)',mint:'linear-gradient(135deg,#CFF3E6,#F1FFF8)',peach:'linear-gradient(135deg,#FFD9C7,#FFF3EA)',lemon:'linear-gradient(135deg,#FFEDA8,#FFFAE3)',lavender:'linear-gradient(135deg,#DCD2FF,#F5F1FF)',pink:'linear-gradient(135deg,#FFD3E3,#FFF2F7)',cork:'radial-gradient(#B9895B 1.2px,transparent 1.6px) 0 0/16px 16px,#D6A97B',navy:'linear-gradient(135deg,#0B4F7C,#2B78C5)'};
 const PAD_BG_NAMES={sky:'שמיים',mint:'מנטה',peach:'אפרסק',lemon:'לימון',lavender:'לבנדר',pink:'ורוד',cork:'שעם',navy:'כחול כהה'};
-const IC={file:'<svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>',play:'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M10 8.5v5l4-2.5z"/><path d="M8 21h8"/></svg>',pause:'<svg viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></svg>',auto:'<svg viewBox="0 0 24 24"><path d="M8 5.5v13l10-6.5z"/></svg>',prev:'<svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>',next:'<svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>',full:'<svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>',shrink:'<svg viewBox="0 0 24 24"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>',heart:'<svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>',
+const IC={pdf:'<svg viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 19h14"/></svg>',file:'<svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>',play:'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M10 8.5v5l4-2.5z"/><path d="M8 21h8"/></svg>',pause:'<svg viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></svg>',auto:'<svg viewBox="0 0 24 24"><path d="M8 5.5v13l10-6.5z"/></svg>',prev:'<svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>',next:'<svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>',full:'<svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>',shrink:'<svg viewBox="0 0 24 24"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>',heart:'<svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>',
  bubble:'<svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>',
  pen:'<svg viewBox="0 0 24 24"><path d="M4 20l4-1 11-11-3-3L5 16z"/></svg>',
  bin:'<svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>',
@@ -796,7 +796,7 @@ function padLoad(){if(!IDEAS_API){if(padTries++<20)setTimeout(padLoad,700);else 
   jsonp(IDEAS_API+'?action=pad&board='+encodeURIComponent(PAD_ID)).then(r=>{if(!r||!r.ok)throw new Error();PAD=r;padRender()}).catch(()=>{if(!PAD)padMsg('לא הצלחנו לטעון את הלוח. נסו לרענן.')})}
 function padMsg(t){const b=document.querySelector('.padbody');if(b)b.innerHTML=`<div class="padempty">${esc(t)}</div>`}
 function padHTML(){return `<div class="pad"><div class="padhd"><b class="padttl">תוצרי השיעור</b><span class="padsp"></span>
-  <button class="padico padplay" type="button" title="הקרנה">${IC.play}</button><button class="padico padfull" type="button" title="מסך מלא">${document.fullscreenElement?IC.shrink:IC.full}</button><button class="padico padgear" type="button" title="עריכת הלוח">${IC.gear}</button><button class="padico padlock" type="button" title="כניסת עורכת">${IC.gear}</button></div>
+  <button class="padico padpdf" type="button" title="הורדה כ-PDF">${IC.pdf}</button><button class="padico padplay" type="button" title="הקרנה">${IC.play}</button><button class="padico padfull" type="button" title="מסך מלא">${document.fullscreenElement?IC.shrink:IC.full}</button><button class="padico padgear" type="button" title="עריכת הלוח">${IC.gear}</button><button class="padico padlock" type="button" title="כניסת עורכת">${IC.gear}</button></div>
   <div class="padbody"><div class="padempty">טוען את הלוח...</div></div><button class="padfab padadd" type="button" title="פוסט חדש" aria-label="פוסט חדש"><svg viewBox="0 0 24 24"><path d="M12 4v16M4 12h16"/></svg></button><div class="padshow"></div><div class="padov"></div></div>`}
 const PAD_MAX_FILE=20*1024*1024;
 const driveView=id=>'https://drive.google.com/file/d/'+encodeURIComponent(id)+'/view';
@@ -835,7 +835,7 @@ function padCard(p){const likes=(PAD.likes[p.id]||[]),liked=likes.includes(PAD_C
    ${open?`<div class="pccs">${cms.map(c=>`<div class="pcc"><b>${esc(c.name)}</b> ${nl2br(c.text)}</div>`).join('')}<div class="pccf"><input class="pccn" maxlength="40" placeholder="שם" value="${esc(lsGet('ideaName',''))}"><input class="pcct" maxlength="500" placeholder="כתבו תגובה..."><button class="pccs-send" type="button">שליחה</button></div></div>`:''}</article>`}
 function padRender(){const root=document.querySelector('.pad');if(!root||!PAD)return;const S=PAD.settings||{};
   root.style.background=padBg(S.bg);root.classList.toggle('dark',S.bg==='navy'||/^https?:/.test(S.bg||''));
-  root.querySelector('.padttl').textContent=S.title||'תוצרי השיעור';root.querySelector('.padgear').style.display=padIsEditor()?'':'none';root.querySelector('.padlock').style.display=padIsEditor()?'none':'';
+  root.querySelector('.padttl').textContent=S.title||'תוצרי השיעור';root.querySelector('.padgear').style.display=padIsEditor()?'':'none';root.querySelector('.padpdf').style.display=padIsEditor()?'':'none';root.querySelector('.padlock').style.display=padIsEditor()?'none':'';
   const posts=PAD.posts.slice().reverse(),body=root.querySelector('.padbody');
   const keep=document.activeElement&&document.activeElement.closest&&document.activeElement.closest('.pccf');if(keep||padDragId||root.querySelector('.pcask'))return;
   if(S.layout==='shelves'&&(S.shelves||[]).length){const shelves=S.shelves.slice();const other=posts.filter(p=>!shelves.includes(p.shelf));
@@ -881,6 +881,38 @@ function padDoLogin(){const ov=document.querySelector('.padov'),k=ov.querySelect
   padPost({action:'padCheckEditor',editorKey:k}).then(r=>{if(!r.editor){msg.textContent='הסיסמה לא נכונה.';return}lsSet('padEditorKey',k);padClose();padRender()}).catch(()=>{msg.textContent='לא הצלחנו לבדוק.'})}
 function padFull(){if(document.fullscreenElement){document.exitFullscreen();return}const r=document.documentElement.requestFullscreen;if(r)r.call(document.documentElement).catch(()=>{})}
 document.addEventListener('fullscreenchange',()=>{const on=!!document.fullscreenElement;document.body.classList.toggle('padfs',on&&!!document.querySelector('.pad'));const b=document.querySelector('.padfull');if(b){b.innerHTML=on?IC.shrink:IC.full;b.title=on?'יציאה ממסך מלא':'מסך מלא'}});
+/* הורדה כ-PDF: דף הדפסה של כל הלוח. בחלון ההדפסה בוחרים "שמירה כ-PDF" */
+function padPdf(){if(!PAD)return;const S=PAD.settings||{},title=S.title||'תוצרי השיעור';
+  const card=p=>{const pic=padPicture(p),pv=p.preview||{},cms=PAD.comments.filter(c=>c.post===p.id),lk=(PAD.likes[p.id]||[]).length;
+    return `<article>${pic?`<img src="${esc(pic)}" alt="">`:''}<div class="b">${p.title?`<h3>${esc(p.title)}</h3>`:''}${p.text?`<p>${nl2br(p.text)}</p>`:''}
+    ${p.link?`<div class="l">${esc(pv.t||padDomain(p.link))}<br><span dir="ltr">${esc(p.link)}</span></div>`:''}
+    ${p.file?`<div class="l">קובץ: ${esc(p.fileName||'')}<br><span dir="ltr">${driveView(p.file)}</span></div>`:''}
+    <div class="w">${esc(p.name)}${lk?` · ${lk} לייקים`:''}</div>${cms.length?`<div class="c">${cms.map(c=>`<div><b>${esc(c.name)}:</b> ${nl2br(c.text)}</div>`).join('')}</div>`:''}</div></article>`};
+  const posts=PAD.posts.slice().reverse();let body;
+  if(S.layout==='shelves'&&(S.shelves||[]).length){const sh=S.shelves,other=posts.filter(p=>!sh.includes(p.shelf));
+    body=sh.map(x=>{const ps=posts.filter(p=>p.shelf===x);return ps.length?`<section><h2>${esc(x)}</h2><div class="g">${ps.map(card).join('')}</div></section>`:''}).join('')+(other.length?`<section><h2>שונות</h2><div class="g">${other.map(card).join('')}</div></section>`:'')}
+  else body=`<div class="g">${posts.map(card).join('')}</div>`;
+  const d=new Date().toLocaleDateString('he-IL');
+  const html=`<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><title>${esc(title)}</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap" rel="stylesheet">
+<style>@page{size:A4;margin:14mm}body{font-family:'Heebo',sans-serif;color:#1d2b36;margin:0}
+header{border-bottom:3px solid #E2448F;padding-bottom:8px;margin-bottom:14px}header h1{margin:0;font-size:26px;color:#0B4F7C}header div{font-size:13px;color:#667}
+h2{font-size:19px;color:#0B4F7C;margin:18px 0 8px;break-after:avoid}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+article{border:1px solid #d5e3ec;border-radius:10px;overflow:hidden;break-inside:avoid}
+article img{display:block;width:100%;max-height:220px;object-fit:contain;background:#f3f7fa}
+.b{padding:8px 12px}h3{margin:0 0 4px;font-size:16px}p{margin:0 0 6px;font-size:13px;line-height:1.5}
+.l{font-size:11px;color:#0181C9;margin:4px 0;word-break:break-all}.w{font-size:12px;font-weight:700;color:#8A5A00;margin-top:4px}
+.c{border-top:1px solid #e6eef3;margin-top:6px;padding-top:4px;font-size:11.5px;line-height:1.45}
+footer{margin-top:16px;font-size:11px;color:#889;text-align:center}</style></head>
+<body><header><h1>${esc(title)}</h1><div>${posts.length} פרסומים · ${d}</div></header>${body||'<p>אין פרסומים</p>'}
+<footer>© שירה רוט זליקוביץ · הוראה יצירתית עם AI</footer></body></html>`;
+  let fr=document.getElementById('padPrint');if(fr)fr.remove();fr=document.createElement('iframe');fr.id='padPrint';
+  Object.assign(fr.style,{position:'fixed',width:'0',height:'0',border:'0',right:'0',bottom:'0'});document.body.appendChild(fr);
+  const doc=fr.contentWindow.document;doc.open();doc.write(html);doc.close();
+  let printed=false;const go=()=>{if(printed)return;printed=true;try{fr.contentWindow.focus();fr.contentWindow.print()}catch(e){}};
+  const imgs=[...doc.images];let left=imgs.length;const done=()=>{if(--left<=0)setTimeout(go,300)};
+  if(!left)setTimeout(go,600);else{imgs.forEach(im=>{if(im.complete)done();else{im.onload=im.onerror=done}});setTimeout(()=>{if(left>0){left=0;go()}},8000)}}
 /* הקרנה: כל הפרסומים אחד אחרי השני, לפי הסדר בלוח */
 let SHOW={list:[],i:0,auto:null};
 function padShowList(){const S=PAD.settings||{},posts=PAD.posts.slice().reverse();
@@ -900,6 +932,7 @@ function padClick(e){const t=e.target;const card=t.closest('.pc');const id=card&
   if(t.closest('.padadd'))return padForm(null,'');
   if(t.closest('.padaddto'))return padForm(null,t.closest('.padaddto').dataset.shelf);
   if(t.closest('.padplay'))return padShow();
+  if(t.closest('.padpdf'))return padPdf();
   if(t.closest('.psh-x'))return padShowClose();
   if(t.closest('.psh-next'))return padShowGo(1);
   if(t.closest('.psh-prev'))return padShowGo(-1);
