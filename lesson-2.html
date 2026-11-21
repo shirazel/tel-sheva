@@ -345,6 +345,17 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'H
 .fig .cap{min-height:0}
 .fig{justify-content:flex-end}
 .gal{align-items:end}
+/* צביעת תמונה ישנה: הכיתוב בצד, התמונות גדולות, ותיקייה כאייקון */
+.sidewrap{position:relative}
+.gal.side{gap:60px}
+.gal.side .fig{flex-direction:row;align-items:center;gap:18px}
+.gal.side .fig .cap{flex:0 0 150px;min-height:0;font-size:26px;align-items:center}
+.gal.side .ph{flex:1;height:500px}
+.gal.side .arr{right:-46px;top:50%;transform:translateY(-50%)}
+.folderbtn{position:absolute;left:0;bottom:0;width:72px;height:72px;border-radius:50%;border:3px solid var(--yellow);background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px -8px rgba(0,0,0,.3)}
+.folderbtn svg{width:36px;height:36px;fill:#FFE27A;stroke:#8A6A00;stroke-width:1.6;stroke-linejoin:round}
+.folderbtn:hover{transform:scale(1.06)}
+.folderbtn.off{opacity:.45}
 .content .talk,.content .try{padding:10px 22px}
 .content{padding-top:18px;padding-bottom:22px}
 /* לשונית הרעיונות שלנו לכיתה */
@@ -644,13 +655,14 @@ const STYLES='https://gemini.google.com/share/d6e7352f6da8';
 
 /* ===== תוכן החלונות ===== */
 const ex=(label,text)=>`<div class="ex"><small>${label}</small><span>${text}</span><br><button class="copy">העתקה</button></div>`;
+const FOLDER_IC='<svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>';
 const tryIt=(text,link,lt)=>`<div class="try"><span class="lbl">התנסות</span><span class="txt">${text}</span>${link?`<a href="${link}" target="_blank" rel="noopener">${lt||'לפתיחת Gemini'}</a>`:''}</div>`;
 const talk=text=>`<div class="talk"><span class="lbl">בכיתה</span><span class="txt">${text}</span></div>`;
 const idea=()=>`<div class="try idea"><span class="lbl">הקיר המשותף</span><span class="txt">איך אשלב את זה בכיתה? כתבו רעיון אחד.</span><button class="ib" data-open="ideas">לקיר הרעיונות</button></div>`;
 const frame=u=>`<iframe src="${u}" allowfullscreen allow="fullscreen; clipboard-write"></iframe>`;
 /* תמונות לדוגמה: שמים קובץ בתיקייה assets/lesson2 בשם שמופיע כאן, והוא מופיע בחלון */
 const IMG='assets/lesson2/';
-const gal=items=>`<div class="gal" style="--n:${items.length}">${items.map(([f,c],i)=>`<figure class="fig">${i?'<span class="arr">&larr;</span>':''}<figcaption class="cap">${c}</figcaption><div class="ph"><img src="${IMG+f}.jpg" alt="" onload="this.parentNode.classList.add('has')" onerror="this.remove()"><em>מקום לתמונה<br><small>${f}.jpg</small></em></div></figure>`).join('')}</div>`;
+const gal=(items,cls='')=>`<div class="gal ${cls}" style="--n:${items.length}">${items.map(([f,c],i)=>`<figure class="fig">${i?'<span class="arr">&larr;</span>':''}<figcaption class="cap">${c}</figcaption><div class="ph"><img src="${IMG+f}.jpg" alt="" onload="this.parentNode.classList.add('has')" onerror="this.remove()"><em>מקום לתמונה<br><small>${f}.jpg</small></em></div></figure>`).join('')}</div>`;
 const WIN={
  prompt:()=>({t:'פרומפט טוב לתמונה',h:`
   <div class="formula"><span>מה רואים</span><i>+</i><span>איפה</span><i>+</i><span>מתי</span><i>+</i><span>אווירה</span><i>+</i><span>סגנון</span><a class="wheel sm" href="${STYLES}" target="_blank" rel="noopener">למעבדת הסגנונות</a></div>
@@ -658,8 +670,8 @@ const WIN={
  edit:()=>({t:'עריכת תמונה',h:`
   ${gal([['edit-1','צור תמונה של ילד בחצר'],['edit-2','שנה את צבע החולצה'],['edit-3','תוסיף חתול']])}`}),
  color:()=>({t:'צביעת תמונה ישנה',h:`
-  ${gal([['color-1','תמונה ישנה'],['color-2','תקן את התמונה וצבע אותה']])}
-  ${LINKS.drive?tryIt('בחרו תמונה בשחור-לבן מהתיקייה, ותקנו וצבעו אותה.',LINKS.drive,'לתיקיית התמונות'):tryIt('תיקיית תמונות בשחור-לבן לתרגול תעלה כאן.')}`}),
+  <div class="sidewrap">${gal([['color-1','תמונה ישנה'],['color-2','תקן את התמונה וצבע אותה']],'side')}
+  ${LINKS.drive?`<a class="folderbtn" href="${LINKS.drive}" target="_blank" rel="noopener" title="תיקיית תמונות בשחור-לבן לתרגול" aria-label="תיקיית תמונות לתרגול">${FOLDER_IC}</a>`:`<span class="folderbtn off" title="תיקיית התמונות עוד לא מחוברת" aria-label="תיקיית תמונות לתרגול">${FOLDER_IC}</span>`}</div>`}),
  char:()=>({t:'דמות עקבית',h:`
   ${gal([['char-1','ילד מתולתל, חולצת פסים'],['char-2','עכשיו אותו ילד ברחוב, עם גלידה'],['char-3','עכשיו אותו ילד על אופניים בחוף']])}`}),
  combine:()=>({t:'שילוב תמונות',h:`
