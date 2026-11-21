@@ -348,6 +348,20 @@ html,body{margin:0;height:100%;overflow:hidden;background:#EEF4F6;font-family:'H
 .gal{align-items:end}
 /* צביעת תמונה ישנה: הכיתוב בצד, התמונות גדולות, ותיקייה כאייקון */
 .gal.side{gap:60px}
+.gal.dict .cap{flex-direction:column;align-items:flex-start;gap:8px;min-height:0}
+.dlead{font-size:22px;color:var(--muted);font-weight:600}
+.dsay{font-size:26px;color:var(--deep)}
+.dictbar{display:flex;align-items:center;gap:10px;width:100%;border:1px solid #E3E8EE;background:#fff;border-radius:999px;padding:6px 8px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.06);direction:ltr}
+.dictbar .dx{width:34px;height:34px;border-radius:50%;border:1px solid #D5DCE3;display:flex;align-items:center;justify-content:center;font-size:20px;color:#444;flex:0 0 auto}
+.dwave{flex:1;height:32px;display:flex;align-items:center;gap:3px;overflow:hidden}
+.dwave i{flex:1;max-width:3px;height:var(--h);background:#9AA3AD;border-radius:2px;transform-origin:center}
+.dictbar.on .dwave i{animation:dw .8s ease-in-out infinite alternate}
+.dictbar.on .dwave i:nth-child(3n){animation-delay:.2s}.dictbar.on .dwave i:nth-child(3n+1){animation-delay:.4s}
+@keyframes dw{from{transform:scaleY(.35)}to{transform:scaleY(1.1)}}
+.dplay,.dsend{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.dplay{background:#F1F3F5}.dplay svg{width:18px;height:18px;fill:#222}
+.dictbar.on .dplay svg path{d:path("M7 6h4v12H7zM13 6h4v12h-4z")}
+.dsend{background:#2F6FDB}.dsend svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 /* קומיקס: פרומפט לדוגמה בצד */
 .pwrap{display:flex;align-items:center;gap:36px}
 .pwrap .gal{flex:1;margin:0}
@@ -665,6 +679,14 @@ const STYLES='https://gemini.google.com/share/d6e7352f6da8';
 /* ===== תוכן החלונות ===== */
 const ex=(label,text)=>`<div class="ex"><small>${label}</small><span>${text}</span><br><button class="copy">העתקה</button></div>`;
 const FOLDER_IC='<svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>';
+/* מציירים מדיבור: פס הקלטה כמו בצ'אט. לחיצה משמיעה את ההוראה בעברית */
+const dictWave=()=>Array.from({length:34},(_,i)=>`<i style="--h:${(18+Math.round(70*Math.abs(Math.sin(i*1.7)*Math.cos(i*.45))))}%"></i>`).join('');
+const dictCap=(lead,say)=>`<span class="dlead">${lead}</span><span class="dsay">"${say}"</span><button type="button" class="dictbar" data-say="${say}" title="השמעה"><span class="dx">×</span><span class="dwave">${dictWave()}</span><span class="dplay"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l10-6.5z"/></svg></span><span class="dsend"><svg viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></span></button>`;
+function dictSay(btn){const ss=window.speechSynthesis;if(!ss)return;const was=btn.classList.contains('on');ss.cancel();document.querySelectorAll('.dictbar.on').forEach(b=>b.classList.remove('on'));if(was)return;
+  const u=new SpeechSynthesisUtterance(btn.dataset.say);u.lang='he-IL';u.rate=.95;const v=ss.getVoices().find(x=>/^he|^iw/i.test(x.lang));if(v)u.voice=v;
+  u.onend=u.onerror=()=>btn.classList.remove('on');btn.classList.add('on');ss.speak(u)}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.dictbar');if(b){e.preventDefault();e.stopPropagation();dictSay(b)}},true);
+try{speechSynthesis.getVoices()}catch(e){}
 const tryIt=(text,link,lt)=>`<div class="try"><span class="lbl">התנסות</span><span class="txt">${text}</span>${link?`<a href="${link}" target="_blank" rel="noopener">${lt||'לפתיחת Gemini'}</a>`:''}</div>`;
 const talk=text=>`<div class="talk"><span class="lbl">בכיתה</span><span class="txt">${text}</span></div>`;
 const idea=()=>`<div class="try idea"><span class="lbl">הקיר המשותף</span><span class="txt">איך אשלב את זה בכיתה? כתבו רעיון אחד.</span><button class="ib" data-open="ideas">לקיר הרעיונות</button></div>`;
@@ -690,7 +712,7 @@ const WIN={
   <div class="formula"><span>מי?</span><span>איפה?</span><span>מה קרה?</span><span>למה?</span><span>מה הם אומרים?</span><button class="wheel sm" type="button" data-open="wheel">לגלגל ההגרלה</button></div>
   ${gal([['midrash-1','סצנה'],['midrash-2','סצנת המשך']])}`}),
  voice:()=>({t:'מציירים מדיבור',h:`
-  ${gal([['voice-1','לוחצים על המיקרופון ואומרים: "ילדים משחקים כדור בחצר של בית הספר"'],['voice-2','אומרים: "תוסיף עץ גדול עם צל"']])}`}),
+  ${gal([['voice-1',dictCap('לוחצים על המיקרופון ואומרים:','מכונית מרוץ נוסעת בכביש')],['voice-2',dictCap('אומרים:','המכונית מגיעה אל סוף המסלול, והנהג מרים גביע ניצחון')]],'dict')}`}),
  deck:()=>({t:'מצגת - מטקסט לתמונה',u:LINKS.deck,f:!!LINKS.deck,h:LINKS.deck?frame(LINKS.deck):'<div class="empty">המצגת תופיע כאן</div>'}),
  wheel:()=>({t:'גלגל ההגרלה',h:wheelHTML(),after:wheelInit}),
  products:()=>({t:'תוצרי השיעור',h:padHTML(),after:padInit}),
