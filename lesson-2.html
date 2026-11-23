@@ -963,7 +963,7 @@ document.addEventListener('fullscreenchange',()=>{const on=!!document.fullscreen
 /* הורדה כ-PDF: דף הדפסה של כל הלוח. בחלון ההדפסה בוחרים "שמירה כ-PDF" */
 function padPdf(){if(!PAD)return;const S=PAD.settings||{},title=S.title||'תוצרי השיעור';
   const card=p=>{const pic=padPicture(p),pv=p.preview||{},cms=PAD.comments.filter(c=>c.post===p.id),lk=(PAD.likes[p.id]||[]).length;
-    return `<article>${(padImgs(p).length?padImgs(p):pic?[pic]:[]).map(u=>`<img src="${esc(u)}" alt="">`).join('')}<div class="b">${p.title?`<h3>${esc(p.title)}</h3>`:''}${p.text?`<p>${nl2br(p.text)}</p>`:''}
+    return `<article>${(padImgs(p).length?padImgs(p):pic?[pic]:[]).map(u=>`<img data-src="${esc(u)}" alt="">`).join('')}<div class="b">${p.title?`<h3>${esc(p.title)}</h3>`:''}${p.text?`<p>${nl2br(p.text)}</p>`:''}
     ${p.link?`<div class="l">${esc(pv.t||padDomain(p.link))}<br><span dir="ltr">${esc(p.link)}</span></div>`:''}
     ${p.file?`<div class="l">קובץ: ${esc(p.fileName||'')}<br><span dir="ltr">${driveView(p.file)}</span></div>`:''}
     <div class="w">${esc(p.name)}${lk?` · ${lk} לייקים`:''}</div>${cms.length?`<div class="c">${cms.map(c=>`<div><b>${esc(c.name)}:</b> ${nl2br(c.text)}</div>`).join('')}</div>`:''}</div></article>`};
@@ -989,9 +989,15 @@ footer{margin-top:16px;font-size:11px;color:#889;text-align:center}</style></hea
   let fr=document.getElementById('padPrint');if(fr)fr.remove();fr=document.createElement('iframe');fr.id='padPrint';
   Object.assign(fr.style,{position:'fixed',width:'0',height:'0',border:'0',right:'0',bottom:'0'});document.body.appendChild(fr);
   const doc=fr.contentWindow.document;doc.open();doc.write(html);doc.close();
-  let printed=false;const go=()=>{if(printed)return;printed=true;try{fr.contentWindow.focus();fr.contentWindow.print()}catch(e){}};
-  const imgs=[...doc.images];let left=imgs.length;const done=()=>{if(--left<=0)setTimeout(go,300)};
-  if(!left)setTimeout(go,600);else{imgs.forEach(im=>{if(im.complete)done();else{im.onload=im.onerror=done}});setTimeout(()=>{if(left>0){left=0;go()}},8000)}}
+  /* דרייב חוסם כשמבקשים הרבה תמונות יחד: טוענים 4 בכל פעם, עם ניסיון חוזר, ורק אז מדפיסים */
+  let printed=false;const go=()=>{if(printed)return;printed=true;padClose();try{fr.contentWindow.focus();fr.contentWindow.print()}catch(e){}};
+  const imgs=[...doc.images],N=imgs.length;if(!N){setTimeout(go,600);return}
+  padOverlay(`<h3>מכינים PDF</h3><p class="pf-pdfp" style="margin:0;font-size:22px">טוענים תמונות: 0 מתוך ${N}</p>`);
+  let next=0,fin=0;const prog=()=>{const el=document.querySelector('.pf-pdfp');if(el)el.textContent=`טוענים תמונות: ${fin} מתוך ${N}`};
+  const settle=()=>{fin++;prog();if(fin>=N)setTimeout(go,400);else pump()};
+  const load=(im,tries)=>{im.onload=settle;im.onerror=()=>{if(tries<4)setTimeout(()=>load(im,tries+1),1200*(tries+1)+Math.random()*800);else{im.remove();settle()}};im.src=im.dataset.src+(tries?'&r='+tries:'')};
+  const pump=()=>{while(next<N&&next-fin<4)load(imgs[next++],0)};pump();
+  setTimeout(()=>{if(!printed)go()},120000)}
 /* הקרנה: כל הפרסומים אחד אחרי השני, לפי הסדר בלוח */
 let SHOW={list:[],i:0,auto:null};
 function padShowList(){const S=PAD.settings||{},posts=PAD.posts.slice().reverse();
