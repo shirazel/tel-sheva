@@ -871,8 +871,10 @@ const padImgs=p=>String(p.image||'').split(/\s+/).filter(Boolean);
 const padPicture=p=>padImgs(p)[0]||(p.preview&&p.preview.i)||'';
 const PAD_MAX_IMGS=10;
 /* כמה תמונות בפוסט: חיצים ימינה ושמאלה */
-function padCar(list,cls){if(!list.length)return '';if(list.length===1)return `<img class="${cls}" src="${esc(list[0])}" alt="" loading="lazy">`;
-  return `<div class="pcar" data-imgs="${esc(list.join(' '))}" data-i="0"><img class="${cls}" src="${esc(list[0])}" alt="" loading="lazy"><button class="pcarr pcp" type="button" title="הקודם">${IC.prev}</button><button class="pcarr pcn" type="button" title="הבא">${IC.next}</button><span class="pcdots">${list.map((_,i)=>`<i${i?'':' class="on"'}></i>`).join('')}</span></div>`}
+/* דרייב חוסם לפעמים כשנטענות הרבה תמונות יחד: מנסים שוב */
+function padImgRetry(i){const n=+(i.dataset.r||0);if(n>=4)return;i.dataset.r=n+1;setTimeout(()=>{i.src=i.src.replace(/&r=\d+$/,'')+'&r='+(n+1)},1500*(n+1)+Math.random()*1500)}
+function padCar(list,cls){if(!list.length)return '';if(list.length===1)return `<img class="${cls}" src="${esc(list[0])}" alt="" onerror="padImgRetry(this)">`;
+  return `<div class="pcar" data-imgs="${esc(list.join(' '))}" data-i="0"><img class="${cls}" src="${esc(list[0])}" alt="" onerror="padImgRetry(this)"><button class="pcarr pcp" type="button" title="הקודם">${IC.prev}</button><button class="pcarr pcn" type="button" title="הבא">${IC.next}</button><span class="pcdots">${list.map((_,i)=>`<i${i?'':' class="on"'}></i>`).join('')}</span></div>`}
 function padCarGo(car,d){const L=car.dataset.imgs.split(' '),i=((+car.dataset.i||0)+d+L.length)%L.length;car.dataset.i=i;car.querySelector('img').src=L[i];car.querySelectorAll('.pcdots i').forEach((x,k)=>x.classList.toggle('on',k===i))}
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.pcarr,.zarr');if(!b)return;e.preventDefault();e.stopPropagation();const d=b.classList.contains('pcn')||b.classList.contains('zn')?1:-1;
   if(b.classList.contains('pcarr')){padCarGo(b.closest('.pcar'),d);return}
