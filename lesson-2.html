@@ -528,6 +528,20 @@ button.wheel{border:0;cursor:pointer;font-family:'Heebo',sans-serif}
 .pshc .pc{margin-bottom:12px}
 .pc{background:#fff;border-radius:16px;box-shadow:0 4px 14px rgba(11,79,124,.12);overflow:hidden}
 .pcimg{display:block;width:100%;max-height:300px;object-fit:cover;cursor:zoom-in}
+.pcar{position:relative}
+.pcarr{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.94);box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;z-index:2}
+.pcarr svg{width:22px;height:22px;fill:none;stroke:var(--deep);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.pcarr:hover{background:#fff}.pcp{right:8px}.pcn{left:8px}
+.pcdots{position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;gap:6px;pointer-events:none}
+.pcdots i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.55);box-shadow:0 0 3px rgba(0,0,0,.45)}.pcdots i.on{background:#fff}
+.pshmain .pcar{max-width:62%;height:100%;display:flex;align-items:center;justify-content:center}.pshmain .pcar .pshimg{max-width:100%;max-height:100%}
+.pshmain .pcarr{width:56px;height:56px}.pshmain .pcarr svg{width:30px;height:30px}.pshmain .pcp{right:14px}.pshmain .pcn{left:14px}.pshmain .pcdots{bottom:14px}
+.pthumbs{display:flex;flex-wrap:wrap;gap:10px}.pthumbs:empty{display:none}
+.pthumbs span{position:relative;width:78px;height:78px}.pthumbs img{width:100%;height:100%;object-fit:cover;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.pthumbs button{position:absolute;top:-8px;left:-8px;width:26px;height:26px;border-radius:50%;border:0;background:#E2448F;color:#fff;font:700 18px/1 'Heebo';cursor:pointer;padding:0}
+.zarr{display:none;position:absolute;top:50%;transform:translateY(-50%);width:64px;height:64px;border-radius:50%;border:0;background:#fff;cursor:pointer;align-items:center;justify-content:center;padding:0;box-shadow:0 8px 20px rgba(0,0,0,.3)}
+.zarr svg{width:34px;height:34px;fill:none;stroke:var(--deep);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+#zoom.multi .zarr{display:flex}.zp{right:30px}.zn{left:30px}
 .pcb{padding:12px 16px 6px;display:flex;flex-direction:column;gap:4px}
 .pct{font-size:23px;color:var(--ink);line-height:1.3}
 .pctx{margin:0;font-size:20px;line-height:1.45;color:var(--body)}
@@ -664,7 +678,7 @@ button.wheel{border:0;cursor:pointer;font-family:'Heebo',sans-serif}
   <div class="sig">© שירה רוט זליקוביץ · הוראה יצירתית עם AI · <a href="https://wa.me/972523930628" target="_blank" rel="noopener">ווטסאפ</a> · <a href="https://www.lomdot.org/" target="_blank" rel="noopener">להזמנת סדנאות בינה מלאכותית</a></div>
 
   <div id="modal"><div class="box"><div class="bar"><span class="ic" id="mIc"></span><h2 id="mTitle"></h2><a id="mExt" target="_blank" rel="noopener">פתיחה בחלון חדש</a><button class="x" id="mClose" aria-label="סגירה">×</button></div><div class="content" id="mBody"></div></div></div>
-  <div id="zoom"><button class="zx" aria-label="סגירה">×</button><img alt=""><div class="zcap"></div></div>
+  <div id="zoom"><button class="zx" aria-label="סגירה">×</button><img alt=""><div class="zcap"></div><button class="zarr zp" type="button" title="הקודם"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button><button class="zarr zn" type="button" title="הבא"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button></div>
 <!--DESIGN-END-->
 </div></div>
 
@@ -853,7 +867,16 @@ const driveView=id=>'https://drive.google.com/file/d/'+encodeURIComponent(id)+'/
 const drivePlay=id=>'https://drive.google.com/uc?export=download&id='+encodeURIComponent(id);
 const driveFrame=id=>'https://drive.google.com/file/d/'+encodeURIComponent(id)+'/preview';
 const padDomain=u=>{try{return new URL(u).hostname.replace(/^www\./,'')}catch(e){return ''}};
-const padPicture=p=>p.image||(p.preview&&p.preview.i)||'';
+const padImgs=p=>String(p.image||'').split(/\s+/).filter(Boolean);
+const padPicture=p=>padImgs(p)[0]||(p.preview&&p.preview.i)||'';
+const PAD_MAX_IMGS=10;
+/* כמה תמונות בפוסט: חיצים ימינה ושמאלה */
+function padCar(list,cls){if(!list.length)return '';if(list.length===1)return `<img class="${cls}" src="${esc(list[0])}" alt="" loading="lazy">`;
+  return `<div class="pcar" data-imgs="${esc(list.join(' '))}" data-i="0"><img class="${cls}" src="${esc(list[0])}" alt="" loading="lazy"><button class="pcarr pcp" type="button" title="הקודם">${IC.prev}</button><button class="pcarr pcn" type="button" title="הבא">${IC.next}</button><span class="pcdots">${list.map((_,i)=>`<i${i?'':' class="on"'}></i>`).join('')}</span></div>`}
+function padCarGo(car,d){const L=car.dataset.imgs.split(' '),i=((+car.dataset.i||0)+d+L.length)%L.length;car.dataset.i=i;car.querySelector('img').src=L[i];car.querySelectorAll('.pcdots i').forEach((x,k)=>x.classList.toggle('on',k===i))}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.pcarr,.zarr');if(!b)return;e.preventDefault();e.stopPropagation();const d=b.classList.contains('pcn')||b.classList.contains('zn')?1:-1;
+  if(b.classList.contains('pcarr')){padCarGo(b.closest('.pcar'),d);return}
+  const z=document.getElementById('zoom'),L=z._list||[];if(L.length<2)return;z._i=(z._i+d+L.length)%L.length;z.querySelector('img').src=L[z._i]},true);
 function padLinkHTML(p,big){if(!p.link)return '';const pv=p.preview||{},d=padDomain(p.link);const showImg=pv.i&&!p.image;
   return `<a class="${big?'pshlink':'pclink'}" href="${esc(p.link)}" target="_blank" rel="noopener">${showImg&&!big?`<img src="${esc(pv.i)}" alt="" loading="lazy">`:''}<span class="pclt">${esc(pv.t||d)}</span><span class="pcld">${esc(d)}</span></a>`}
 function padFileHTML(p,big){if(!p.file)return '';const t=p.fileType||'';
@@ -879,7 +902,7 @@ function padDragInit(root){let st=null;
     padPost({action:'padEdit',id,editorKey:padEditorKey(),token:padTokens()[id]||'',post:{name:p.name,title:p.title,text:p.text,link:p.link,shelf:to}}).then(()=>padLoad()).catch(err=>{alert('לא הועבר: '+err.message);padLoad()})};
   document.addEventListener('pointerup',end);document.addEventListener('pointercancel',e=>{if(st&&st.ghost)st.ghost.remove();st=null;padDragId='';clear();padRender()})}
 function padCard(p){const likes=(PAD.likes[p.id]||[]),liked=likes.includes(PAD_CLIENT),cms=PAD.comments.filter(c=>c.post===p.id),open=padOpenC.has(p.id),can=padMine(p.id)||padIsEditor();
-  return `<article class="pc" data-id="${esc(p.id)}"${padCanDrag()?' data-drag="1"':''}>${p.image?`<img class="pcimg" src="${esc(p.image)}" alt="" loading="lazy">`:''}
+  return `<article class="pc" data-id="${esc(p.id)}"${padCanDrag()?' data-drag="1"':''}>${padCar(padImgs(p),'pcimg')}
    <div class="pcb">${p.title?`<b class="pct">${esc(p.title)}</b>`:''}${p.text?`<p class="pctx">${nl2br(p.text)}</p>`:''}${padLinkHTML(p)}${padFileHTML(p)}<span class="pcw">${esc(p.name)}</span></div>
    <div class="pcf"><button class="pclike${liked?' on':''}" type="button">${IC.heart}<span>${likes.length||''}</span></button><button class="pccm" type="button">${IC.bubble}<span>${cms.length||''}</span></button><span class="padsp"></span>${can?`<button class="pcedit" type="button" title="עריכה">${IC.pen}</button><button class="pcdel" type="button" title="מחיקה">${IC.bin}</button>`:''}</div>
    ${open?`<div class="pccs">${cms.map(c=>`<div class="pcc"><b>${esc(c.name)}</b> ${nl2br(c.text)}</div>`).join('')}<div class="pccf"><input class="pccn" maxlength="40" placeholder="שם" value="${esc(lsGet('ideaName',''))}"><input class="pcct" maxlength="500" placeholder="כתבו תגובה..."><button class="pccs-send" type="button">שליחה</button></div></div>`:''}</article>`}
@@ -893,27 +916,31 @@ function padRender(){const root=document.querySelector('.pad');if(!root||!PAD)re
   else body.innerHTML=posts.length?`<div class="pwall">${[0,1,2,3].map(c=>`<div class="pcol">${posts.filter((p,i)=>i%4===c).map(padCard).join('')}</div>`).join('')}</div>`:'<div class="padempty">עוד אין פוסטים. לחצו על הפלוס למטה.</div>'}
 function padOverlay(html){const ov=document.querySelector('.padov');ov.innerHTML=`<div class="padpanel">${html}</div>`;ov.classList.add('on')}
 function padClose(){const ov=document.querySelector('.padov');if(ov){ov.classList.remove('on');ov.innerHTML=''}}
-let padImg=null;
+let padNew=[],padKeep=[];
 let padFile=null;
-function padForm(p,shelf){padImg=null;padFile=null;const S=PAD.settings||{};const shelves=S.layout==='shelves'?(S.shelves||[]):[];p=p||{};
+function padForm(p,shelf){padNew=[];padKeep=padImgs(p||{});padFile=null;const S=PAD.settings||{};const shelves=S.layout==='shelves'?(S.shelves||[]):[];p=p||{};
   padOverlay(`<h3>${p.id?'עריכת הפוסט':'פוסט חדש'}</h3>
    <div class="pfr"><input class="pf-name" maxlength="40" placeholder="השם שלי" value="${esc(p.name||lsGet('ideaName',''))}">${shelves.length?`<select class="pf-shelf">${shelves.map(s=>`<option${(p.shelf||shelf)===s?' selected':''}>${esc(s)}</option>`).join('')}</select>`:''}</div>
    <input class="pf-title" maxlength="120" placeholder="כותרת" value="${esc(p.title||'')}">
    <textarea class="pf-text" maxlength="1500" placeholder="מה רוצים לספר?">${esc(p.text||'')}</textarea>
-   <div class="pfr"><label class="pfile">${p.image?'החלפת תמונה':'הוספת תמונה'}<input type="file" accept="image/*" hidden></label><img class="pprev" alt="" ${p.image?`src="${esc(p.image)}" style="display:block"`:''}>${p.image?'<label class="pf-rm"><input type="checkbox" class="pf-noimg"> בלי תמונה</label>':''}<input class="pf-link" maxlength="500" placeholder="קישור (לא חובה)" dir="ltr" value="${esc(p.link||'')}"></div>
+   <div class="pfr"><label class="pfile">הוספת תמונות<input type="file" accept="image/*" multiple hidden></label><input class="pf-link" maxlength="500" placeholder="קישור (לא חובה)" dir="ltr" value="${esc(p.link||'')}"></div>
+   <div class="pthumbs"></div>
    <div class="pfr"><label class="pfile pfile2">${p.file?'החלפת קובץ':'הוספת קובץ'}<input type="file" accept="audio/*,video/*,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.zip" hidden></label><span class="pf-fname">${p.file?esc(p.fileName||'קובץ'):'שמע, וידאו, PDF או מסמך, עד 20MB'}</span>${p.file?'<label class="pf-rm"><input type="checkbox" class="pf-nofile"> בלי קובץ</label>':''}</div>
    <div class="pfb"><button class="padbtn pf-save" type="button">${p.id?'שמירה':'פרסום'}</button><button class="padbtn2 pf-cancel" type="button">ביטול</button><span class="pf-msg"></span></div>`);
   const ov=document.querySelector('.padov');ov.dataset.edit=p.id||'';
   ov.querySelector('.pfile2 input').onchange=e=>{const f=e.target.files[0];if(!f)return;const nm=ov.querySelector('.pf-fname'),msg=ov.querySelector('.pf-msg');
     if(f.size>PAD_MAX_FILE){padFile=null;e.target.value='';msg.textContent='הקובץ גדול מדי. עד 20MB.';return}msg.textContent='';
     const r=new FileReader();r.onload=()=>{padFile={name:f.name,type:f.type||'application/octet-stream',data:String(r.result).split(',')[1]||''};nm.textContent=f.name};r.readAsDataURL(f)};
-  ov.querySelector('.pfile:not(.pfile2) input').onchange=e=>{const f=e.target.files[0];if(!f)return;shrinkImage(f).then(d=>{padImg=d;const pv=ov.querySelector('.pprev');pv.src='data:image/jpeg;base64,'+d;pv.style.display='block'})}}
+  const th=ov.querySelector('.pthumbs'),draw=()=>{th.innerHTML=padKeep.map((u,i)=>`<span><img src="${esc(u)}" alt=""><button type="button" data-k="${i}" title="הסרה">×</button></span>`).join('')+padNew.map((d,i)=>`<span><img src="data:image/jpeg;base64,${d}" alt=""><button type="button" data-n="${i}" title="הסרה">×</button></span>`).join('')};draw();
+  th.onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.k!=null)padKeep.splice(+b.dataset.k,1);else padNew.splice(+b.dataset.n,1);draw()};
+  ov.querySelector('.pfile:not(.pfile2) input').onchange=async e=>{const msg=ov.querySelector('.pf-msg');const fs=[...e.target.files];e.target.value='';
+    for(const f of fs){if(padKeep.length+padNew.length>=PAD_MAX_IMGS){msg.textContent='עד '+PAD_MAX_IMGS+' תמונות בפוסט.';break}try{padNew.push(await shrinkImage(f));draw()}catch(er){msg.textContent='לא הצלחנו לקרוא תמונה.'}}}}
 function padSave(){const ov=document.querySelector('.padov'),msg=ov.querySelector('.pf-msg'),btn=ov.querySelector('.pf-save'),id=ov.dataset.edit;
   const post={name:ov.querySelector('.pf-name').value.trim(),title:ov.querySelector('.pf-title').value.trim(),text:ov.querySelector('.pf-text').value.trim(),link:ov.querySelector('.pf-link').value.trim(),shelf:(ov.querySelector('.pf-shelf')||{}).value||''};
-  if(!post.name){msg.textContent='כתבו את השם שלכם.';return}if(!post.title&&!post.text&&!padImg&&!padFile&&!post.link&&!id){msg.textContent='הפוסט ריק.';return}
-  lsSet('ideaName',post.name);btn.disabled=true;msg.textContent=padFile?'מעלה קובץ...':padImg?'מעלה תמונה...':'שומר...';
-  const body={post,image:padImg?{type:'image/jpeg',data:padImg}:null,file:padFile};
-  const req=id?padPost(Object.assign(body,{action:'padEdit',id,token:padTokens()[id]||'',editorKey:padEditorKey(),removeImage:!!(ov.querySelector('.pf-noimg')||{}).checked,removeFile:!!(ov.querySelector('.pf-nofile')||{}).checked})):padPost(Object.assign(body,{action:'padAdd'}));
+  if(!post.name){msg.textContent='כתבו את השם שלכם.';return}if(!post.title&&!post.text&&!padNew.length&&!padFile&&!post.link&&!id){msg.textContent='הפוסט ריק.';return}
+  lsSet('ideaName',post.name);btn.disabled=true;msg.textContent=padFile?'מעלה קובץ...':padNew.length?'מעלה תמונה...':'שומר...';
+  const body={post,file:padFile,images:padNew.map(d=>({type:'image/jpeg',data:d})),image:padNew[0]?{type:'image/jpeg',data:padNew[0]}:null};
+  const req=id?padPost(Object.assign(body,{action:'padEdit',id,token:padTokens()[id]||'',editorKey:padEditorKey(),keep:padKeep,removeImage:!padKeep.length&&!padNew.length,removeFile:!!(ov.querySelector('.pf-nofile')||{}).checked})):padPost(Object.assign(body,{action:'padAdd'}));
   req.then(r=>{if(r.token){const t=padTokens();t[r.id]=r.token;lsSet('padTokens',JSON.stringify(t))}padClose();padLoad()}).catch(e=>{msg.textContent=e.message==='nolink'?'הלוח עוד לא מחובר.':'לא הצלחנו לשמור: '+e.message;btn.disabled=false})}
 function padSettingsForm(){const S=PAD.settings||{};padOverlay(`<h3>עריכת הלוח</h3>
    <label class="pfl">שם הלוח<input class="ps-title" maxlength="80" value="${esc(S.title||'תוצרי השיעור')}"></label>
@@ -934,7 +961,7 @@ document.addEventListener('fullscreenchange',()=>{const on=!!document.fullscreen
 /* הורדה כ-PDF: דף הדפסה של כל הלוח. בחלון ההדפסה בוחרים "שמירה כ-PDF" */
 function padPdf(){if(!PAD)return;const S=PAD.settings||{},title=S.title||'תוצרי השיעור';
   const card=p=>{const pic=padPicture(p),pv=p.preview||{},cms=PAD.comments.filter(c=>c.post===p.id),lk=(PAD.likes[p.id]||[]).length;
-    return `<article>${pic?`<img src="${esc(pic)}" alt="">`:''}<div class="b">${p.title?`<h3>${esc(p.title)}</h3>`:''}${p.text?`<p>${nl2br(p.text)}</p>`:''}
+    return `<article>${(padImgs(p).length?padImgs(p):pic?[pic]:[]).map(u=>`<img src="${esc(u)}" alt="">`).join('')}<div class="b">${p.title?`<h3>${esc(p.title)}</h3>`:''}${p.text?`<p>${nl2br(p.text)}</p>`:''}
     ${p.link?`<div class="l">${esc(pv.t||padDomain(p.link))}<br><span dir="ltr">${esc(p.link)}</span></div>`:''}
     ${p.file?`<div class="l">קובץ: ${esc(p.fileName||'')}<br><span dir="ltr">${driveView(p.file)}</span></div>`:''}
     <div class="w">${esc(p.name)}${lk?` · ${lk} לייקים`:''}</div>${cms.length?`<div class="c">${cms.map(c=>`<div><b>${esc(c.name)}:</b> ${nl2br(c.text)}</div>`).join('')}</div>`:''}</div></article>`};
@@ -970,7 +997,7 @@ function padShowList(){const S=PAD.settings||{},posts=PAD.posts.slice().reverse(
 function padShow(){if(!PAD||!PAD.posts.length)return;SHOW.list=padShowList();SHOW.i=0;document.querySelector('.padshow').classList.add('on');padShowDraw()}
 function padShowDraw(){const el=document.querySelector('.padshow');if(!el)return;const n=SHOW.list.length,p=SHOW.list[SHOW.i];if(!p)return;
   el.innerHTML=`<div class="pshtop"><span class="pshn">${SHOW.i+1} מתוך ${n}</span><span class="padsp"></span><button class="pshbtn psh-auto" type="button" title="${SHOW.auto?'עצירה':'הקרנה אוטומטית'}">${SHOW.auto?IC.pause:IC.auto}</button><button class="pshbtn psh-x" type="button" title="סגירה">×</button></div>
-   <div class="pshmain${padPicture(p)||/^video\/|pdf$/.test(p.fileType||'')?'':' noimg'}">${padPicture(p)?`<img class="pshimg" src="${esc(padPicture(p))}" alt="">`:p.file&&/^video\/|pdf$/.test(p.fileType||'')?padFileHTML(p,1):''}<div class="pshtxt">${p.title?`<b class="psht">${esc(p.title)}</b>`:''}${p.text?`<p class="pshp">${nl2br(p.text)}</p>`:''}${padLinkHTML(p,1)}${p.file&&!(/^video\/|pdf$/.test(p.fileType||'')&&!padPicture(p))?padFileHTML(p,1):''}<span class="pshw">${esc(p.name)}${p.shelf?` · ${esc(p.shelf)}`:''}</span></div></div>
+   <div class="pshmain${padPicture(p)||/^video\/|pdf$/.test(p.fileType||'')?'':' noimg'}">${padPicture(p)?(padImgs(p).length>1?padCar(padImgs(p),'pshimg'):`<img class="pshimg" src="${esc(padPicture(p))}" alt="">`):p.file&&/^video\/|pdf$/.test(p.fileType||'')?padFileHTML(p,1):''}<div class="pshtxt">${p.title?`<b class="psht">${esc(p.title)}</b>`:''}${p.text?`<p class="pshp">${nl2br(p.text)}</p>`:''}${padLinkHTML(p,1)}${p.file&&!(/^video\/|pdf$/.test(p.fileType||'')&&!padPicture(p))?padFileHTML(p,1):''}<span class="pshw">${esc(p.name)}${p.shelf?` · ${esc(p.shelf)}`:''}</span></div></div>
    <button class="pshnav psh-prev" type="button" title="הקודם"${SHOW.i?'':' disabled'}>${IC.prev}</button><button class="pshnav psh-next" type="button" title="הבא"${SHOW.i<n-1?'':' disabled'}>${IC.next}</button>`}
 function padShowGo(d){const n=SHOW.list.length;if(!n)return;if(SHOW.auto&&d>0&&SHOW.i===n-1){SHOW.i=0}else SHOW.i=Math.max(0,Math.min(n-1,SHOW.i+d));padShowDraw()}
 function padShowAuto(){if(SHOW.auto){clearInterval(SHOW.auto);SHOW.auto=null}else SHOW.auto=setInterval(()=>padShowGo(1),7000);padShowDraw()}
@@ -1035,7 +1062,7 @@ document.addEventListener('click',e=>{if(e.target.closest('#mClose'))closeWin()}
 document.addEventListener('click',e=>{if(e.target.id==='modal')closeWin()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(closeZoom())return;const ov=document.querySelector('.padov.on');if(ov){padClose();return}if(padShowOpen()){padShowClose();return}closeWin()}});
 /* ===== הגדלת תמונה ===== */
-document.addEventListener('click',e=>{const im=e.target.closest('.fig .ph img,.pcard img,.pcimg');if(!im)return;e.stopPropagation();const z=document.getElementById('zoom');z.querySelector('img').src=im.src;const pc=im.closest('.pc');let cap='';if(pc){const t=pc.querySelector('.pct'),w=pc.querySelector('.pcw');cap=[t&&t.textContent,w&&w.textContent].filter(Boolean).join(' · ')}z.querySelector('.zcap').textContent=cap;z.classList.add('on')},true);
+document.addEventListener('click',e=>{const im=e.target.closest('.fig .ph img,.pcard img,.pcimg');if(!im)return;e.stopPropagation();const z=document.getElementById('zoom');z.querySelector('img').src=im.src;const pc=im.closest('.pc');let cap='';if(pc){const t=pc.querySelector('.pct'),w=pc.querySelector('.pcw');cap=[t&&t.textContent,w&&w.textContent].filter(Boolean).join(' · ')}z.querySelector('.zcap').textContent=cap;const car=im.closest('.pcar');z._list=car?car.dataset.imgs.split(' '):[];z._i=car?(+car.dataset.i||0):0;z.classList.toggle('multi',z._list.length>1);z.classList.add('on')},true);
 document.getElementById('zoom').addEventListener('click',()=>document.getElementById('zoom').classList.remove('on'));
 function closeZoom(){const z=document.getElementById('zoom');if(z.classList.contains('on')){z.classList.remove('on');return true}return false}
 
